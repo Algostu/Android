@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class MainActivity extends AppCompatActivity {
     private Button btn_home;
     private Button btn_school;
-    private Button btn_board;
+    private Button btn_community;
     private Button btn_simulation;
     private Button btn_mypage;
     @Override
@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         btn_home = findViewById(R.id.btn_home);
         btn_school = findViewById(R.id.btn_school);
-        btn_board = findViewById(R.id.btn_board);
+        btn_community = findViewById(R.id.btn_community);
         btn_simulation = findViewById(R.id.btn_simulation);
         btn_mypage = findViewById(R.id.btn_mypage);
 
@@ -36,10 +36,10 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new School());
             }
         });
-        btn_board.setOnClickListener(new View.OnClickListener() {
+        btn_community.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(new Board());
+                replaceFragment(new Community());
             }
         });
         btn_simulation.setOnClickListener(new View.OnClickListener() {

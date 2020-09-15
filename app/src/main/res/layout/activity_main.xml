@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
     <!-- guide line -->
@@ -12,76 +12,81 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp"/>
+        app:layout_constraintGuide_begin="20dp" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gd_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="20dp"/>
+        app:layout_constraintGuide_end="20dp" />
 
     <!-- fragment -->
     <FrameLayout
         android:id="@+id/fragment_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/nav_bar"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintBottom_toTopOf="@id/nav_bar"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:id="@+id/fragment"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- navigation bar -->
     <LinearLayout
         android:id="@+id/nav_bar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        android:orientation="horizontal">
+        app:layout_constraintRight_toRightOf="@id/gd_right">
 
         <Button
             android:id="@+id/btn_home"
-            android:text="HOME"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="HOME" />
+
         <Button
             android:id="@+id/btn_school"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
             android:text="SCHOOL"
-            android:textSize="13dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:textSize="13dp" />
+
         <Button
-            android:id="@+id/btn_board"
-            android:text="BOARD"
+            android:id="@+id/btn_community"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="COMM"
+            android:textSize="12dp" />
+
         <Button
             android:id="@+id/btn_simulation"
-            android:text="SIMULAT"
-            android:textSize="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="SIMULAT"
+            android:textSize="12dp" />
+
         <Button
             android:id="@+id/btn_mypage"
-            android:text="MYPAGE"
-            android:textSize="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="MYPAGE"
+            android:textSize="12dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
