@@ -11,37 +11,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_begin="10dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gd_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="20dp" />
+        app:layout_constraintGuide_end="10dp" />
 
     <!--  title background  -->
     <TextView
         android:id="@+id/title_bg"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:background="@color/classic_blue"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
         android:text="School Community"
         android:textColor="#FFFFFF"
         android:textSize="25dp"
         app:layout_constraintLeft_toRightOf="@id/gd_left"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="35dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <!--  articles  -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_articles"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:scrollbarFadeDuration="0"
@@ -54,6 +55,4 @@
         app:layout_constraintTop_toBottomOf="@id/title_bg"
         app:layout_constraintVertical_bias="0"
         tools:ignore="MissingConstraints" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

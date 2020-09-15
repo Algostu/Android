@@ -3,10 +3,11 @@
     <color name="colorPrimary">#34538A</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#03DAC5</color>
-    
+
     <color name="classic_blue">#34538A</color>
     <color name="flame_scarlet">#d13b40</color>
     <color name="coral_pink">#eaac9d</color>
     <color name="faded_denim">#798fa8</color>
     <color name="saffron">#ffaf12</color>
+    <color name="faded_gray">#727C8E</color>
 </resources>

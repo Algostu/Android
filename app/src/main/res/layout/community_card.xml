@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="10dp"
         tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/article_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Article ID"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="vertical">
 
             <TextView
@@ -22,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:textSize="25dp" />
+                android:textSize="23dp" />
 
             <TextView
                 android:id="@+id/content"
@@ -31,7 +41,7 @@
                 android:text="Contents"
                 android:textSize="20dp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -57,21 +67,20 @@
                     android:id="@+id/reply"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="270dp"
                     android:text="Reply"
                     android:textColor="@color/faded_gray"
-                    android:textSize="10dp"
-                    app:layout_constraintRight_toLeftOf="@id/heart" />
+                    android:textSize="10dp" />
 
                 <TextView
                     android:id="@+id/heart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:text="heart"
                     android:textColor="@color/faded_gray"
-                    android:textSize="10dp"
-                    app:layout_constraintRight_toRightOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textSize="10dp" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

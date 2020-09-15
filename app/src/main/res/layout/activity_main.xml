@@ -7,28 +7,26 @@
     tools:context=".MainActivity">
 
     <!-- guide line -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gd_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
+    <!--    <androidx.constraintlayout.widget.Guideline-->
+    <!--        android:id="@+id/gd_left"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="vertical"-->
+    <!--        app:layout_constraintGuide_begin="20dp" />-->
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gd_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="20dp" />
+    <!--    <androidx.constraintlayout.widget.Guideline-->
+    <!--        android:id="@+id/gd_right"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="vertical"-->
+    <!--        app:layout_constraintGuide_end="20dp" />-->
 
-    <!-- fragment -->
+    <!-- fragment "-->
     <FrameLayout
         android:id="@+id/fragment_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/nav_bar"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
@@ -36,57 +34,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- navigation bar -->
-    <LinearLayout
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_bar"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        app:itemBackground="@android:color/white"
+        app:itemIconTint="@drawable/item_color"
+        app:itemTextColor="@drawable/item_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right">
+        app:menu="@menu/bottom_nav_bar"
+        tools:ignore="MissingConstraints" />
 
-        <Button
-            android:id="@+id/btn_home"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="HOME" />
-
-        <Button
-            android:id="@+id/btn_school"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="SCHOOL"
-            android:textSize="13dp" />
-
-        <Button
-            android:id="@+id/btn_community"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="COMM"
-            android:textSize="12dp" />
-
-        <Button
-            android:id="@+id/btn_simulation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="SIMULAT"
-            android:textSize="12dp" />
-
-        <Button
-            android:id="@+id/btn_mypage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="MYPAGE"
-            android:textSize="12dp" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
