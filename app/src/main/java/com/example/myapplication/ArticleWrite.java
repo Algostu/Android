@@ -8,12 +8,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class ArticleWrite extends Fragment {
+
+    private ImageButton btn_upload_article;
 
     @Nullable
     @Override
@@ -24,6 +27,16 @@ public class ArticleWrite extends Fragment {
         et_title.requestFocus();
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+        btn_upload_article = view.findViewById(R.id.btn_upload_article);
+        btn_upload_article.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
         return view;
     }
