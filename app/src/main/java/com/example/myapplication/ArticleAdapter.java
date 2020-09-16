@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
     @NonNull
     @Override
     public ArticleAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.article_card, parent, false);
         Holder holder = new Holder(view);
 
         return holder;

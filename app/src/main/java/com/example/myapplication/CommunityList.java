@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,36 +19,51 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
+
 public class CommunityList extends Fragment {
+
+    private static final String TAG = "RHC";
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<ArticleList> list = new ArrayList<>();
 
     private String community_name;
+    private int article_type;
 
-    public CommunityList(String community_name) {
-        this.community_name = community_name;
+    private ArrayList<ArticleList> list = new ArrayList<>();
+
+    public CommunityList(int article_type, ArrayList<ArticleList> list) {
+        this.list = list;
+        this.article_type = article_type;
+        if (article_type == 2 || article_type == 3 || article_type == 6)
+            this.community_name = "자유 게시판";
+        else if (article_type == 1 || article_type == 5)
+            this.community_name = "질문 게시판";
+        else if (article_type == 4)
+            this.community_name = "모집 게시판";
+        else if (article_type == 7)
+            this.community_name = "학원&인강 게시판";
+        else
+            this.community_name = "대학 게시판";
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.community_list, container, false);
+        final View view = inflater.inflate(R.layout.article_list, container, false);
 
         TextView title = (TextView) view.findViewById(R.id.tv_title);
-        title.setText(community_name + " Community");
+        title.setText(community_name);
         ImageButton btn_write_article = (ImageButton) view.findViewById(R.id.btn_write_article);
 
         btn_write_article.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite());
+                ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(article_type));
             }
         });
-
-        list = ArticleList.tempFunctionCreateArticle(10);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_articles);
 

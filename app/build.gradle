@@ -41,4 +41,5 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:30.0.1'
     implementation 'com.android.support:cardview-v7:30.0.1'
     implementation 'com.android.support:design:30.0.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 }
