@@ -30,10 +30,11 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
-        android:text="School Community"
+        android:text="Community"
         android:textColor="#FFFFFF"
         android:textSize="25dp"
         app:layout_constraintLeft_toRightOf="@id/gd_left"
@@ -56,4 +57,17 @@
         app:layout_constraintTop_toBottomOf="@id/title_bg"
         app:layout_constraintVertical_bias="0"
         tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/btn_write_article"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_pen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="@id/gd_right" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

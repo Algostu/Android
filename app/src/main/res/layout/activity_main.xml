@@ -6,21 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- guide line -->
-    <!--    <androidx.constraintlayout.widget.Guideline-->
-    <!--        android:id="@+id/gd_left"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:orientation="vertical"-->
-    <!--        app:layout_constraintGuide_begin="20dp" />-->
-
-    <!--    <androidx.constraintlayout.widget.Guideline-->
-    <!--        android:id="@+id/gd_right"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:orientation="vertical"-->
-    <!--        app:layout_constraintGuide_end="20dp" />-->
-
     <!-- fragment "-->
     <FrameLayout
         android:id="@+id/fragment_main"
@@ -40,13 +25,12 @@
         android:id="@+id/nav_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
         app:itemBackground="@android:color/white"
         app:itemIconTint="@drawable/item_color"
         app:itemTextColor="@drawable/item_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_bar"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="26dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

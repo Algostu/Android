@@ -1,13 +1,19 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -45,9 +51,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         navigation = findViewById(R.id.nav_bar);
+        navigation.setSelectedItemId(R.id.item_home);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
 
+    }
 
     public void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -58,12 +65,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void replaceFragmentFull(Fragment fragment) {
+        navigation.setVisibility(fragment.getView().GONE);
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
 }
-
-
-
