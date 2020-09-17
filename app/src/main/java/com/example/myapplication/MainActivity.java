@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         navigation = findViewById(R.id.nav_bar);
-        navigation.setSelectedItemId(R.id.item_home);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setSelectedItemId(R.id.item_home);
 
     }
 

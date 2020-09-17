@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public class SessionCallback implements ISessionCallback {
