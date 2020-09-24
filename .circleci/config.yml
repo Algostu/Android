@@ -16,12 +16,9 @@ jobs:
                   command: sudo chmod +x ./gradlew
 
             - run:
-                  name: echo hello
-                  command: echo $TEST_VALUE
-
-            - run:
                   name: Download Dependencies
                   command: ./gradlew androidDependencies
+
             - save_cache:
                   paths:
                       - ~/.gradle
