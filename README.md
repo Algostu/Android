@@ -17,7 +17,8 @@
     * AtricleList - dataframe of list
   * ArticleAdapter - adapter for recyclerview
   * ArticleWrite - Fragment of Wirting article
-  * Community - Fragment of 
+  * Community - Fragment of specific community
+  * CommunityList - Fragment of community's list.
 * Simulation
 * Mypage
 * Login
