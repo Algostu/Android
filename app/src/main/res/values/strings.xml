@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Dodam Dodam</string>
+    <string name="kakao_app_key">8132d323ea5a43a6a27aeb2d5c80db1b</string>
 </resources>

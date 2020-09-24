@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/item_school"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="SCHOOL" />
+
+    <item
+        android:id="@+id/item_community"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="COMMUNITY" />
+
+    <item
+        android:id="@+id/item_simulation"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="SIMULATION" />
+
+    <item
+        android:id="@+id/item_mypage"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="MYPAGE" />
+
+</menu>
