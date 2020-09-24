@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Community;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
+import com.example.myapplication.Community.dataframe.ArticleList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,10 +36,9 @@ import okhttp3.Response;
 //        R.id.country_academy   article_type = 7;
 //        R.id.country_univ      article_type = 8;
 
-public class Community extends Fragment {
+public class CommunityList extends Fragment {
     public static String TAG = "RHC";
     private ArrayList<ArticleList> list = new ArrayList<>();
-    private int article_type;
 
     @Nullable
     @Override
@@ -97,7 +100,7 @@ public class Community extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ((MainActivity) getActivity()).replaceFragmentFull(new CommunityList(article_type, list));
+                            ((MainActivity) getActivity()).replaceFragmentFull(new Community(article_type, list));
                         }
                     });
 

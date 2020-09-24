@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Community;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,10 +10,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
+import com.example.myapplication.Community.dataframe.ArticleList;
+
 import java.util.ArrayList;
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> {
-    private static final String TAG = "RHC";
     private ArrayList<ArticleList> list = new ArrayList<ArticleList>();
     private Context context;
 
@@ -75,6 +77,5 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
             this.article_ID = (TextView) view.findViewById(R.id.article_ID);
         }
     }
-
 
 }

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Community;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -15,14 +15,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
+import com.example.myapplication.Community.dataframe.ArticleList;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
 
-public class CommunityList extends Fragment {
-
-    private static final String TAG = "RHC";
+public class Community extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -33,7 +34,7 @@ public class CommunityList extends Fragment {
 
     private ArrayList<ArticleList> list = new ArrayList<>();
 
-    public CommunityList(int article_type, ArrayList<ArticleList> list) {
+    public Community(int article_type, ArrayList<ArticleList> list) {
         this.list = list;
         this.article_type = article_type;
         if (article_type == 2 || article_type == 3 || article_type == 6)
@@ -84,4 +85,5 @@ public class CommunityList extends Fragment {
         navigation.setVisibility(View.VISIBLE);
         super.onDestroy();
     }
+
 }

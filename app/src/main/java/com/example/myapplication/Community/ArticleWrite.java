@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Community;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,7 +33,6 @@ import okhttp3.Response;
 public class ArticleWrite extends Fragment {
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String TAG = "RHC";
 
     private int user_id = 1;
     private boolean is_anonymous = true;
