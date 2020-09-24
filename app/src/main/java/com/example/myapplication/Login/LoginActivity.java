@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_custom_login_out;
     private SessionCallback sessionCallback = new SessionCallback();
     Session session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-//        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public class SessionCallback implements ISessionCallback {
@@ -129,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (ageRange != null) {
                                     if (ageRange != AgeRange.AGE_15_19)
                                         Toast.makeText(getApplicationContext(), "나이 제한에 걸리셨습니다.", Toast.LENGTH_SHORT).show();
-                                        return;
+                                    return;
 
                                 }
                                 // 프로필
