@@ -59,22 +59,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-        if (pressedTime == 0) {
-            Toast.makeText(MainActivity.this, "한번 더 누르면 종료됩니다", Toast.LENGTH_LONG).show();
-            pressedTime = System.currentTimeMillis();
-        } else {
-            int seconds = (int) (System.currentTimeMillis() - pressedTime);
-
-            if (seconds > 2000) {
-                pressedTime = 0;
-            } else {
-                finish();
-            }
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        //super.onBackPressed();
+//        if (pressedTime == 0) {
+//            Toast.makeText(MainActivity.this, "한번 더 누르면 종료됩니다", Toast.LENGTH_LONG).show();
+//            pressedTime = System.currentTimeMillis();
+//        } else {
+//            int seconds = (int) (System.currentTimeMillis() - pressedTime);
+//
+//            if (seconds > 2000) {
+//                pressedTime = 0;
+//            } else {
+//                finish();
+//            }
+//        }
+//    }
 
     public void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

@@ -37,13 +37,13 @@ import okhttp3.Response;
 //        R.id.country_univ      article_type = 8;
 
 public class CommunityList extends Fragment {
-    public static String TAG = "RHC";
     private ArrayList<ArticleList> list = new ArrayList<>();
+    private static final String TAG = "RHC";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.community, container, false);
+        View view = inflater.inflate(R.layout.community_list, container, false);
         textViewClickListener(view, R.id.school_free, 2);
         textViewClickListener(view, R.id.school_question, 1);
         textViewClickListener(view, R.id.region_free, 3);

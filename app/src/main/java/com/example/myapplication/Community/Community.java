@@ -75,7 +75,6 @@ public class Community extends Fragment {
 
         adapter = new ArticleAdapter(getContext(), list);
         recyclerView.setAdapter(adapter);
-
         return view;
     }
 
@@ -86,4 +85,9 @@ public class Community extends Fragment {
         super.onDestroy();
     }
 
+    @Override
+    public void onResume() {
+        adapter.notifyDataSetChanged();
+        super.onResume();
+    }
 }
