@@ -2,11 +2,13 @@ package com.example.myapplication.Community;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,24 +19,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.Community.dataframe.ArticleList;
+import com.example.myapplication.Community.dataframe.ArticleFrame;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-public class Community extends Fragment {
+
+public class Community extends Fragment implements ArticleAdapter.OnListItemSelectedInterface {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private static final String TAG = "RHC";
 
     private String community_name;
     private int article_type;
 
-    private ArrayList<ArticleList> list = new ArrayList<>();
+    private ArrayList<ArticleFrame> list = new ArrayList<>();
 
-    public Community(int article_type, ArrayList<ArticleList> list) {
+    public Community(int article_type, ArrayList<ArticleFrame> list) {
         this.list = list;
         this.article_type = article_type;
         if (article_type == 2 || article_type == 3 || article_type == 6)
@@ -73,7 +86,7 @@ public class Community extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new ArticleAdapter(getContext(), list);
+        adapter = new ArticleAdapter(getContext(), list, this);
         recyclerView.setAdapter(adapter);
         return view;
     }
@@ -89,5 +102,67 @@ public class Community extends Fragment {
     public void onResume() {
         adapter.notifyDataSetChanged();
         super.onResume();
+    }
+
+
+    @Override
+    public void onItemSelected(View v, int position) {
+        ArticleAdapter.Holder holder = (ArticleAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
+        // https://thepassion.tistory.com/300 ID가 제대로 안들어옴
+        
+        String article_ID = holder.article_ID.toString();
+
+        Log.d(TAG, "ARTICLEID:" + article_ID);
+        String url = String.format("http://49.50.164.11:5000/article/read?articleID=%s&articleType=%d", article_ID, article_type);
+        getRequest(url);
+    }
+
+    public void getRequest(String postUrl) {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(postUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Bundle bundle = new Bundle();
+                final Fragment fragment_article = new Article();
+
+                try {
+                    Log.d(TAG, "onResponse: " + result);
+                    JSONObject jsonObject = new JSONObject(result);
+                    Log.d(TAG, "josnobject.tostring = " + jsonObject.toString());
+
+                    bundle.putString("writer", jsonObject.get("nickName").toString());
+                    bundle.putString("title", jsonObject.get("title").toString());
+                    bundle.putString("content", jsonObject.get("content").toString());
+                    bundle.putString("time", jsonObject.get("writtenTime").toString());
+                    bundle.putInt("reply", Integer.parseInt(jsonObject.get("reply").toString()));
+                    bundle.putInt("heart", Integer.parseInt(jsonObject.get("heart").toString()));
+                    bundle.putInt("article_ID", (Integer.parseInt(jsonObject.get("articleId").toString())));
+
+                    fragment_article.setArguments(bundle);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((MainActivity) getActivity()).replaceFragmentFull(fragment_article);
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    Log.d(TAG, "JSON: False " + e.toString());
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

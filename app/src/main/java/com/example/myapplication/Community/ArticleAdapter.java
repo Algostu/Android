@@ -1,27 +1,33 @@
 package com.example.myapplication.Community;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.Community.dataframe.ArticleList;
+import com.example.myapplication.Community.dataframe.ArticleFrame;
 
 import java.util.ArrayList;
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> {
-    private ArrayList<ArticleList> list = new ArrayList<ArticleList>();
+    private ArrayList<ArticleFrame> list = new ArrayList<ArticleFrame>();
     private Context context;
+    private OnListItemSelectedInterface mListener;
 
-    public ArticleAdapter(Context context, ArrayList<ArticleList> list) {
+    public ArticleAdapter(Context context, ArrayList<ArticleFrame> list, OnListItemSelectedInterface listener) {
         this.context = context;
         this.list = list;
+        this.mListener = listener;
+    }
+
+    public interface OnListItemSelectedInterface {
+        void onItemSelected(View v, int position);
     }
 
     @NonNull
@@ -42,14 +48,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
         holder.reply.setText(String.valueOf(list.get(position).reply));
         holder.heart.setText(String.valueOf(list.get(position).heart));
         holder.article_ID.setText(String.valueOf(list.get(position).article_ID));
-
         holder.itemView.setTag(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Click position" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
@@ -57,7 +56,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
         return (null != list ? list.size() : 0);
     }
 
-    public static class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends RecyclerView.ViewHolder {
         protected TextView title;
         protected TextView content;
         protected TextView writer;
@@ -75,6 +74,14 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
             this.reply = (TextView) view.findViewById(R.id.reply);
             this.heart = (TextView) view.findViewById(R.id.heart);
             this.article_ID = (TextView) view.findViewById(R.id.article_ID);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemSelected(v, getAdapterPosition());
+                    Log.d("Recyclerview", "position = " + getAdapterPosition());
+                }
+            });
         }
     }
 

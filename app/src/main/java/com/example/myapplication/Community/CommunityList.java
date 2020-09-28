@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.Community.dataframe.ArticleList;
+import com.example.myapplication.Community.dataframe.ArticleFrame;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +38,7 @@ import okhttp3.Response;
 //        R.id.country_univ      article_type = 8;
 
 public class CommunityList extends Fragment {
-    private ArrayList<ArticleList> list = new ArrayList<>();
+    private ArrayList<ArticleFrame> list = new ArrayList<>();
     private static final String TAG = "RHC";
 
     @Nullable
@@ -77,7 +78,7 @@ public class CommunityList extends Fragment {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
-                Log.d(TAG, "serverFailure: " + e.toString());
+                Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -89,7 +90,7 @@ public class CommunityList extends Fragment {
                     Log.d(TAG, "josnArray.length = " + jsonArray.length());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        list.add(new ArticleList(Integer.parseInt(jsonObject.get("articleId").toString()),
+                        list.add(new ArticleFrame(Integer.parseInt(jsonObject.get("articleId").toString()),
                                 jsonObject.get("title").toString(),
                                 jsonObject.get("content").toString(),
                                 jsonObject.get("nickName").toString(),
