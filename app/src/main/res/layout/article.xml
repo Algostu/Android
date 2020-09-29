@@ -56,10 +56,12 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:text="Title"
-        android:textSize="20dp"
+        android:textSize="25dp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
         app:layout_constraintTop_toBottomOf="@id/ll_who"
         tools:ignore="MissingConstraints" />
 
@@ -67,10 +69,11 @@
         android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
         android:text="Content"
         android:textSize="18dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:ignore="MissingConstraints" />
 
@@ -78,7 +81,7 @@
         android:id="@+id/things"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
         app:layout_constraintTop_toBottomOf="@id/content"

@@ -92,7 +92,8 @@ public class CommunityList extends Fragment {
 
     public interface RetrofitService {
         //        @FormUrlEncoded
-        @GET("ArticleListFrame")
+        @GET("articleList")
         Call<ArrayList<ArticleListFrame>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
     }
+
 }

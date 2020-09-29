@@ -17,23 +17,21 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Community.dataframe.ArticleFrame;
 import com.example.myapplication.Community.dataframe.ArticleListFrame;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.Community.dataframe.ArticleFrame;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 
 public class Community extends Fragment implements ArticleAdapter.OnListItemSelectedInterface {
@@ -68,7 +66,7 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.article_list, container, false);
-
+        view.setClickable(true);
         TextView title = (TextView) view.findViewById(R.id.tv_title);
         title.setText(community_name);
         ImageButton btn_write_article = (ImageButton) view.findViewById(R.id.btn_write_article);
@@ -101,69 +99,79 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
 
     @Override
     public void onResume() {
-        adapter.notifyDataSetChanged();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://49.50.164.11:5000/article/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetrofitService service = retrofit.create(RetrofitService.class);
+
+        Call<ArrayList<ArticleListFrame>> call = service.goArticle(article_type, "latest");
+
+        call.enqueue(new Callback<ArrayList<ArticleListFrame>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ArticleListFrame>> call, Response<ArrayList<ArticleListFrame>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<ArticleListFrame> result = response.body();
+                    list.clear();
+                    list.addAll(result);
+                    adapter.notifyDataSetChanged();
+                    Log.d(TAG, "onResponse: " + result.toString());
+                } else {
+                    Toast.makeText(getContext(), "Upload Fail", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onResponse: Fail");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ArticleListFrame>> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
         super.onResume();
     }
-
 
     @Override
     public void onItemSelected(View v, int position) {
         ArticleAdapter.Holder holder = (ArticleAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
-        // https://thepassion.tistory.com/300 ID가 제대로 안들어옴
 
-        String article_ID = holder.article_ID.toString();
+        String article_ID = holder.article_ID.getText().toString();
 
         Log.d(TAG, "ARTICLEID:" + article_ID);
-        String url = String.format("http://49.50.164.11:5000/article/read?articleID=%s&articleType=%d", article_ID, article_type);
-        getRequest(url);
-    }
 
-    public void getRequest(String postUrl) {
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url(postUrl)
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://49.50.164.11:5000/article/")
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
+        RetrofitService service = retrofit.create(RetrofitService.class);
+
+        Call<ArticleFrame> call = service.readArticle(Integer.parseInt(article_ID), article_type);
+
+        call.enqueue(new retrofit2.Callback<ArticleFrame>() {
             @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, Response response) throws IOException {
-                String result = response.body().string();
-                Bundle bundle = new Bundle();
-                final Fragment fragment_article = new Article();
-
-                try {
-                    Log.d(TAG, "onResponse: " + result);
-                    JSONObject jsonObject = new JSONObject(result);
-                    Log.d(TAG, "josnobject.tostring = " + jsonObject.toString());
-
-                    bundle.putString("writer", jsonObject.get("nickName").toString());
-                    bundle.putString("title", jsonObject.get("title").toString());
-                    bundle.putString("content", jsonObject.get("content").toString());
-                    bundle.putString("time", jsonObject.get("writtenTime").toString());
-                    bundle.putInt("reply", Integer.parseInt(jsonObject.get("reply").toString()));
-                    bundle.putInt("heart", Integer.parseInt(jsonObject.get("heart").toString()));
-                    bundle.putInt("article_ID", (Integer.parseInt(jsonObject.get("articleId").toString())));
-
-                    fragment_article.setArguments(bundle);
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((MainActivity) getActivity()).replaceFragmentFull(fragment_article);
-                        }
-                    });
-
-                } catch (JSONException e) {
-                    Log.d(TAG, "JSON: False " + e.toString());
-                    e.printStackTrace();
+            public void onResponse(Call<ArticleFrame> call, retrofit2.Response<ArticleFrame> response) {
+                if (response.isSuccessful()) {
+                    ArticleFrame result = response.body();
+                    ((MainActivity) getActivity()).replaceFragmentFull(new Article(result));
+                } else {
+                    Toast.makeText(getContext(), "Connection error", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onResponse: Fail " + response.body().toString());
                 }
             }
+
+            @Override
+            public void onFailure(Call<ArticleFrame> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
         });
+    }
+
+    public interface RetrofitService {
+        @GET("read")
+        Call<ArticleFrame> readArticle(@Query("articleID") int articleID, @Query("articleType") int articleType);
+
+        @GET("articleList")
+        Call<ArrayList<ArticleListFrame>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
     }
 }
