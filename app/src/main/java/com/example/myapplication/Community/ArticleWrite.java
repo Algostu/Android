@@ -16,18 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.myapplication.Community.dataframe.ArticleFrame;
 import com.example.myapplication.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.kakao.usermgmt.response.model.User;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,9 +28,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Body;
-import retrofit2.http.FieldMap;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 
@@ -65,7 +54,7 @@ public class ArticleWrite extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-        View view = inflater.inflate(R.layout.wrtie_article, container, false);
+        View view = inflater.inflate(R.layout.article_write, container, false);
 
         checkBox = view.findViewById(R.id.checkbox_isAnonymous);
         et_title = view.findViewById(R.id.et_title);

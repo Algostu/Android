@@ -93,6 +93,8 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
     @Override
     public void onDestroy() {
         BottomNavigationView navigation = getActivity().findViewById(R.id.nav_bar);
+        View nav_view = getActivity().findViewById(R.id.nav_view);
+        nav_view.setVisibility(View.VISIBLE);
         navigation.setVisibility(View.VISIBLE);
         super.onDestroy();
     }

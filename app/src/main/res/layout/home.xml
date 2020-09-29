@@ -1,15 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white_gray">
+
+    <!-- guide line -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="15dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="15dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <!--  title background  -->
+    <TextView
+        android:id="@+id/title_bg"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/classic_blue"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/coral_pink"
-        android:gravity="center"
-        android:text="HOME"
-        android:textSize="50dp" />
+        android:id="@+id/school_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="아주 고등학교"
+        android:textColor="@android:color/white"
+        android:textSize="25dp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintTop_toTopOf="@id/gd_top" />
 
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="오승민"
+        android:textColor="@android:color/white"
+        android:textSize="25dp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintTop_toBottomOf="@id/school_name" />
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="님, 안녕하세요!"
+        android:textColor="@android:color/white"
+        android:textSize="25dp"
+        app:layout_constraintLeft_toRightOf="@id/user_name"
+        app:layout_constraintTop_toBottomOf="@id/school_name" />
+
+    <LinearLayout
+        android:id="@+id/layout_school"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/user_name">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:text="오늘의 급식"
+                    android:textColor="@color/classic_blue"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="2dp"
+                    android:background="@color/faded_gray" />
+
+                <TextView
+                    android:id="@+id/cafeteria"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="MANU1\nMANU2\nMANU3"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <!-- 내 게시판 -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="90dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/layout_school"
+        tools:ignore="MissingConstraints">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+
+            <TextView
+                android:id="@+id/title_my_community"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="내 게시판"
+                android:textColor="@color/classic_blue"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginBottom="10dp" />
+
+            <!--Recycler View for my community-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_my_community"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:overScrollMode="never"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarSize="5dp"
+                android:scrollbarThumbVertical="@android:color/darker_gray"
+                android:scrollbars="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title_my_community"
+                app:layout_constraintVertical_bias="0"
+                tools:ignore="MissingConstraints" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

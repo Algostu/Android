@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white_gray">
 
     <!-- guide line -->
     <androidx.constraintlayout.widget.Guideline
@@ -11,14 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="10dp" />
+        app:layout_constraintGuide_begin="15dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gd_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="10dp" />
+        app:layout_constraintGuide_end="15dp" />
 
     <!--  title background  -->
     <TextView
@@ -72,7 +73,7 @@
 
                 <TextView
                     android:id="@+id/school_free"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="자유 게시판"
                     android:textSize="20dp" />
@@ -87,7 +88,7 @@
 
                 <TextView
                     android:id="@+id/school_question"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="질문 게시판"
@@ -122,7 +123,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:shadowColor="@color/classic_blue"
-                android:text="지역 게시판"
+                android:text="동네 게시판"
                 android:textSize="23dp"
                 android:textStyle="bold" />
 
@@ -134,7 +135,7 @@
 
                 <TextView
                     android:id="@+id/region_free"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="자유 게시판"
                     android:textSize="20dp" />
@@ -149,7 +150,7 @@
 
                 <TextView
                     android:id="@+id/region_recruit"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="모집 게시판"
                     android:textSize="20dp" />
@@ -164,7 +165,7 @@
 
                 <TextView
                     android:id="@+id/region_question"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="질문 게시판"
@@ -211,7 +212,7 @@
 
                 <TextView
                     android:id="@+id/country_entry"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="자유 게시판"
                     android:textSize="20dp" />
@@ -226,7 +227,7 @@
 
                 <TextView
                     android:id="@+id/country_academy"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="학원&amp;인강 게시판"
                     android:textSize="20dp" />
@@ -241,7 +242,7 @@
 
                 <TextView
                     android:id="@+id/country_univ"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="대학 게시판"

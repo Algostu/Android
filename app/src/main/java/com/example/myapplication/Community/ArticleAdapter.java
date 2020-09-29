@@ -1,7 +1,6 @@
 package com.example.myapplication.Community;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.R;
 import com.example.myapplication.Community.dataframe.ArticleListFrame;
+import com.example.myapplication.R;
 
 import java.util.ArrayList;
 
@@ -79,7 +78,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
                 @Override
                 public void onClick(View v) {
                     mListener.onItemSelected(v, getAdapterPosition());
-                    Log.d("Recyclerview", "position = " + getAdapterPosition());
                 }
             });
         }

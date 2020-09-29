@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,8 +18,8 @@ import com.example.myapplication.Simulation.Simulation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-
     private BottomNavigationView navigation;
+
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -52,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         navigation = findViewById(R.id.nav_bar);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.item_home);
-
     }
 
     public void replaceFragment(Fragment fragment) {
@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void replaceFragmentFull(Fragment fragment) {
+        View nav_view = findViewById(R.id.nav_view);
+        nav_view.setVisibility(fragment.getView().GONE);
         navigation.setVisibility(fragment.getView().GONE);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
