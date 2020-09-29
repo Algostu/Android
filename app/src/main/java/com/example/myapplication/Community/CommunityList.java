@@ -1,11 +1,14 @@
 package com.example.myapplication.Community;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,17 +18,15 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Community.dataframe.ArticleList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 //        R.id.school_free        article_type = 2;
 //        R.id.school_question   article_type = 1;
@@ -37,7 +38,6 @@ import okhttp3.Response;
 //        R.id.country_univ      article_type = 8;
 
 public class CommunityList extends Fragment {
-    private ArrayList<ArticleList> list = new ArrayList<>();
     private static final String TAG = "RHC";
 
     @Nullable
@@ -60,55 +60,43 @@ public class CommunityList extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = String.format("http://49.50.164.11:5000/article/articleList?articleType=%d&articleTime=latest", article_type);
-                list.clear();
-                getRequest(url, article_type);
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://49.50.164.11:5000/article/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                RetrofitService service = retrofit.create(RetrofitService.class);
+
+                Call<ArrayList<ArticleList>> call = service.goArticle(article_type, "latest");
+
+                call.enqueue(new Callback<ArrayList<ArticleList>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<ArticleList>> call, Response<ArrayList<ArticleList>> response) {
+                        if (response.isSuccessful()) {
+                            ArrayList<ArticleList> result = response.body();
+
+                            Log.d(TAG, "onResponse: " + result.get(0).writtenTime);
+
+                            ((MainActivity) getActivity()).replaceFragmentFull(new Community(article_type, result));
+                        } else {
+                            Toast.makeText(getContext(), "No data", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onResponse: Fail");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<ArticleList>> call, Throwable t) {
+                        Log.d(TAG, "onFailure: " + t.getMessage());
+                    }
+                });
             }
         });
     }
 
-    public void getRequest(String postUrl, final int article_type) {
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url(postUrl)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                Log.d(TAG, "serverFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, Response response) throws IOException {
-                String result = response.body().string();
-//                result = result.substring(1, result.length() - 1);
-                try {
-                    JSONArray jsonArray = new JSONArray(result);
-                    Log.d(TAG, "josnArray.length = " + jsonArray.length());
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        list.add(new ArticleList(Integer.parseInt(jsonObject.get("articleId").toString()),
-                                jsonObject.get("title").toString(),
-                                jsonObject.get("content").toString(),
-                                jsonObject.get("nickName").toString(),
-                                jsonObject.get("writtenTime").toString(),
-                                Integer.parseInt(jsonObject.get("heart").toString()),
-                                Integer.parseInt(jsonObject.get("reply").toString())));
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((MainActivity) getActivity()).replaceFragmentFull(new Community(article_type, list));
-                        }
-                    });
-
-                } catch (JSONException e) {
-                    Log.d(TAG, "JSON: False " + e.toString());
-                    e.printStackTrace();
-                }
-            }
-        });
+    public interface RetrofitService {
+        //        @FormUrlEncoded
+        @GET("articleList")
+        Call<ArrayList<ArticleList>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
     }
 }

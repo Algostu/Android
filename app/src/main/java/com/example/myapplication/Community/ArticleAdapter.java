@@ -37,11 +37,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
     public void onBindViewHolder(@NonNull ArticleAdapter.Holder holder, final int position) {
         holder.title.setText(list.get(position).title);
         holder.content.setText(list.get(position).content);
-        holder.writer.setText(list.get(position).nickname);
-        holder.time.setText(list.get(position).time);
+        holder.writer.setText(list.get(position).nickName);
+        holder.time.setText(list.get(position).writtenTime);
         holder.reply.setText(String.valueOf(list.get(position).reply));
         holder.heart.setText(String.valueOf(list.get(position).heart));
-        holder.article_ID.setText(String.valueOf(list.get(position).article_ID));
+        holder.article_ID.setText(String.valueOf(list.get(position).articleId));
 
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -77,5 +77,4 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
             this.article_ID = (TextView) view.findViewById(R.id.article_ID);
         }
     }
-
 }

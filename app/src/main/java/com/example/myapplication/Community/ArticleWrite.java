@@ -1,39 +1,49 @@
 package com.example.myapplication.Community;
 
-import android.content.Context;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
+import com.example.myapplication.Community.dataframe.Article;
 import com.example.myapplication.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.kakao.usermgmt.response.model.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
+
 
 public class ArticleWrite extends Fragment {
-
-    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private static final String TAG = "RHC";
 
     private int user_id = 1;
     private boolean is_anonymous = true;
@@ -62,8 +72,6 @@ public class ArticleWrite extends Fragment {
         et_content = view.findViewById(R.id.et_content);
 
         et_title.requestFocus();
-        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         btn_upload_article = view.findViewById(R.id.btn_upload_article);
         btn_upload_article.setOnClickListener(new View.OnClickListener() {
@@ -77,51 +85,50 @@ public class ArticleWrite extends Fragment {
                 title = et_title.getText().toString();
                 content = et_content.getText().toString();
 
-                connectServer(view);
-                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
-                getActivity().getSupportFragmentManager().popBackStack();
+                JsonObject paramObject = new JsonObject();
+                paramObject.addProperty("articleType", article_type);
+                paramObject.addProperty("userId", user_id);
+                paramObject.addProperty("isAnonymous", is_anonymous);
+                paramObject.addProperty("title", title);
+                paramObject.addProperty("content", content);
+
+                Log.d(TAG, "JSON " + paramObject.toString());
+
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://49.50.164.11:5000/article/")
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .build();
+
+                RetrofitService service = retrofit.create(RetrofitService.class);
+                Call<String> call = service.writeArticle(paramObject);
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Toast.makeText(getContext(), "게시 성공!", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Write Article Response: " + response.body());
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.d(TAG, "onFailure: " + t.toString());
+                        Toast.makeText(getContext(), "게시 실패ㅠㅠ", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         return view;
     }
 
-    public void connectServer(View view) {
-        String postUrl = "http://49.50.164.11:5000/article/write";
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("articleType", article_type);
-            json.put("userId", user_id);
-            json.put("isAnonymous", is_anonymous);
-            json.put("title", title);
-            json.put("content", content);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody body = RequestBody.create(json.toString(), JSON);
-        postRequest(postUrl, body);
+    public interface RetrofitService {
+        @POST("write")
+        Call<String> writeArticle(@Body JsonObject body);
     }
-
-    public void postRequest(String postUrl, RequestBody postBody) {
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url(postUrl)
-                .post(postBody)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, Response response) throws IOException {
-            }
-        });
-    }
-
 }

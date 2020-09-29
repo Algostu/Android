@@ -1,34 +1,15 @@
 package com.example.myapplication.Community.dataframe;
 
-import java.util.ArrayList;
 
 public class Article {
-    public int userID;
-    public String title;
-    public String nickname;
-    public Boolean isAnonymous;
+    public String articleID;
+    public String isAnonymous;
     public String content;
-    public String articleType;
-    public String time;
+    public String title;
+    public String viewNumber;
+    public String reply;
+    public String heart;
+    public String writtenTime;
+    public String nickName;
 
-    public Article(int userID, String title, String nickname, Boolean isAnonymous, String content, String articleType, String time) {
-        this.userID = userID;
-        this.title = title;
-        this.nickname = nickname;
-        this.isAnonymous = isAnonymous;
-        this.content = content;
-        this.articleType = articleType;
-        this.time = time;
-    }
-
-    public static ArrayList<Article> tempFunctionCreateArticle(int num) {
-
-        ArrayList<Article> articels = new ArrayList<Article>();
-
-        for (int i = 0; i < num + 1; i++) {
-            articels.add(new Article(i, "title", "nickname", true, "Content", "Type", "00:00"));
-        }
-
-        return articels;
-    }
 }
