@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Community.dataframe.ArticleListFrame;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Community.dataframe.ArticleFrame;
@@ -45,9 +46,9 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
     private String community_name;
     private int article_type;
 
-    private ArrayList<ArticleFrame> list = new ArrayList<>();
+    private ArrayList<ArticleListFrame> list = new ArrayList<>();
 
-    public Community(int article_type, ArrayList<ArticleFrame> list) {
+    public Community(int article_type, ArrayList<ArticleListFrame> list) {
         this.list = list;
         this.article_type = article_type;
         if (article_type == 2 || article_type == 3 || article_type == 6)
@@ -109,7 +110,7 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
     public void onItemSelected(View v, int position) {
         ArticleAdapter.Holder holder = (ArticleAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
         // https://thepassion.tistory.com/300 ID가 제대로 안들어옴
-        
+
         String article_ID = holder.article_ID.toString();
 
         Log.d(TAG, "ARTICLEID:" + article_ID);

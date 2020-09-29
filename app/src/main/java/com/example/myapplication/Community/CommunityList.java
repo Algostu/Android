@@ -1,8 +1,6 @@
 package com.example.myapplication.Community;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.Community.dataframe.ArticleListFrame;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.Community.dataframe.ArticleList;
 
 import java.util.ArrayList;
 
@@ -68,15 +66,13 @@ public class CommunityList extends Fragment {
 
                 RetrofitService service = retrofit.create(RetrofitService.class);
 
-                Call<ArrayList<ArticleList>> call = service.goArticle(article_type, "latest");
+                Call<ArrayList<ArticleListFrame>> call = service.goArticle(article_type, "latest");
 
-                call.enqueue(new Callback<ArrayList<ArticleList>>() {
+                call.enqueue(new Callback<ArrayList<ArticleListFrame>>() {
                     @Override
-                    public void onResponse(Call<ArrayList<ArticleList>> call, Response<ArrayList<ArticleList>> response) {
+                    public void onResponse(Call<ArrayList<ArticleListFrame>> call, Response<ArrayList<ArticleListFrame>> response) {
                         if (response.isSuccessful()) {
-                            ArrayList<ArticleList> result = response.body();
-
-                            Log.d(TAG, "onResponse: " + result.get(0).writtenTime);
+                            ArrayList<ArticleListFrame> result = response.body();
 
                             ((MainActivity) getActivity()).replaceFragmentFull(new Community(article_type, result));
                         } else {
@@ -86,7 +82,7 @@ public class CommunityList extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<ArrayList<ArticleList>> call, Throwable t) {
+                    public void onFailure(Call<ArrayList<ArticleListFrame>> call, Throwable t) {
                         Log.d(TAG, "onFailure: " + t.getMessage());
                     }
                 });
@@ -96,7 +92,7 @@ public class CommunityList extends Fragment {
 
     public interface RetrofitService {
         //        @FormUrlEncoded
-        @GET("articleList")
-        Call<ArrayList<ArticleList>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
+        @GET("ArticleListFrame")
+        Call<ArrayList<ArticleListFrame>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
     }
 }

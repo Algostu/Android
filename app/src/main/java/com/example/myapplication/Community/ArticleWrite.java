@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.myapplication.Community.dataframe.Article;
+import com.example.myapplication.Community.dataframe.ArticleFrame;
 import com.example.myapplication.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

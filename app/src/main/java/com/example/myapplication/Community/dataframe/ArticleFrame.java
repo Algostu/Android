@@ -1,14 +1,15 @@
 package com.example.myapplication.Community.dataframe;
 
-public class ArticleList {
 
-    public String articleId;
-    public String title;
+public class ArticleFrame {
+    public String articleID;
+    public String isAnonymous;
     public String content;
-    public String nickName;
-    public String writtenTime;
-    public String heart;
+    public String title;
+    public String viewNumber;
     public String reply;
-    //public String articleType;
-    //private static String articles;
+    public String heart;
+    public String writtenTime;
+    public String nickName;
+
 }

@@ -11,16 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.Community.dataframe.ArticleFrame;
+import com.example.myapplication.Community.dataframe.ArticleListFrame;
 
 import java.util.ArrayList;
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> {
-    private ArrayList<ArticleFrame> list = new ArrayList<ArticleFrame>();
+    private ArrayList<ArticleListFrame> list = new ArrayList<ArticleListFrame>();
     private Context context;
     private OnListItemSelectedInterface mListener;
 
-    public ArticleAdapter(Context context, ArrayList<ArticleFrame> list, OnListItemSelectedInterface listener) {
+    public ArticleAdapter(Context context, ArrayList<ArticleListFrame> list, OnListItemSelectedInterface listener) {
         this.context = context;
         this.list = list;
         this.mListener = listener;
@@ -43,11 +43,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
     public void onBindViewHolder(@NonNull ArticleAdapter.Holder holder, final int position) {
         holder.title.setText(list.get(position).title);
         holder.content.setText(list.get(position).content);
-        holder.writer.setText(list.get(position).nickname);
-        holder.time.setText(list.get(position).time);
+        holder.writer.setText(list.get(position).nickName);
+        holder.time.setText(list.get(position).writtenTime);
         holder.reply.setText(String.valueOf(list.get(position).reply));
         holder.heart.setText(String.valueOf(list.get(position).heart));
-        holder.article_ID.setText(String.valueOf(list.get(position).article_ID));
+        holder.article_ID.setText(String.valueOf(list.get(position).articleId));
         holder.itemView.setTag(position);
     }
 

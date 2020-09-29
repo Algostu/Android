@@ -18,10 +18,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private long pressedTime;
-
     private BottomNavigationView navigation;
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -56,24 +54,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.item_home);
 
     }
-
-
-//    @Override
-//    public void onBackPressed() {
-//        //super.onBackPressed();
-//        if (pressedTime == 0) {
-//            Toast.makeText(MainActivity.this, "한번 더 누르면 종료됩니다", Toast.LENGTH_LONG).show();
-//            pressedTime = System.currentTimeMillis();
-//        } else {
-//            int seconds = (int) (System.currentTimeMillis() - pressedTime);
-//
-//            if (seconds > 2000) {
-//                pressedTime = 0;
-//            } else {
-//                finish();
-//            }
-//        }
-//    }
 
     public void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
