@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Community.dataframe.ArticleFrame;
 import com.example.myapplication.Community.dataframe.ArticleListFrame;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
@@ -46,8 +45,7 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
 
     private ArrayList<ArticleListFrame> list = new ArrayList<>();
 
-    public Community(int article_type, ArrayList<ArticleListFrame> list) {
-        this.list = list;
+    public Community(int article_type) {
         this.article_type = article_type;
         if (article_type == 2 || article_type == 3 || article_type == 6)
             this.community_name = "자유 게시판";
@@ -78,6 +76,10 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
             }
         });
 
+        adapter = new ArticleAdapter(getContext(), list, this);
+
+        readArticleList();
+
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_articles);
 
         recyclerView.setHasFixedSize(true);
@@ -85,7 +87,6 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new ArticleAdapter(getContext(), list, this);
         recyclerView.setAdapter(adapter);
         return view;
     }
@@ -99,8 +100,7 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
         super.onDestroy();
     }
 
-    @Override
-    public void onResume() {
+    public void readArticleList() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://49.50.164.11:5000/article/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -118,7 +118,6 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
                     list.clear();
                     list.addAll(result);
                     adapter.notifyDataSetChanged();
-                    Log.d(TAG, "onResponse: " + result.toString());
                 } else {
                     Toast.makeText(getContext(), "Upload Fail", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onResponse: Fail");
@@ -127,52 +126,27 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
 
             @Override
             public void onFailure(Call<ArrayList<ArticleListFrame>> call, Throwable t) {
+                readArticleList();
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        readArticleList();
         super.onResume();
     }
 
     @Override
     public void onItemSelected(View v, int position) {
         ArticleAdapter.Holder holder = (ArticleAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
-
         String article_ID = holder.article_ID.getText().toString();
 
-        Log.d(TAG, "ARTICLEID:" + article_ID);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/article/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-
-        Call<ArticleFrame> call = service.readArticle(Integer.parseInt(article_ID), article_type);
-
-        call.enqueue(new retrofit2.Callback<ArticleFrame>() {
-            @Override
-            public void onResponse(Call<ArticleFrame> call, retrofit2.Response<ArticleFrame> response) {
-                if (response.isSuccessful()) {
-                    ArticleFrame result = response.body();
-                    ((MainActivity) getActivity()).replaceFragmentFull(new Article(result));
-                } else {
-                    Toast.makeText(getContext(), "Connection error", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onResponse: Fail " + response.body().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArticleFrame> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
+        ((MainActivity) getActivity()).replaceFragmentFull(new Article(Integer.parseInt(article_ID), article_type));
     }
 
     public interface RetrofitService {
-        @GET("read")
-        Call<ArticleFrame> readArticle(@Query("articleID") int articleID, @Query("articleType") int articleType);
-
         @GET("articleList")
         Call<ArrayList<ArticleListFrame>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
     }

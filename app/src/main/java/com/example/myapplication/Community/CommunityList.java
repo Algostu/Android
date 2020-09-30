@@ -1,30 +1,17 @@
 package com.example.myapplication.Community;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.myapplication.Community.dataframe.ArticleListFrame;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 //        R.id.school_free        article_type = 2;
 //        R.id.school_question   article_type = 1;
@@ -58,42 +45,8 @@ public class CommunityList extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://49.50.164.11:5000/article/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                RetrofitService service = retrofit.create(RetrofitService.class);
-
-                Call<ArrayList<ArticleListFrame>> call = service.goArticle(article_type, "latest");
-
-                call.enqueue(new Callback<ArrayList<ArticleListFrame>>() {
-                    @Override
-                    public void onResponse(Call<ArrayList<ArticleListFrame>> call, Response<ArrayList<ArticleListFrame>> response) {
-                        if (response.isSuccessful()) {
-                            ArrayList<ArticleListFrame> result = response.body();
-
-                            ((MainActivity) getActivity()).replaceFragmentFull(new Community(article_type, result));
-                        } else {
-                            Toast.makeText(getContext(), "No data", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "onResponse: Fail");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ArrayList<ArticleListFrame>> call, Throwable t) {
-                        Log.d(TAG, "onFailure: " + t.getMessage());
-                    }
-                });
+                ((MainActivity) getActivity()).replaceFragmentFull(new Community(article_type));
             }
         });
     }
-
-    public interface RetrofitService {
-        //        @FormUrlEncoded
-        @GET("articleList")
-        Call<ArrayList<ArticleListFrame>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
-    }
-
 }

@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,10 +63,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void replaceFragmentFull(Fragment fragment) {
-        View nav_view = findViewById(R.id.nav_view);
-        nav_view.setVisibility(fragment.getView().GONE);
-        navigation.setVisibility(fragment.getView().GONE);
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, fragment);
         transaction.addToBackStack(null);
