@@ -13,7 +13,6 @@ import com.example.myapplication.Community.CommunityList;
 import com.example.myapplication.Home.Home;
 import com.example.myapplication.Mypage.Mypage;
 import com.example.myapplication.School.School;
-import com.example.myapplication.Simulation.Simulation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.item_community:
                     replaceFragment(new CommunityList());
                     return true;
-                case R.id.item_simulation:
-                    replaceFragment(new Simulation());
-                    return true;
+//                case R.id.item_simulation:
+//                    replaceFragment(new Simulation());
+//                    return true;
                 case R.id.item_mypage:
                     replaceFragment(new Mypage());
                     return true;

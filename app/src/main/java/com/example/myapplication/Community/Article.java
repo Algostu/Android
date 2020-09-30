@@ -95,4 +95,6 @@ public class Article extends Fragment {
         @GET("read")
         Call<ArticleFrame> readArticle(@Query("articleID") int articleID, @Query("articleType") int articleType);
     }
+
+//    https://coding-factory.tistory.com/210?category=758272
 }
