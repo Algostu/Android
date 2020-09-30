@@ -1,6 +1,5 @@
 package com.example.myapplication.Community.dataframe;
 
-
 public class ArticleFrame {
     public String articleID;
     public String isAnonymous;
@@ -11,5 +10,4 @@ public class ArticleFrame {
     public String heart;
     public String writtenTime;
     public String nickName;
-
 }

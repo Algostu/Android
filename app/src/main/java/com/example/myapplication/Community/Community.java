@@ -33,7 +33,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 
-public class Community extends Fragment implements ArticleAdapter.OnListItemSelectedInterface {
+public class Community extends Fragment implements ArticleListAdapter.OnListItemSelectedInterface {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -77,7 +77,7 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
             }
         });
 
-        adapter = new ArticleAdapter(getContext(), list, this);
+        adapter = new ArticleListAdapter(getContext(), list, this);
 
         readArticleList();
 
@@ -143,7 +143,7 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
 
     @Override
     public void onItemSelected(View v, int position) {
-        ArticleAdapter.Holder holder = (ArticleAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
+        ArticleListAdapter.Holder holder = (ArticleListAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
         String article_ID = holder.article_ID.getText().toString();
 
         ((MainActivity) getActivity()).replaceFragmentFull(new Article(Integer.parseInt(article_ID), article_type));

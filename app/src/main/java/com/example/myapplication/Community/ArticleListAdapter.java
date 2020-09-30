@@ -14,12 +14,12 @@ import com.example.myapplication.R;
 
 import java.util.ArrayList;
 
-public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> {
+public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.Holder> {
     private ArrayList<ArticleListFrame> list = new ArrayList<ArticleListFrame>();
     private Context context;
     private OnListItemSelectedInterface mListener;
 
-    public ArticleAdapter(Context context, ArrayList<ArticleListFrame> list, OnListItemSelectedInterface listener) {
+    public ArticleListAdapter(Context context, ArrayList<ArticleListFrame> list, OnListItemSelectedInterface listener) {
         this.context = context;
         this.list = list;
         this.mListener = listener;
@@ -31,23 +31,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
 
     @NonNull
     @Override
-    public ArticleAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ArticleListAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.article_list_card, parent, false);
         Holder holder = new Holder(view);
 
         return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ArticleAdapter.Holder holder, final int position) {
-        holder.title.setText(list.get(position).title);
-        holder.content.setText(list.get(position).content);
-        holder.writer.setText(list.get(position).nickName);
-        holder.time.setText(list.get(position).writtenTime);
-        holder.reply.setText(String.valueOf(list.get(position).reply));
-        holder.heart.setText(String.valueOf(list.get(position).heart));
-        holder.article_ID.setText(String.valueOf(list.get(position).articleId));
-        holder.itemView.setTag(position);
     }
 
     @Override
@@ -83,4 +71,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
         }
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull ArticleListAdapter.Holder holder, final int position) {
+        holder.title.setText(list.get(position).title);
+        holder.content.setText(list.get(position).content);
+        holder.writer.setText(list.get(position).nickName);
+        holder.time.setText(list.get(position).writtenTime);
+        holder.reply.setText(String.valueOf(list.get(position).reply));
+        holder.heart.setText(String.valueOf(list.get(position).heart));
+        holder.article_ID.setText(String.valueOf(list.get(position).articleId));
+        holder.itemView.setTag(position);
+    }
 }
