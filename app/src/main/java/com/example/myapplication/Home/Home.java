@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,9 @@ import retrofit2.http.GET;
 
 public class Home extends Fragment implements HotArticleAdapter.OnListItemSelectedInterface, MyCommunityAdapter.OnListItemSelectedInterface {
     private static final String TAG = "RHC";
+
+    private int cnt_myCommunity = 0;
+    private int cnt_hotArticle = 0;
 
     private RecyclerView myCommunity_recyclerView;
     private RecyclerView.Adapter myCommunity_adapter;
@@ -100,7 +104,9 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             @Override
             public void onFailure(Call<ArrayList<MyCommunityFrame>> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
-                setMyCommunity();
+                if (cnt_myCommunity < 10) setMyCommunity();
+                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                cnt_myCommunity++;
             }
         });
     }
@@ -136,7 +142,9 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             @Override
             public void onFailure(Call<ArrayList<HotArticleFrame>> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
-                setHotArticle();
+                if (cnt_hotArticle < 10) setHotArticle();
+                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                cnt_hotArticle++;
             }
         });
     }

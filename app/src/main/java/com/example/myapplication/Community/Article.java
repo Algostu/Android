@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,8 @@ import retrofit2.http.Query;
 
 public class Article extends Fragment {
     private static final String TAG = "RHC";
+
+    private int cnt_readArticle = 0;
 
     private TextView writer;
     private TextView title;
@@ -85,8 +88,10 @@ public class Article extends Fragment {
 
             @Override
             public void onFailure(Call<ArticleFrame> call, Throwable t) {
-                readArticle();
                 Log.d(TAG, "onFailure: " + t.getMessage());
+                if (cnt_readArticle < 10) readArticle();
+                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                cnt_readArticle++;
             }
         });
     }

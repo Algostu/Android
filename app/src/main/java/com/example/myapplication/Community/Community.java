@@ -39,6 +39,7 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private static final String TAG = "RHC";
+    private int cnt_readArticleList = 0;
 
     private String community_name;
     private int article_type;
@@ -126,8 +127,10 @@ public class Community extends Fragment implements ArticleAdapter.OnListItemSele
 
             @Override
             public void onFailure(Call<ArrayList<ArticleListFrame>> call, Throwable t) {
-                readArticleList();
                 Log.d(TAG, "onFailure: " + t.getMessage());
+                if (cnt_readArticleList < 10) readArticleList();
+                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                cnt_readArticleList++;
             }
         });
     }

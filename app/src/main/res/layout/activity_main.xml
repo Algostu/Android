@@ -22,20 +22,20 @@
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="47dp"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/shadow" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="bottom"
+            android:background="@android:color/white"
             app:itemBackground="@android:color/white"
             app:itemIconTint="@drawable/item_color"
             app:itemTextColor="@drawable/item_color"
             app:menu="@menu/bottom_nav_bar"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="26dp" />
+            tools:ignore="MissingConstraints" />
     </FrameLayout>
 
     <FrameLayout
