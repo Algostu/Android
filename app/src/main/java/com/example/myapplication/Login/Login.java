@@ -3,12 +3,18 @@ package com.example.myapplication.Login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
@@ -18,7 +24,6 @@ import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
-import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.usermgmt.response.model.AgeRange;
@@ -28,20 +33,20 @@ import com.kakao.util.OptionalBoolean;
 import com.kakao.util.exception.KakaoException;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class Login extends Fragment {
 
     private Button btn_custom_login;
     private Button btn_custom_login_out;
     private SessionCallback sessionCallback = new SessionCallback();
     Session session;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.login, container, false);
 
-        btn_custom_login = (Button) findViewById(R.id.btn_custom_login);
-        btn_custom_login_out = (Button) findViewById(R.id.btn_custom_login2);
+        btn_custom_login = (Button) view.findViewById(R.id.btn_custom_login3);
+//        btn_custom_login_out = (Button) findViewById(R.id.btn_custom_login2);
 
         session = Session.getCurrentSession();
         session.addCallback(sessionCallback);
@@ -49,28 +54,30 @@ public class LoginActivity extends AppCompatActivity {
         btn_custom_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                session.open(AuthType.KAKAO_LOGIN_ALL, LoginActivity.this);
+                session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);
             }
         });
 
-        btn_custom_login_out.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserManagement.getInstance()
-                        .requestLogout(new LogoutResponseCallback() {
-                            @Override
-                            public void onCompleteLogout() {
-                                Toast.makeText(LoginActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
+//        btn_custom_login_out.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                UserManagement.getInstance()
+//                        .requestLogout(new LogoutResponseCallback() {
+//                            @Override
+//                            public void onCompleteLogout() {
+//                                Toast.makeText(LoginActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//            }
+//        });
 
-        session.open(AuthType.KAKAO_LOGIN_ALL, LoginActivity.this);
+        session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);
+
+        return view;
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         // 세션 콜백 삭제
@@ -78,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // 카카오톡|스토리 간편로그인 실행 결과를 받아서 SDK로 전달
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
             return;
@@ -117,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         @Override
                         public void onSuccess(MeV2Response result) {
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
 
                             Log.i("KAKAO_API", "사용자 아이디: " + result.getId());
 
@@ -127,12 +134,12 @@ public class LoginActivity extends AppCompatActivity {
                                 // 이메일
                                 AgeRange ageRange = kakaoAccount.getAgeRange();
 
-                                if (ageRange != null) {
-                                    if (ageRange != AgeRange.AGE_15_19)
-                                        Toast.makeText(getApplicationContext(), "나이 제한에 걸리셨습니다.", Toast.LENGTH_SHORT).show();
-                                    return;
-
-                                }
+//                                if (ageRange != null) {
+//                                    if (ageRange != AgeRange.AGE_15_19)
+//                                        Toast.makeText(getActivity(), "나이 제한에 걸리셨습니다.", Toast.LENGTH_SHORT).show();
+//                                    return;
+//
+//                                }
                                 // 프로필
                                 Profile profile = kakaoAccount.getProfile();
 
@@ -148,9 +155,10 @@ public class LoginActivity extends AppCompatActivity {
                                     // 프로필 획득 불가
                                 }
 
-                                startActivity(intent);
-                                finish();
+                                //startActivity(intent);
+                                //finish();
 
+                                ((startUpActivity)getActivity()).replaceFragment(new SignUP());
                             }
                         }
                     });
