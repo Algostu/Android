@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/signup_main" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/continues"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/checkAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="220dp"
+                android:layout_marginRight="220dp"
+                android:text="약관에 모두 동의 합니다"
+                app:layout_constraintBottom_toTopOf="@+id/contract1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/check1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="129dp"
+                android:layout_marginLeft="129dp"
+                android:text="개인정보 제공 항목에 동의 합니다(필수)"
+                app:layout_constraintEnd_toEndOf="@+id/contract1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/contract1" />
+
+            <EditText
+                android:id="@+id/contract1"
+                android:layout_width="372dp"
+                android:layout_height="114dp"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toTopOf="@+id/check1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkAll" />
+
+            <CheckBox
+                android:id="@+id/check2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="142dp"
+                android:layout_marginLeft="142dp"
+                android:layout_marginTop="9dp"
+                android:text="서비스 이용 약관에 동의 합니다(필수)"
+                app:layout_constraintBottom_toTopOf="@+id/contract3"
+                app:layout_constraintEnd_toEndOf="@+id/contract2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/contract2" />
+
+            <EditText
+                android:id="@+id/contract2"
+                android:layout_width="372dp"
+                android:layout_height="114dp"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toTopOf="@+id/check2"
+                app:layout_constraintEnd_toEndOf="@+id/contract1"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/contract1"
+                app:layout_constraintTop_toBottomOf="@+id/check1"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <CheckBox
+                android:id="@+id/check3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="개인 정보 수집 항목에 동의 합니다(필수)"
+                app:layout_constraintBottom_toTopOf="@+id/contract4"
+                app:layout_constraintEnd_toEndOf="@+id/contract3"
+                app:layout_constraintTop_toBottomOf="@+id/contract3" />
+
+            <EditText
+                android:id="@+id/contract3"
+                android:layout_width="372dp"
+                android:layout_height="114dp"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toTopOf="@+id/check3"
+                app:layout_constraintEnd_toEndOf="@+id/contract2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/contract2"
+                app:layout_constraintTop_toBottomOf="@+id/check2" />
+
+            <EditText
+                android:id="@+id/contract4"
+                android:layout_width="372dp"
+                android:layout_height="114dp"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                app:layout_constraintEnd_toEndOf="@+id/contract3"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/contract3"
+                app:layout_constraintTop_toBottomOf="@+id/check3" />
+
+            <CheckBox
+                android:id="@+id/check4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="마케팅용 정보 제공에 동의 합니다(선택)"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/contract4"
+                app:layout_constraintTop_toBottomOf="@+id/contract4" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/continues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/continues"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
