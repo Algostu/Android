@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="grade">
+        <item>중학교 3학년(예비 고1)</item>
+        <item>고등학교 1학년</item>
+        <item>고등학교 2학년</item>
+        <item>고등학교 3학년</item>
+        <item>졸업생</item>
+    </string-array>
+
+</resources>
