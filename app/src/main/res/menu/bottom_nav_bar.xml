@@ -10,25 +10,25 @@
     <item
         android:id="@+id/item_school"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/ic_fork"
         android:title="SCHOOL" />
 
     <item
         android:id="@+id/item_community"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/ic_conversation"
         android:title="COMMUNITY" />
 
-    <item
-        android:id="@+id/item_simulation"
-        android:enabled="true"
-        android:icon="@drawable/ic_baseline_home_24"
-        android:title="SIMULATION" />
+    <!--    <item-->
+    <!--        android:id="@+id/item_simulation"-->
+    <!--        android:enabled="true"-->
+    <!--        android:icon="@drawable/ic_baseline_home_24"-->
+    <!--        android:title="SIMULATION" />-->
 
     <item
         android:id="@+id/item_mypage"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/ic_user"
         android:title="MYPAGE" />
 
 </menu>
