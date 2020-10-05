@@ -12,6 +12,7 @@ public class UserJson implements Serializable {
     public int age;
     public int grade;
     public String nickName;
+    public String status;
 
     public String getNickName() {
         return nickName;

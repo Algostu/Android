@@ -16,6 +16,8 @@ import com.example.myapplication.Login.Data.UserInfo;
 import com.example.myapplication.Login.Data.UserJson;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kakao.usermgmt.response.model.AgeRange;
 import com.kakao.usermgmt.response.model.Gender;
 import com.kakao.usermgmt.response.model.UserAccount;
@@ -51,9 +53,13 @@ public class startUpActivity extends AppCompatActivity {
 
     public void login(long id, String token) {
 
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://49.50.164.11:5000/auth/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         RetrofitService service = retrofit.create(RetrofitService.class);
@@ -65,18 +71,23 @@ public class startUpActivity extends AppCompatActivity {
             public void onResponse(Call<UserJson> call, retrofit2.Response<UserJson> response) {
                 if (response.isSuccessful()) {
                     UserJson result = response.body();
+                    if (result.status.equals("success")){
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("user",result);
+                        intent.putExtras(bundle);
 
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("user",result);
-                    intent.putExtras(bundle);
+                        startActivity(intent);
+                        Log.d(TAG, "onResponse: Success " + response.body());
+                    }
+                    else {
+                        // if need to sign up
+                        startUpActivity.this.replaceFragment(new SignUP());
+                        Log.d(TAG, "onResponse: Fail " + response.body());
+                    }
 
-                    startActivity(intent);
-                    Log.d(TAG, "onResponse: Success " + response.body());
                 } else {
-                    // if need to sign up
-                    startUpActivity.this.replaceFragment(new SignUP());
-                    Log.d(TAG, "onResponse: Fail " + response.body());
+
                 }
             }
 
