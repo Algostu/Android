@@ -1,8 +1,10 @@
 package com.example.myapplication.Login;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,9 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.myapplication.Community.ArticleWrite;
-import com.example.myapplication.Community.dataframe.ArticleFrame;
-import com.example.myapplication.Community.dataframe.ArticleListFrame;
 import com.example.myapplication.Login.Adapter.SearchAdapter;
 import com.example.myapplication.Login.Data.School;
 import com.example.myapplication.Login.Data.UserInfo;
@@ -33,13 +33,16 @@ import com.example.myapplication.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.kakao.usermgmt.response.model.UserAccount;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,13 +51,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
-import static android.content.ContentValues.TAG;
+import static android.app.Activity.RESULT_OK;
 
 public class SIgnUP2 extends Fragment {
     private static final String TAG = "KHK";
+
+    private final int GET_GALLERY_IMAGE = 200;
+    Uri selectedImageUri;
 
     private List<School> list;          // 데이터를 넣은 리스트변수
     private ListView listView;          // 검색을 보여줄 리스트변수
@@ -68,6 +76,7 @@ public class SIgnUP2 extends Fragment {
     private Spinner gradeSpinner;
     private School school;
     private Button submit;
+    private ImageView studentCard;
     private int grade;
     private boolean nickNamePossibleNot;
 
@@ -88,7 +97,7 @@ public class SIgnUP2 extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (Pattern.matches("^[가-힣a-zA-Z0-9]*$",charSequence.toString()) && charSequence.length() <= 15 && charSequence.length() >= 5){
+                if (Pattern.matches("^[가-힣a-zA-Z0-9]*$", charSequence.toString()) && charSequence.length() <= 15 && charSequence.length() >= 5) {
                     nickNameOkay.setText("사용 가능한 닉네임 입니다.");
                     nickNameOkay.setTextColor(Color.parseColor("#52D84D"));
                     nickNamePossibleNot = false;
@@ -155,18 +164,28 @@ public class SIgnUP2 extends Fragment {
             }
         });
 
+        studentCard = view.findViewById(R.id.im_student_card);
+        studentCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent, GET_GALLERY_IMAGE);
+            }
+        });
+
         submit = view.findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserInfo user = ((startUpActivity)getActivity()).user;
+                UserInfo user = ((startUpActivity) getActivity()).user;
                 Date date = new Date();
                 if (date.getTime() > user.expTime) {
                     Toast.makeText(getActivity(), "가입 시간이 만료 되었습니다. 처음부터 다시 시작해 주세요.", Toast.LENGTH_SHORT).show();
-                    ((startUpActivity)getActivity()).replaceFragment(new Login());
+                    ((startUpActivity) getActivity()).replaceFragment(new Login());
                     return;
                 }
-                if (nickNamePossibleNot){
+                if (nickNamePossibleNot) {
                     Toast.makeText(getActivity(), "닉네임을 제대로 입력해 주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -193,6 +212,12 @@ public class SIgnUP2 extends Fragment {
                 paramObject.addProperty("gender", user.gender);
                 paramObject.addProperty("ageRange", user.ageRange);
 
+                File file = new File(String.valueOf(selectedImageUri));
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+                MultipartBody.Part image =
+                        MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+
                 Log.d(TAG, "JSON " + paramObject.toString());
 
                 Gson gson = new GsonBuilder()
@@ -206,7 +231,7 @@ public class SIgnUP2 extends Fragment {
                         .build();
 
                 RetrofitService service = retrofit.create(RetrofitService.class);
-                Call<String> call = service.registerKAKAO(paramObject);
+                Call<String> call = service.registerKAKAO(paramObject, image);
 
                 call.enqueue(new Callback<String>() {
                     @Override
@@ -215,7 +240,7 @@ public class SIgnUP2 extends Fragment {
                         Log.d(TAG, "Register Kakao response: " + response.body());
                         if (!response.isSuccessful()) return;
                         String[] res = response.body().split(":");
-                        if (res.length == 1){
+                        if (res.length == 1) {
                             getActivity().getSupportFragmentManager().popBackStack();
                             Context context = getActivity();
                             SharedPreferences sharedPref = context.getSharedPreferences(
@@ -223,7 +248,7 @@ public class SIgnUP2 extends Fragment {
                             SharedPreferences.Editor autoLogin = sharedPref.edit();
                             autoLogin.putString("autoLogin", "true");
                             autoLogin.commit();
-                            ((startUpActivity)getActivity()).replaceFragment(new Login());
+                            ((startUpActivity) getActivity()).replaceFragment(new Login());
                         }
 
 
@@ -280,10 +305,20 @@ public class SIgnUP2 extends Fragment {
     }
 
     public interface RetrofitService {
+
+        @Multipart
         @POST("kakaoSignup")
-        Call<String> registerKAKAO(@Body JsonObject body);
+        Call<String> registerKAKAO(@Body JsonObject body, @Part MultipartBody.Part image);
+
         @GET("schoolList")
         Call<ArrayList<School>> searchSchoolName(@Query("schoolName") String schoolName);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+        }
     }
 
 }

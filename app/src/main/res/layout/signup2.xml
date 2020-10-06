@@ -63,7 +63,6 @@
         app:layout_constraintTop_toBottomOf="@id/nickName"
         tools:ignore="MissingConstraints" />
 
-
     <TextView
         android:id="@+id/grade_text"
         android:layout_width="wrap_content"
@@ -123,15 +122,49 @@
         app:layout_constraintTop_toBottomOf="@id/grade_layout"
         tools:ignore="MissingConstraints" />
 
+    <TextView
+        android:id="@+id/student_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="10dp"
+        android:text="학생증"
+        android:textColor="#3C4041"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/selected_school" />
+
+    <ImageView
+        android:id="@+id/im_student_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_add_photo"
+        app:layout_constraintLeft_toRightOf="@id/student_card"
+        app:layout_constraintTop_toBottomOf="@id/selected_school" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView"
+        android:layout_marginLeft="80dp"
+        android:text="학교명과 이름이 보이도록 찍어주세요."
+        android:textSize="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/student_card"
+        tools:ignore="MissingConstraints" />
+
+
     <EditText
         android:id="@+id/editSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="10dp"
         android:hint="검색어를 입력하세요."
-        app:layout_constraintTop_toBottomOf="@id/selected_school"
+        app:layout_constraintTop_toBottomOf="@id/student_card"
         tools:ignore="MissingConstraints" />
 
     <RelativeLayout
