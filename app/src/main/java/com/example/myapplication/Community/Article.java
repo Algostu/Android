@@ -1,5 +1,7 @@
 package com.example.myapplication.Community;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +60,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
     private int articleID;
     private int articleType;
+    private int parentReplyID = 0;
 
     public Article(int articleID, int articleType) {
         this.articleID = articleID;
@@ -183,7 +187,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
         JsonObject paramObject = new JsonObject();
         paramObject.addProperty("userId", 1);
-        paramObject.addProperty("parentReplyID", 0);
+        paramObject.addProperty("parentReplyID", parentReplyID);
         paramObject.addProperty("isAnonymous", ck_isAnonymous.isChecked());
         paramObject.addProperty("content", comment.getText().toString());
 
@@ -227,7 +231,17 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         Call<String> uploadComment(@Body JsonObject body);
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void onItemSelected(View v, int position) {
+        ArticleCommentAdapter.CommentViewHolder holder = (ArticleCommentAdapter.CommentViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+        int replyID = holder.replyID;
+        if (parentReplyID == 0) {
+            parentReplyID = replyID;
+            v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.coral_pink));
+        } else {
+            parentReplyID = 0;
+            v.setBackgroundColor(ContextCompat.getColor(getContext(), Color.TRANSPARENT));
+        }
     }
 }

@@ -103,8 +103,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
             @Override
             public void onFailure(Call<ArrayList<MyCommunityFrame>> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-                if (cnt_myCommunity < 10) setMyCommunity();
+                Log.d(TAG, "My Community " + String.valueOf(cnt_myCommunity) + " " + t.getMessage());
+                if (cnt_myCommunity < 5) setMyCommunity();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
                 cnt_myCommunity++;
             }
@@ -141,8 +141,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
             @Override
             public void onFailure(Call<ArrayList<HotArticleFrame>> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-                if (cnt_hotArticle < 10) setHotArticle();
+                Log.d(TAG, "HotArticle " + String.valueOf(cnt_hotArticle) + " " + t.getMessage());
+                if (cnt_hotArticle < 5) setHotArticle();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
                 cnt_hotArticle++;
             }

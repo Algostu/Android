@@ -49,6 +49,7 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder1.nickName.setText(list.get(position).nickName);
             holder1.writtenTime.setText(list.get(position).writtenTime);
             holder1.content.setText(list.get(position).content);
+            holder1.replyID = list.get(position).replyID;
             holder1.itemView.setTag(position);
         } else {
             RecommentViewHolder holder2 = (RecommentViewHolder) holder;
@@ -63,8 +64,8 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         protected TextView nickName;
         protected TextView writtenTime;
         protected TextView content;
+        protected int replyID;
         protected ImageView im_comment;
-        protected boolean recomment = false;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,14 +77,7 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             im_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    recomment = true;
-                }
-            });
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onItemSelected(v, getAdapterPosition());
+                    mListener.onItemSelected(view, getAdapterPosition());
                 }
             });
         }
