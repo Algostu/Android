@@ -135,6 +135,11 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         });
     }
 
+    public interface RetrofitService {
+        @GET("articleList")
+        Call<ArrayList<ArticleListFrame>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
+    }
+
     @Override
     public void onResume() {
         readArticleList();
@@ -147,10 +152,5 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         String article_ID = holder.article_ID.getText().toString();
 
         ((MainActivity) getActivity()).replaceFragmentFull(new Article(Integer.parseInt(article_ID), article_type));
-    }
-
-    public interface RetrofitService {
-        @GET("articleList")
-        Call<ArrayList<ArticleListFrame>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
     }
 }
