@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -13,7 +12,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.myapplication.Community.CommunityList;
 import com.example.myapplication.Home.Home;
-import com.example.myapplication.Login.Data.UserJson;
 import com.example.myapplication.Mypage.Mypage;
 import com.example.myapplication.School.School;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -51,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        intent = getIntent();
-        UserJson user = (UserJson)intent.getSerializableExtra("user");
-        Log.v("Test", "tel  :  "+user.getNickName());
+//        intent = getIntent();
+//        UserJson user = (UserJson)intent.getSerializableExtra("user");
+//        Log.v("Test", "tel  :  "+user.getNickName());
 
         navigation = findViewById(R.id.nav_bar);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
