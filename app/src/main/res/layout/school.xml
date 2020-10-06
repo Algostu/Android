@@ -1,14 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <!-- guide line -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="15dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="15dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="10dp" />
+
+    <!--  title background  -->
     <TextView
+        android:id="@+id/title_bg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="50dp"
-        android:text="SCHOOL"
-        android:textAlignment="center"
+        android:layout_height="100dp"
         android:background="@color/classic_blue"
-        android:gravity="center" />
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/school_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="아주 고등학교"
+        android:textColor="@android:color/white"
+        android:textSize="25dp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintTop_toTopOf="@id/gd_top" />
+
+    <!-- 내 게시판 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_cafeteria"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/school_name"
+        tools:ignore="MissingConstraints">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+
+            <TextView
+                android:id="@+id/title_cafeteria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="내 게시판"
+                android:textColor="@color/classic_blue"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginBottom="10dp" />
+
+            <!--Recycler View for my community-->
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_cafeteria">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_cafeteria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbarFadeDuration="0"
+                    android:scrollbarSize="5dp"
+                    android:scrollbarThumbVertical="@android:color/darker_gray"
+                    android:scrollbars="vertical"
+                    tools:ignore="MissingConstraints" />
+            </androidx.core.widget.NestedScrollView>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- 핫 게시판 -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/cv_cafeteria"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="새로운 기능이 업데이트 예정이에요ㅎ-ㅎ"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <!--        <RelativeLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginLeft="15dp"-->
+        <!--            android:layout_marginRight="15dp">-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/title_hot_community"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginTop="15dp"-->
+        <!--                android:text="HOT 게시물"-->
+        <!--                android:textColor="@color/classic_blue"-->
+        <!--                android:textSize="20dp"-->
+        <!--                android:textStyle="bold"-->
+        <!--                app:layout_constraintTop_toTopOf="parent"-->
+        <!--                app:layout_goneMarginBottom="10dp" />-->
+
+        <!--            <androidx.core.widget.NestedScrollView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_below="@id/title_hot_community">-->
+
+        <!--                <androidx.recyclerview.widget.RecyclerView-->
+        <!--                    android:id="@+id/rv_hot_article"-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="match_parent"-->
+        <!--                    android:layout_below="@id/title_hot_community"-->
+        <!--                    android:overScrollMode="never"-->
+        <!--                    android:scrollbarFadeDuration="0"-->
+        <!--                    android:scrollbarSize="5dp"-->
+        <!--                    android:scrollbarThumbVertical="@android:color/darker_gray"-->
+        <!--                    android:scrollbars="vertical"-->
+        <!--                    tools:ignore="MissingConstraints" />-->
+
+        <!--            </androidx.core.widget.NestedScrollView>-->
+        <!--        </RelativeLayout>-->
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
