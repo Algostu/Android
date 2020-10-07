@@ -185,7 +185,7 @@ public class SIgnUP2 extends Fragment {
 
                 JsonObject paramObject = new JsonObject();
                 paramObject.addProperty("schoolID", school.schoolID);
-                paramObject.addProperty("nickName", nickName.getFreezesText());
+                paramObject.addProperty("nickName", nickName.getText().toString());
                 paramObject.addProperty("grade", grade);
                 paramObject.addProperty("userID", user.userID);
                 paramObject.addProperty("accessToken", user.accessToken);

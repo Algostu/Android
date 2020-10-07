@@ -8,7 +8,7 @@ public class UserJson implements Serializable {
     public String regionName;
     public String townName;
     public String schoolName;
-    public String schoolGender;
+    public int schoolGender;
     public String email;
     public String contact;
     public String homePage;
