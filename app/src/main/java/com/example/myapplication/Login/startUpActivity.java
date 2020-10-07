@@ -69,7 +69,6 @@ public class startUpActivity extends AppCompatActivity {
                     String expDateStr = format.format(c.getTime());
                     SharedPreferences.Editor edit = sharedPref.edit();
                     edit.putString("expDate", expDateStr);
-                    edit.commit();
                     // load user object and pass it to main Activity
                     Gson gson = new Gson();
                     String json = sharedPref.getString("userObject", "");
