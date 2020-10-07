@@ -91,15 +91,6 @@ public class Login extends Fragment {
 //            }
 //        });
 
-        Context context = getActivity();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                "auto", Context.MODE_PRIVATE);
-
-        String autoLogin = sharedPref.getString("autoLogin",null);
-
-        if (autoLogin != null)
-            session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);
-
         return view;
     }
 

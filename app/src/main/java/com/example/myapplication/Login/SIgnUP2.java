@@ -217,16 +217,8 @@ public class SIgnUP2 extends Fragment {
                         String[] res = response.body().split(":");
                         if (res.length == 1){
                             getActivity().getSupportFragmentManager().popBackStack();
-                            Context context = getActivity();
-                            SharedPreferences sharedPref = context.getSharedPreferences(
-                                    "auto", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor autoLogin = sharedPref.edit();
-                            autoLogin.putString("autoLogin", "true");
-                            autoLogin.commit();
                             ((startUpActivity)getActivity()).replaceFragment(new Login());
                         }
-
-
                     }
 
                     @Override
