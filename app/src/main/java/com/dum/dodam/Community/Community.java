@@ -18,19 +18,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Community.dataframe.ArticleListFrame;
+import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 
 public class Community extends Fragment implements ArticleListAdapter.OnListItemSelectedInterface {
@@ -42,19 +42,22 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     private int cnt_readArticleList = 0;
 
     private String community_name;
-    private int article_type;
+    private int communityID;
+    private int communityType;
 
     private ArrayList<ArticleListFrame> list = new ArrayList<>();
 
-    public Community(int article_type) {
-        this.article_type = article_type;
-        if (article_type == 2 || article_type == 3 || article_type == 6)
+    public Community(int communityType, int communityID) {
+        this.communityID = communityID;
+        this.communityType = communityType;
+
+        if (communityID == 2 || communityID == 3 || communityID == 6)
             this.community_name = "자유 게시판";
-        else if (article_type == 1 || article_type == 5)
+        else if (communityID == 1 || communityID == 5)
             this.community_name = "질문 게시판";
-        else if (article_type == 4)
+        else if (communityID == 4)
             this.community_name = "모집 게시판";
-        else if (article_type == 7)
+        else if (communityID == 7)
             this.community_name = "학원&인강 게시판";
         else
             this.community_name = "대학 게시판";
@@ -73,7 +76,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         btn_write_article.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(article_type));
+                ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(communityID));
             }
         });
 
@@ -102,22 +105,28 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     }
 
     public void readArticleList() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/article/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        RetrofitAdapter rAdapter = new RetrofitAdapter();
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
 
-        RetrofitService service = retrofit.create(RetrofitService.class);
+        long now = System.currentTimeMillis();
+        Date data = new Date(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:MM:SS");
+        String date;
+        if (list.isEmpty()) {
+            date = dateFormat.format(data);
+        } else {
+            date = list.get(list.size()).writtenTime;
+        }
+//        Call<ArticleListResponse> call = service.goArticle(communityType, communityID, date);
+        Call<ArticleListResponse> call = service.goArticle(0, 1, "latest");
 
-        Call<ArrayList<ArticleListFrame>> call = service.goArticle(article_type, "latest");
-
-        call.enqueue(new Callback<ArrayList<ArticleListFrame>>() {
+        call.enqueue(new Callback<ArticleListResponse>() {
             @Override
-            public void onResponse(Call<ArrayList<ArticleListFrame>> call, Response<ArrayList<ArticleListFrame>> response) {
+            public void onResponse(Call<ArticleListResponse> call, Response<ArticleListResponse> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<ArticleListFrame> result = response.body();
-                    list.clear();
-                    list.addAll(result);
+                    ArticleListResponse result = response.body();
+                    if (result.checkError(getActivity()) != 0) return;
+                    list.addAll(result.articles);
                     adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "Upload Fail", Toast.LENGTH_SHORT).show();
@@ -126,7 +135,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
             }
 
             @Override
-            public void onFailure(Call<ArrayList<ArticleListFrame>> call, Throwable t) {
+            public void onFailure(Call<ArticleListResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 if (cnt_readArticleList < 10) readArticleList();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
@@ -135,13 +144,9 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         });
     }
 
-    public interface RetrofitService {
-        @GET("articleList")
-        Call<ArrayList<ArticleListFrame>> goArticle(@Query("articleType") int article_type, @Query("articleTime") String articleTime);
-    }
-
     @Override
     public void onResume() {
+        list.clear();
         readArticleList();
         super.onResume();
     }
@@ -151,6 +156,6 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         ArticleListAdapter.Holder holder = (ArticleListAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
         String article_ID = holder.article_ID.getText().toString();
 
-        ((MainActivity) getActivity()).replaceFragmentFull(new Article(Integer.parseInt(article_ID), article_type));
+        ((MainActivity) getActivity()).replaceFragmentFull(new Article(Integer.parseInt(article_ID), communityType, communityID));
     }
 }

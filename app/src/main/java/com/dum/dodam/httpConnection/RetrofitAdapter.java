@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -17,8 +18,7 @@ public class RetrofitAdapter {
     public static Retrofit retrofit = null;
 
 
-    public static RetrofitService getInstance(String baseUrl, Context context)
-    {
+    public static RetrofitService getInstance(String baseUrl, Context context) {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -29,14 +29,15 @@ public class RetrofitAdapter {
         builder.addInterceptor(new ReceivedCookiesInterceptor(context)); // VERY VERY IMPORTANT
         client = builder.build();
 
-        if(retrofit==null)
-        {
-            retrofit = new Retrofit.Builder().
-                    baseUrl(baseUrl).
-                    addConverterFactory(GsonConverterFactory.create(gson)).
-                    client(client).
-                    build();
+        if (retrofit == null) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(client)
+                    .build();
         }
+
         RetrofitService service = retrofit.create(RetrofitService.class);
         return service;
     }

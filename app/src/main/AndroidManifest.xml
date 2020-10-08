@@ -24,7 +24,6 @@
             android:value="@string/kakao_app_key" />
 
         <activity android:name=".Login.startUpActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

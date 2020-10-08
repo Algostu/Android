@@ -50,6 +50,7 @@ public class HotArticleAdapter extends RecyclerView.Adapter<HotArticleAdapter.Ho
         else if (8 == list.get(position).communityID) community_name = "아주대학교";
 
         holder.communityID = list.get(position).communityID;
+        holder.communityType = list.get(position).communityType;
         holder.community.setText(community_name);
         holder.articleID.setText(String.valueOf(list.get(position).articleID));
         holder.title.setText(list.get(position).title);
@@ -71,6 +72,7 @@ public class HotArticleAdapter extends RecyclerView.Adapter<HotArticleAdapter.Ho
         protected TextView content;
         protected TextView reply;
         protected TextView heart;
+        protected int communityType;
         protected int communityID;
 
         public Holder(View view) {

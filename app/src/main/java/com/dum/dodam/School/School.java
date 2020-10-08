@@ -16,6 +16,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.dum.dodam.R;
 import com.dum.dodam.School.dataframe.CafeteriaFrame;
 import com.dum.dodam.School.dataframe.LunchFrame;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -97,17 +99,9 @@ public class School extends Fragment {
     }
 
     public void downloadCafeteriaList() {
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/article/")
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
+        RetrofitAdapter rAdapter = new RetrofitAdapter();
+        RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getContext());
 
         Call<ArrayList<LunchFrame>> call = service.getCafeteriaList();
 
@@ -168,10 +162,6 @@ public class School extends Fragment {
         });
     }
 
-    public interface RetrofitService {
-        @GET("getCafeteriaList")
-        Call<ArrayList<LunchFrame>> getCafeteriaList();
-    }
 
     public static int getWeek() {
         Calendar c = Calendar.getInstance();

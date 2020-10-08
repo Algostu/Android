@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -15,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,20 +27,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Community.dataframe.ArticleCommentFrame;
 import com.dum.dodam.Community.dataframe.ArticleFrame;
+import com.dum.dodam.Community.dataframe.ArticleResponse;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
-import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 public class Article extends Fragment implements ArticleCommentAdapter.OnListItemSelectedInterface {
     private static final String TAG = "RHC";
@@ -55,18 +54,23 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private TextView reply;
     private TextView heart;
     private TextView article_ID;
+    private androidx.appcompat.widget.Toolbar toolbar;
+    private ActionBar actionbar;
 
     private ImageView upload_comment;
     private EditText comment;
     private CheckBox ck_isAnonymous;
 
     private int articleID;
-    private int articleType;
+    private int communityType;
+    private int communityID;
     private int parentReplyID = 0;
+    private String edit;
 
-    public Article(int articleID, int articleType) {
+    public Article(int articleID, int communityType, int communityID) {
         this.articleID = articleID;
-        this.articleType = articleType;
+        this.communityType = communityType;
+        this.communityID = communityID;
     }
 
     @Nullable
@@ -74,6 +78,13 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.article_, container, false);
         view.setClickable(true);
+
+        toolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionbar.setDisplayShowCustomEnabled(true);
+//        actionbar.setDisplayShowTitleEnabled(false);//기본 제목을 없애줍니다.
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         writer = view.findViewById(R.id.writer);
         title = view.findViewById(R.id.title);
@@ -118,13 +129,16 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     public void readArticle() {
         RetrofitAdapter adapter = new RetrofitAdapter();
         com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
-        Call<ArticleFrame> call = service.readArticle(articleID, articleType);
+        Call<ArticleResponse> call = service.readArticle(articleID, communityType, communityID);
 
-        call.enqueue(new retrofit2.Callback<ArticleFrame>() {
+        call.enqueue(new retrofit2.Callback<ArticleResponse>() {
             @Override
-            public void onResponse(Call<ArticleFrame> call, retrofit2.Response<ArticleFrame> response) {
+            public void onResponse(Call<ArticleResponse> call, retrofit2.Response<ArticleResponse> response) {
                 if (response.isSuccessful()) {
-                    ArticleFrame articleFrame = response.body();
+                    ArticleResponse result = response.body();
+                    if (result.checkError(getActivity()) != 0) return;
+
+                    ArticleFrame articleFrame = result.article;
                     writer.setText(articleFrame.nickName);
                     title.setText(articleFrame.title);
                     content.setText(articleFrame.content);
@@ -132,13 +146,14 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                     reply.setText(articleFrame.reply);
                     heart.setText(articleFrame.heart);
                     article_ID.setText(articleFrame.articleID);
+                    edit = articleFrame.edit;
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body().toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<ArticleFrame> call, Throwable t) {
+            public void onFailure(Call<ArticleResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 if (cnt_readArticle < 10) readArticle();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
@@ -150,7 +165,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     public void readArticleComment() {
         RetrofitAdapter rAdapter = new RetrofitAdapter();
         com.dum.dodam.httpConnection.RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getContext());
-        Call<ArrayList<ArticleCommentFrame>> call = service.readArticleComment(articleID, articleType);
+        Call<ArrayList<ArticleCommentFrame>> call = service.readArticleComment(articleID, 0);
 
         call.enqueue(new retrofit2.Callback<ArrayList<ArticleCommentFrame>>() {
             @Override
@@ -176,7 +191,39 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     }
 
     public void UploadComment() {
+        JsonObject paramObject = new JsonObject();
+        paramObject.addProperty("communityType", 1);
+        paramObject.addProperty("communityID", 1);
+        paramObject.addProperty("articleID", 1);
+        paramObject.addProperty("parentReplyID", parentReplyID);
+        paramObject.addProperty("isAnonymous", ck_isAnonymous.isChecked());
+        paramObject.addProperty("content", comment.getText().toString());
 
+        RetrofitAdapter adapter = new RetrofitAdapter();
+        com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
+        Call<String> call = service.uploadComment(paramObject);
+
+        call.enqueue(new retrofit2.Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                if (response.isSuccessful()) {
+                    String result = response.body();
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+                if (cnt_readArticleComment < 10) readArticle();
+                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                cnt_readArticleComment++;
+            }
+        });
+    }
+
+    public void DeleteArticle() {
         JsonObject paramObject = new JsonObject();
         paramObject.addProperty("userId", 1);
         paramObject.addProperty("parentReplyID", parentReplyID);
@@ -219,5 +266,40 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             parentReplyID = 0;
             v.setBackgroundColor(ContextCompat.getColor(getContext(), Color.TRANSPARENT));
         }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        if (edit.equals("TRUE")) {
+            MenuItem menu2 = menu.findItem(R.id.report);
+            menu2.setVisible(false);
+        }
+        MenuItem menu1 = menu.findItem(R.id.delete);
+        menu1.setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.option_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete:
+                DeleteArticle();
+                break;
+            case R.id.report:
+                //
+                break;
+            case android.R.id.home:
+                //select back button
+                getActivity().getSupportFragmentManager().popBackStack();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

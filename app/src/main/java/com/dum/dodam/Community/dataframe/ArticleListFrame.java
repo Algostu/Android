@@ -9,6 +9,5 @@ public class ArticleListFrame {
     public String writtenTime;
     public String heart;
     public String reply;
-//    public String articleType;
-    //private static String articles;
+    public String viewNumber;
 }
