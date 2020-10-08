@@ -111,6 +111,7 @@ public class startUpActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     UserJson result = response.body();
                     if (result.status.equals("success")){
+                        Log.d("KHK", result.toString());
                         // make curDate + 30 string as expired date
                         Calendar c = Calendar.getInstance();
                         c.setTime(new Date());

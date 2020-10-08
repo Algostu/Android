@@ -1,6 +1,11 @@
 package com.dum.dodam.Home.dataframe;
 
-public class MyCommunityFrame {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class MyCommunityFrame implements Serializable {
     public int communityID;
+    @SerializedName("communityName")
     public String title;
 }
