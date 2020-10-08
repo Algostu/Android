@@ -1,10 +1,14 @@
 package com.dum.dodam.httpConnection;
+
 import com.dum.dodam.Community.dataframe.ArticleCommentFrame;
 import com.dum.dodam.Community.dataframe.ArticleFrame;
+import com.dum.dodam.Community.dataframe.ArticleListResponse;
+import com.dum.dodam.Community.dataframe.ArticleResponse;
 import com.dum.dodam.Home.dataframe.HotArticleFrame;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
 import com.dum.dodam.Login.Data.School;
 import com.dum.dodam.Login.Data.UserJson;
+import com.dum.dodam.School.dataframe.LunchFrame;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -37,11 +41,20 @@ public interface RetrofitService {
     Call<ArrayList<HotArticleFrame>> getHotArticle();
 
     @GET("/article/read")
-    Call<ArticleFrame> readArticle(@Query("articleID") int articleID, @Query("articleType") int articleType);
+    Call<ArticleResponse> readArticle(@Query("articleID") int articleID, @Query("communityType") int communityType, @Query("communityID") int communityID);
 
     @GET("/article/readComment")
     Call<ArrayList<ArticleCommentFrame>> readArticleComment(@Query("articleID") int articleID, @Query("articleType") int articleType);
 
     @POST("/article/uploadComment")
     Call<String> uploadComment(@Body JsonObject body);
+
+    @POST("/article/write")
+    Call<String> writeArticle(@Body JsonObject body);
+
+    @GET("/article/articleList")
+    Call<ArticleListResponse> goArticle(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
+
+    @GET("/article/getCafeteriaList")
+    Call<ArrayList<LunchFrame>> getCafeteriaList();
 }

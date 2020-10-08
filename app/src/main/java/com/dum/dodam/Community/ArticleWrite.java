@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -88,13 +89,9 @@ public class ArticleWrite extends Fragment {
                         .setLenient()
                         .create();
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://49.50.164.11:5000/article/")
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .build();
+                RetrofitAdapter adapter = new RetrofitAdapter();
+                com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
 
-                RetrofitService service = retrofit.create(RetrofitService.class);
                 Call<String> call = service.writeArticle(paramObject);
 
                 call.enqueue(new Callback<String>() {
@@ -114,10 +111,5 @@ public class ArticleWrite extends Fragment {
             }
         });
         return view;
-    }
-
-    public interface RetrofitService {
-        @POST("write")
-        Call<String> writeArticle(@Body JsonObject body);
     }
 }

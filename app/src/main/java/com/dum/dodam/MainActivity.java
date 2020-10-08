@@ -54,12 +54,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         intent = getIntent();
-        UserJson user = (UserJson)intent.getSerializableExtra("user");
-        Log.d("Test", "nickName  :  "+user.nickName);
-        Log.d("Test", "regionName  :  "+user.regionName);
-        Log.d("Test", "townName  :  "+user.townName);
-        Log.d("Test", "schoolGender  :  "+user.schoolGender);
-        Log.d("Test", "email  :  "+user.email);
+
+        UserJson user = (UserJson) intent.getSerializableExtra("user");
+        Log.d("Test", "nickName  :  " + user.nickName);
+        Log.d("Test", "regionName  :  " + user.regionName);
+        Log.d("Test", "townName  :  " + user.townName);
+        Log.d("Test", "schoolGender  :  " + user.schoolGender);
+        Log.d("Test", "email  :  " + user.email);
 
 
         navigation = findViewById(R.id.nav_bar);

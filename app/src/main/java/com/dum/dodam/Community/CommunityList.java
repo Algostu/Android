@@ -29,23 +29,23 @@ public class CommunityList extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.community_list, container, false);
-        textViewClickListener(view, R.id.school_free, 2);
-        textViewClickListener(view, R.id.school_question, 1);
-        textViewClickListener(view, R.id.region_free, 3);
-        textViewClickListener(view, R.id.region_recruit, 4);
-        textViewClickListener(view, R.id.region_question, 5);
-        textViewClickListener(view, R.id.country_entry, 6);
-        textViewClickListener(view, R.id.country_academy, 7);
-        textViewClickListener(view, R.id.country_univ, 8);
+        textViewClickListener(view, R.id.school_free, 2, 2);
+        textViewClickListener(view, R.id.school_question, 1, 2);
+        textViewClickListener(view, R.id.region_free, 3, 1);
+        textViewClickListener(view, R.id.region_recruit, 4, 1);
+        textViewClickListener(view, R.id.region_question, 5, 1);
+        textViewClickListener(view, R.id.country_entry, 1, 0);
+        textViewClickListener(view, R.id.country_academy, 7, 0);
+        textViewClickListener(view, R.id.country_univ, 8, 0);
         return view;
     }
 
-    public void textViewClickListener(View view, final int id, final int article_type) {
+    public void textViewClickListener(View view, final int id, final int communityID, final int communityType) {
         TextView textView = view.findViewById(id);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new Community(article_type));
+                ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID));
             }
         });
     }

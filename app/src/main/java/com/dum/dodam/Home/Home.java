@@ -136,15 +136,16 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     public void onCommunityItemSelected(View v, int position) {
         MyCommunityAdapter.Holder holder = (MyCommunityAdapter.Holder) myCommunity_recyclerView.findViewHolderForAdapterPosition(position);
         int communityID = holder.communityID;
-        ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityID));
+        ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityID, 0));
     }
 
     @Override
     public void onArticleItemSelected(View v, int position) {
         HotArticleAdapter.Holder holder = (HotArticleAdapter.Holder) hotArticle_recyclerView.findViewHolderForAdapterPosition(position);
+        int communityType = holder.communityType;
         int communityID = holder.communityID;
         int articleID = Integer.parseInt(holder.articleID.getText().toString());
 
-        ((MainActivity) getActivity()).replaceFragmentFull(new Article(articleID, communityID));
+        ((MainActivity) getActivity()).replaceFragmentFull(new Article(articleID, communityType, communityID));
     }
 }
