@@ -1,13 +1,14 @@
 package com.dum.dodam.Login.Data;
 
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
+import com.dum.dodam.httpConnection.BaseResponse;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class UserJson implements Serializable {
+public class UserJson extends BaseResponse implements Serializable {
     // school information
     public String regionName;
     public String townName;
@@ -25,9 +26,6 @@ public class UserJson implements Serializable {
     public ArrayList<MyCommunityFrame> comAll;
     public ArrayList<MyCommunityFrame> comRegion;
     public ArrayList<MyCommunityFrame> comSchool;
-    // return value
-    public String status;
-
 
     public String getNickName() {
         return nickName;

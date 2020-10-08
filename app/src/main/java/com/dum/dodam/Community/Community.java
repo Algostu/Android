@@ -126,7 +126,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                 if (response.isSuccessful()) {
                     ArticleListResponse result = response.body();
                     if (result.checkError(getActivity()) != 0) return;
-                    list.addAll(result.articles);
+                    list.addAll(result.body);
                     adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "Upload Fail", Toast.LENGTH_SHORT).show();

@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
@@ -104,14 +105,18 @@ public class startUpActivity extends AppCompatActivity {
     public void login(long id, String token) {
         RetrofitAdapter adapter = new RetrofitAdapter();
         RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", this);
-        Call<UserJson> call = service.kakaoLogin(id, token);
-        call.enqueue(new retrofit2.Callback<UserJson>() {
+        Call<LoginResponse> call = service.kakaoLogin(id, token);
+        call.enqueue(new retrofit2.Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<UserJson> call, retrofit2.Response<UserJson> response) {
+            public void onResponse(Call<LoginResponse> call, retrofit2.Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
-                    UserJson result = response.body();
-                    if (result.status.equals("success")){
-                        Log.d("KHK", result.toString());
+                    LoginResponse result = response.body();
+                    if (result.checkError(getApplicationContext()) !=0){
+                        return;
+                    }
+                    if (result.status.equals("<success>")){
+                        UserJson userInfo = result.body;
+                        Log.d("KHK", user.toString());
                         // make curDate + 30 string as expired date
                         Calendar c = Calendar.getInstance();
                         c.setTime(new Date());
@@ -119,7 +124,7 @@ public class startUpActivity extends AppCompatActivity {
                         String expDateStr = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(c.getTime());
                         // make user object to string to store
                         Gson gson = new Gson();
-                        String json = gson.toJson(result);
+                        String json = gson.toJson(userInfo);
                         // store to sharePreference for future Use
                         SharedPreferences sharedPref = getSharedPreferences(
                                 "auto", Context.MODE_PRIVATE);
@@ -131,11 +136,11 @@ public class startUpActivity extends AppCompatActivity {
                         // make intent and start main activity
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("user",result);
+                        bundle.putSerializable("user",userInfo);
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }
-                    else {
+                    else if (result.errorCode == 3){
                         // if need to sign up
                         startUpActivity.this.replaceFragment(new SignUP());
                         Log.d(TAG, "onResponse: Fails " + response.body().status);
@@ -146,7 +151,7 @@ public class startUpActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<UserJson> call, Throwable t) {
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });

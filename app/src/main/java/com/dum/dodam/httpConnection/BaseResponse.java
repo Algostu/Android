@@ -7,13 +7,16 @@ import android.widget.Toast;
 
 import com.dum.dodam.MainActivity;
 
-public class BaseResponse {
+import java.io.Serializable;
+
+public class BaseResponse implements Serializable {
     public String status;
     public String errorMessage;
     public int errorCode;
 
     public int checkError(Context context) {
         String[] errorArray = status.split(":");
+        status = errorArray[0];
         if (errorArray[0].equals("<success>")) {
             return 0;
         } else {

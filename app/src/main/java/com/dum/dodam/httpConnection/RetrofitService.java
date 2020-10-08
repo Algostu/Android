@@ -6,7 +6,9 @@ import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
 import com.dum.dodam.Home.dataframe.HotArticleFrame;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
+import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.School;
+import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.School.dataframe.LunchFrame;
 import com.google.gson.JsonObject;
@@ -25,14 +27,14 @@ import retrofit2.http.Query;
 
 public interface RetrofitService {
     @GET("/auth/login")
-    Call<UserJson> kakaoLogin(@Query("id") long id, @Query("token") String token);
+    Call<LoginResponse> kakaoLogin(@Query("id") long id, @Query("token") String token);
 
     @Multipart
     @POST("/auth/kakaoSignup")
-    Call<String> registerKAKAO(@Part MultipartBody.Part image, @Part("json") RequestBody body);
+    Call<BaseResponse> registerKAKAO(@Part MultipartBody.Part image, @Part("json") RequestBody body);
 
     @GET("/search/schoolList")
-    Call<ArrayList<School>> searchSchoolName(@Query("schoolName") String schoolName);
+    Call<SearchResponse> searchSchoolName(@Query("schoolName") String schoolName);
 
     @GET("/article/latestArticleList")
     Call<ArrayList<MyCommunityFrame>> getMyCommunity();

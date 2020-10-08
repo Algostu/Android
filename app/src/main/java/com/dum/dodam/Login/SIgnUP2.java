@@ -36,9 +36,11 @@ import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.Login.Adapter.SearchAdapter;
 import com.dum.dodam.Login.Data.School;
+import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.Login.Data.UserInfo;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
@@ -244,22 +246,21 @@ public class SIgnUP2 extends Fragment {
 
                 RetrofitAdapter rAdapter = new RetrofitAdapter();
                 RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getActivity());
-                Call<String> call = service.registerKAKAO(image, requestBody);
-                call.enqueue(new Callback<String>() {
+                Call<BaseResponse> call = service.registerKAKAO(image, requestBody);
+                call.enqueue(new Callback<BaseResponse>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        Toast.makeText(getContext(), response.body(), Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "Register Kakao response: " + response.body());
+                    public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                         if (!response.isSuccessful()) return;
-                        String[] res = response.body().split(":");
-                        if (res.length == 1) {
+                        BaseResponse response1 = response.body();
+                        if(response1.checkError(getContext())!=0) return;
+                        if (response1.status.equals("<success>")) {
                             getActivity().getSupportFragmentManager().popBackStack();
                             ((startUpActivity)getActivity()).replaceFragment(new Login());
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                    public void onFailure(Call<BaseResponse> call, Throwable t) {
                         Log.d(TAG, "onFailure: " + t.toString());
                         Toast.makeText(getContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
                     }
@@ -282,15 +283,15 @@ public class SIgnUP2 extends Fragment {
 
         RetrofitAdapter rAdapter = new RetrofitAdapter();
         RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getActivity());
-        Call<ArrayList<School>> call = service.searchSchoolName(query);
+        Call<SearchResponse> call = service.searchSchoolName(query);
 
-        call.enqueue(new retrofit2.Callback<ArrayList<School>>() {
+        call.enqueue(new retrofit2.Callback<SearchResponse>() {
             @Override
-            public void onResponse(Call<ArrayList<School>> call, retrofit2.Response<ArrayList<School>> response) {
+            public void onResponse(Call<SearchResponse> call, retrofit2.Response<SearchResponse> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<School> result = response.body();
+                    SearchResponse result = response.body();
                     list.clear();
-                    list.addAll(result);
+                    list.addAll(result.body);
                     adapter.notifyDataSetChanged();
                     Log.d(TAG, "onResponse: Success " + response.body());
                 } else {
@@ -299,7 +300,7 @@ public class SIgnUP2 extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<School>> call, Throwable t) {
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });

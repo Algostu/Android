@@ -138,7 +138,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                     ArticleResponse result = response.body();
                     if (result.checkError(getActivity()) != 0) return;
 
-                    ArticleFrame articleFrame = result.article;
+                    ArticleFrame articleFrame = result.body;
                     writer.setText(articleFrame.nickName);
                     title.setText(articleFrame.title);
                     content.setText(articleFrame.content);
