@@ -3,6 +3,8 @@ package com.dum.dodam.httpConnection;
 import android.content.Context;
 
 import com.dum.dodam.Login.Data.UserJson;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -17,6 +19,10 @@ public class RetrofitAdapter {
 
     public static RetrofitService getInstance(String baseUrl, Context context)
     {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
         OkHttpClient client = new OkHttpClient();
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(new AddCookiesInterceptor(context)); // VERY VERY IMPORTANT
@@ -27,7 +33,7 @@ public class RetrofitAdapter {
         {
             retrofit = new Retrofit.Builder().
                     baseUrl(baseUrl).
-                    addConverterFactory(GsonConverterFactory.create()).
+                    addConverterFactory(GsonConverterFactory.create(gson)).
                     client(client).
                     build();
         }

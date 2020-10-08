@@ -1,11 +1,19 @@
 package com.dum.dodam.Login;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,12 +37,20 @@ import androidx.fragment.app.Fragment;
 import com.dum.dodam.Login.Adapter.SearchAdapter;
 import com.dum.dodam.Login.Data.School;
 import com.dum.dodam.Login.Data.UserInfo;
+import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,13 +72,17 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class SIgnUP2 extends Fragment {
     private static final String TAG = "KHK";
 
     private final int GET_GALLERY_IMAGE = 200;
+    private static final int REQUEST_CODE = 0;
     Uri selectedImageUri;
+    String filePath;
+    File localImgFile;
 
     private List<School> list;          // 데이터를 넣은 리스트변수
     private ListView listView;          // 검색을 보여줄 리스트변수
@@ -168,11 +188,11 @@ public class SIgnUP2 extends Fragment {
         studentCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, GET_GALLERY_IMAGE);
-            }
-        });
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, 1);
+    }
+});
 
         submit = view.findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -212,27 +232,19 @@ public class SIgnUP2 extends Fragment {
                 paramObject.addProperty("gender", user.gender);
                 paramObject.addProperty("ageRange", user.ageRange);
 
-                File file = new File(String.valueOf(selectedImageUri));
-                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//                File file = new File(filePath);
+                RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), localImgFile);
 
                 MultipartBody.Part image =
-                        MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+                        MultipartBody.Part.createFormData("image", localImgFile.getName(), requestFile);
 
                 Log.d(TAG, "JSON " + paramObject.toString());
 
-                Gson gson = new GsonBuilder()
-                        .setLenient()
-                        .create();
+                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), paramObject.toString());
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://49.50.164.11:5000/auth/")
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .build();
-
-                RetrofitService service = retrofit.create(RetrofitService.class);
-                Call<String> call = service.registerKAKAO(paramObject, image);
-
+                RetrofitAdapter rAdapter = new RetrofitAdapter();
+                RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getActivity());
+                Call<String> call = service.registerKAKAO(image, requestBody);
                 call.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
@@ -258,6 +270,8 @@ public class SIgnUP2 extends Fragment {
         return view;
     }
 
+
+
     private void search(String query) {
 
         list.clear();
@@ -266,13 +280,8 @@ public class SIgnUP2 extends Fragment {
             return;
         }
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/search/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-
+        RetrofitAdapter rAdapter = new RetrofitAdapter();
+        RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getActivity());
         Call<ArrayList<School>> call = service.searchSchoolName(query);
 
         call.enqueue(new retrofit2.Callback<ArrayList<School>>() {
@@ -296,21 +305,144 @@ public class SIgnUP2 extends Fragment {
         });
     }
 
-    public interface RetrofitService {
-
-        @Multipart
-        @POST("kakaoSignup")
-        Call<String> registerKAKAO(@Body JsonObject body, @Part MultipartBody.Part image);
-
-        @GET("schoolList")
-        Call<ArrayList<School>> searchSchoolName(@Query("schoolName") String schoolName);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            selectedImageUri = data.getData();
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri imgUri = data.getData();
+        String imgPath = getPath(getActivity().getApplicationContext(), imgUri);
+
+        if(imgUri != null && imgPath != null){
+
+            InputStream in = null;//src
+            try {
+                in = getActivity().getContentResolver().openInputStream(imgUri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            String extension = imgPath.substring(imgPath.lastIndexOf("."));
+            localImgFile = new File(getActivity().getApplicationContext().getFilesDir(), "localImgFile"+extension);
+
+            if(in != null) {
+                try {
+                    OutputStream out = new FileOutputStream(localImgFile);//dst
+                    try {
+                        // Transfer bytes from in to out
+                        byte[] buf = new byte[1024];
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+                    }
+                    finally {
+                        out.close();
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            //InternalStorage로 복사된 localImgFile을 통하여 File에 접근가능
         }
+    }
+
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {column};
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    public static String getPath(final Context context, final Uri uri) {
+
+        // DocumentProvider
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }else{
+                    Toast.makeText(context, "Could not get file path. Please try again", Toast.LENGTH_SHORT).show();
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(context, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                } else {
+                    contentUri = MediaStore.Files.getContentUri("external");
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[] {
+                        split[1]
+                };
+
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
     }
 
 }

@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dum.dodam.Community.dataframe.ArticleCommentFrame;
 import com.dum.dodam.Community.dataframe.ArticleFrame;
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -114,13 +116,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     }
 
     public void readArticle() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/article/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-
+        RetrofitAdapter adapter = new RetrofitAdapter();
+        com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
         Call<ArticleFrame> call = service.readArticle(articleID, articleType);
 
         call.enqueue(new retrofit2.Callback<ArticleFrame>() {
@@ -151,13 +148,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     }
 
     public void readArticleComment() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/article/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-
+        RetrofitAdapter rAdapter = new RetrofitAdapter();
+        com.dum.dodam.httpConnection.RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getContext());
         Call<ArrayList<ArticleCommentFrame>> call = service.readArticleComment(articleID, articleType);
 
         call.enqueue(new retrofit2.Callback<ArrayList<ArticleCommentFrame>>() {
@@ -191,13 +183,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         paramObject.addProperty("isAnonymous", ck_isAnonymous.isChecked());
         paramObject.addProperty("content", comment.getText().toString());
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/article/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-
+        RetrofitAdapter adapter = new RetrofitAdapter();
+        com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
         Call<String> call = service.uploadComment(paramObject);
 
         call.enqueue(new retrofit2.Callback<String>() {
@@ -218,17 +205,6 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                 cnt_readArticleComment++;
             }
         });
-    }
-
-    public interface RetrofitService {
-        @GET("read")
-        Call<ArticleFrame> readArticle(@Query("articleID") int articleID, @Query("articleType") int articleType);
-
-        @GET("readComment")
-        Call<ArrayList<ArticleCommentFrame>> readArticleComment(@Query("articleID") int articleID, @Query("articleType") int articleType);
-
-        @POST("uploadComment")
-        Call<String> uploadComment(@Body JsonObject body);
     }
 
     @SuppressLint("ResourceType")

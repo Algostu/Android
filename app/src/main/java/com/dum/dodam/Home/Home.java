@@ -17,8 +17,11 @@ import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
 import com.dum.dodam.Home.dataframe.HotArticleFrame;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
+import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -74,18 +77,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     }
 
     public void setMyCommunity() {
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/article/")
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-
+        RetrofitAdapter adapter = new RetrofitAdapter();
+        RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
         Call<ArrayList<MyCommunityFrame>> call = service.getMyCommunity();
 
         call.enqueue(new retrofit2.Callback<ArrayList<MyCommunityFrame>>() {
@@ -112,18 +105,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     }
 
     public void setHotArticle() {
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/article/")
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-
+        RetrofitAdapter adapter = new RetrofitAdapter();
+        RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
         Call<ArrayList<HotArticleFrame>> call = service.getHotArticle();
 
         call.enqueue(new retrofit2.Callback<ArrayList<HotArticleFrame>>() {
@@ -147,14 +130,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 cnt_hotArticle++;
             }
         });
-    }
-
-    public interface RetrofitService {
-        @GET("latestArticleList")
-        Call<ArrayList<MyCommunityFrame>> getMyCommunity();
-
-        @GET("hotArticleList")
-        Call<ArrayList<HotArticleFrame>> getHotArticle();
     }
 
     @Override
