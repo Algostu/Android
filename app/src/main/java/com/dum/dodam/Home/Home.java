@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
 import com.dum.dodam.Home.dataframe.HotArticleFrame;
+import com.dum.dodam.Home.dataframe.HotArticleResponse;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
+import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
@@ -51,11 +54,15 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     private ArrayList<MyCommunityFrame> myCommunityList = new ArrayList<>();
     private ArrayList<HotArticleFrame> hotArticleList = new ArrayList<>();
 
+    private TextView cafeteria;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_, container, false);
         view.setClickable(true);
+
+        cafeteria = view.findViewById(R.id.cafeteria);
 
         myCommunity_adapter = new MyCommunityAdapter(getContext(), myCommunityList, this);
         setMyCommunity();
@@ -77,15 +84,14 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     }
 
     public void setMyCommunity() {
-        RetrofitAdapter adapter = new RetrofitAdapter();
-        RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
-        Call<ArrayList<MyCommunityFrame>> call = service.getMyCommunity();
+        RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
+        Call<MyCommunityResponse> call = service.getMyCommunity();
 
-        call.enqueue(new retrofit2.Callback<ArrayList<MyCommunityFrame>>() {
+        call.enqueue(new retrofit2.Callback<MyCommunityResponse>() {
             @Override
-            public void onResponse(Call<ArrayList<MyCommunityFrame>> call, retrofit2.Response<ArrayList<MyCommunityFrame>> response) {
+            public void onResponse(Call<MyCommunityResponse> call, retrofit2.Response<MyCommunityResponse> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<MyCommunityFrame> result = response.body();
+                    ArrayList<MyCommunityFrame> result = response.body().body;
                     myCommunityList.clear();
                     myCommunityList.addAll(result);
                     myCommunity_adapter.notifyDataSetChanged();
@@ -95,7 +101,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             }
 
             @Override
-            public void onFailure(Call<ArrayList<MyCommunityFrame>> call, Throwable t) {
+            public void onFailure(Call<MyCommunityResponse> call, Throwable t) {
                 Log.d(TAG, "My Community " + String.valueOf(cnt_myCommunity) + " " + t.getMessage());
                 if (cnt_myCommunity < 5) setMyCommunity();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
@@ -107,13 +113,13 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     public void setHotArticle() {
         RetrofitAdapter adapter = new RetrofitAdapter();
         RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
-        Call<ArrayList<HotArticleFrame>> call = service.getHotArticle();
+        Call<HotArticleResponse> call = service.getHotArticle();
 
-        call.enqueue(new retrofit2.Callback<ArrayList<HotArticleFrame>>() {
+        call.enqueue(new retrofit2.Callback<HotArticleResponse>() {
             @Override
-            public void onResponse(Call<ArrayList<HotArticleFrame>> call, retrofit2.Response<ArrayList<HotArticleFrame>> response) {
+            public void onResponse(Call<HotArticleResponse> call, retrofit2.Response<HotArticleResponse> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<HotArticleFrame> result = response.body();
+                    ArrayList<HotArticleFrame> result = response.body().body;
                     hotArticleList.clear();
                     hotArticleList.addAll(result);
                     hotArticle_adapter.notifyDataSetChanged();
@@ -123,7 +129,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             }
 
             @Override
-            public void onFailure(Call<ArrayList<HotArticleFrame>> call, Throwable t) {
+            public void onFailure(Call<HotArticleResponse> call, Throwable t) {
                 Log.d(TAG, "HotArticle " + String.valueOf(cnt_hotArticle) + " " + t.getMessage());
                 if (cnt_hotArticle < 5) setHotArticle();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
@@ -147,5 +153,9 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         int articleID = Integer.parseInt(holder.articleID.getText().toString());
 
         ((MainActivity) getActivity()).replaceFragmentFull(new Article(articleID, communityType, communityID));
+    }
+
+    public void setTodayCafeteria(String menu) {
+        cafeteria.setText(menu);
     }
 }

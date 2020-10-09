@@ -1,16 +1,21 @@
 package com.dum.dodam.httpConnection;
 
 import com.dum.dodam.Community.dataframe.ArticleCommentFrame;
+import com.dum.dodam.Community.dataframe.ArticleCommentResponse;
 import com.dum.dodam.Community.dataframe.ArticleFrame;
 import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
 import com.dum.dodam.Home.dataframe.HotArticleFrame;
+import com.dum.dodam.Home.dataframe.HotArticleResponse;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
+import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.School;
 import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.School.dataframe.LunchFrame;
+import com.dum.dodam.School.dataframe.LunchResponse;
+import com.dum.dodam.Simulation.dataframe.ContestListResponse;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -37,26 +42,32 @@ public interface RetrofitService {
     Call<SearchResponse> searchSchoolName(@Query("schoolName") String schoolName);
 
     @GET("/article/latestArticleList")
-    Call<ArrayList<MyCommunityFrame>> getMyCommunity();
+    Call<MyCommunityResponse> getMyCommunity();
 
     @GET("/article/hotArticleList")
-    Call<ArrayList<HotArticleFrame>> getHotArticle();
+    Call<HotArticleResponse> getHotArticle();
 
     @GET("/article/read")
     Call<ArticleResponse> readArticle(@Query("articleID") int articleID, @Query("communityType") int communityType, @Query("communityID") int communityID);
 
-    @GET("/article/readComment")
-    Call<ArrayList<ArticleCommentFrame>> readArticleComment(@Query("articleID") int articleID, @Query("articleType") int articleType);
+    @GET("/reply/read")
+    Call<ArticleCommentResponse> readArticleComment(@Query("articleID") int articleID, @Query("communityType") int communityType, @Query("communityID") int communityID);
 
-    @POST("/article/uploadComment")
+    @POST("/reply/write")
     Call<String> uploadComment(@Body JsonObject body);
 
     @POST("/article/write")
     Call<String> writeArticle(@Body JsonObject body);
 
+    @GET("/article/delete")
+    Call<String> deleteArticle(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("articleID") int articleID);
+
     @GET("/article/articleList")
     Call<ArticleListResponse> goArticle(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
 
-    @GET("/article/getCafeteriaList")
-    Call<ArrayList<LunchFrame>> getCafeteriaList();
+    @GET("/cafeteria/read")
+    Call<LunchResponse> getCafeteriaList(@Query("version") int version);
+
+    @GET("/contest/getList")
+    Call<ContestListResponse> getContestList();
 }

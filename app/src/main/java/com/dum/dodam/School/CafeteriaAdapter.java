@@ -80,6 +80,11 @@ public class CafeteriaAdapter extends RecyclerView.Adapter<CafeteriaAdapter.Hold
             lunch_wednesday = itemView.findViewById(R.id.lunch_wednesday);
             lunch_thursday = itemView.findViewById(R.id.lunch_thursday);
             lunch_friday = itemView.findViewById(R.id.lunch_friday);
+            lunch_monday.setSelected(true);
+            lunch_tuesday.setSelected(true);
+            lunch_wednesday.setSelected(true);
+            lunch_thursday.setSelected(true);
+            lunch_friday.setSelected(true);
 
             week = itemView.findViewById(R.id.week);
         }

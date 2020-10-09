@@ -2,7 +2,7 @@ package com.dum.dodam.Community.dataframe;
 
 public class ArticleListFrame {
 
-    public String articleId;
+    public String articleID;
     public String title;
     public String content;
     public String nickName;

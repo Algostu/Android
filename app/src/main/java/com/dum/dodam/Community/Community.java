@@ -76,7 +76,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         btn_write_article.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(communityID));
+                ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(communityType, communityID));
             }
         });
 
@@ -105,7 +105,6 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     }
 
     public void readArticleList() {
-        RetrofitAdapter rAdapter = new RetrofitAdapter();
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
 
         long now = System.currentTimeMillis();
@@ -115,7 +114,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         if (list.isEmpty()) {
             date = dateFormat.format(data);
         } else {
-            date = list.get(list.size()).writtenTime;
+            date = list.get(list.size() - 1).writtenTime;
         }
 //        Call<ArticleListResponse> call = service.goArticle(communityType, communityID, date);
         Call<ArticleListResponse> call = service.goArticle(0, 1, "latest");
@@ -137,7 +136,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
             @Override
             public void onFailure(Call<ArticleListResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
-                if (cnt_readArticleList < 10) readArticleList();
+                if (cnt_readArticleList < 5) readArticleList();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
                 cnt_readArticleList++;
             }
@@ -154,7 +153,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     @Override
     public void onItemSelected(View v, int position) {
         ArticleListAdapter.Holder holder = (ArticleListAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
-        String article_ID = holder.article_ID.getText().toString();
+        String article_ID = holder.articleID.getText().toString();
 
         ((MainActivity) getActivity()).replaceFragmentFull(new Article(Integer.parseInt(article_ID), communityType, communityID));
     }

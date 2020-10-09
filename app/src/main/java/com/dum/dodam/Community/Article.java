@@ -1,6 +1,9 @@
 package com.dum.dodam.Community;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,8 +32,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Community.dataframe.ArticleCommentFrame;
-import com.dum.dodam.Community.dataframe.ArticleFrame;
+import com.dum.dodam.Community.dataframe.ArticleCommentResponse;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
+import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.google.gson.JsonObject;
@@ -53,7 +60,6 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private TextView time;
     private TextView reply;
     private TextView heart;
-    private TextView article_ID;
     private androidx.appcompat.widget.Toolbar toolbar;
     private ActionBar actionbar;
 
@@ -61,11 +67,16 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private EditText comment;
     private CheckBox ck_isAnonymous;
 
+    private View contentView;
+
     private int articleID;
     private int communityType;
     private int communityID;
     private int parentReplyID = 0;
     private String edit;
+
+    private int contentHeight = 0;
+    private int previousHeight = 0;
 
     public Article(int articleID, int communityType, int communityID) {
         this.articleID = articleID;
@@ -77,13 +88,15 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.article_, container, false);
+        contentView = view.findViewById(R.id.frame_layout);
         view.setClickable(true);
+        ((MainActivity) getActivity()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionbar.setDisplayShowCustomEnabled(true);
-//        actionbar.setDisplayShowTitleEnabled(false);//기본 제목을 없애줍니다.
+        actionbar.setDisplayShowTitleEnabled(false);//기본 제목을 없애줍니다.
         actionbar.setDisplayHomeAsUpEnabled(true);
 
         writer = view.findViewById(R.id.writer);
@@ -92,7 +105,6 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         time = view.findViewById(R.id.time);
         reply = view.findViewById(R.id.reply);
         heart = view.findViewById(R.id.heart);
-        article_ID = view.findViewById(R.id.article_ID);
         comment = view.findViewById(R.id.comment);
         ck_isAnonymous = view.findViewById(R.id.ck_isAnonymous);
         upload_comment = view.findViewById(R.id.upload_comment);
@@ -137,18 +149,16 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                 if (response.isSuccessful()) {
                     ArticleResponse result = response.body();
                     if (result.checkError(getActivity()) != 0) return;
-
-                    ArticleFrame articleFrame = result.body;
+                    ArticleResponse.ArticleFrame articleFrame = result.body;
                     writer.setText(articleFrame.nickName);
                     title.setText(articleFrame.title);
                     content.setText(articleFrame.content);
                     time.setText(articleFrame.writtenTime);
                     reply.setText(articleFrame.reply);
                     heart.setText(articleFrame.heart);
-                    article_ID.setText(articleFrame.articleID);
                     edit = articleFrame.edit;
                 } else {
-                    Log.d(TAG, "onResponse: Fail " + response.body().toString());
+                    Log.d(TAG, "onResponse: Fail " + response.body());
                 }
             }
 
@@ -165,23 +175,31 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     public void readArticleComment() {
         RetrofitAdapter rAdapter = new RetrofitAdapter();
         com.dum.dodam.httpConnection.RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getContext());
-        Call<ArrayList<ArticleCommentFrame>> call = service.readArticleComment(articleID, 0);
+        Call<ArticleCommentResponse> call = service.readArticleComment(articleID, communityType, communityID);
 
-        call.enqueue(new retrofit2.Callback<ArrayList<ArticleCommentFrame>>() {
+        call.enqueue(new retrofit2.Callback<ArticleCommentResponse>() {
             @Override
-            public void onResponse(Call<ArrayList<ArticleCommentFrame>> call, retrofit2.Response<ArrayList<ArticleCommentFrame>> response) {
+            public void onResponse(Call<ArticleCommentResponse> call, retrofit2.Response<ArticleCommentResponse> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<ArticleCommentFrame> articleCommentList = response.body();
+                    ArrayList<ArticleCommentFrame> replys = response.body().body.replys;
+                    ArrayList<ArticleCommentFrame> reReplys = response.body().body.reReplys;
                     list.clear();
-                    list.addAll(articleCommentList);
+                    for (ArticleCommentFrame reply : replys) {
+                        list.add(reply);
+                        for (ArticleCommentFrame reReply : reReplys) {
+                            if (reReply.parentReplyID == reply.replyID) {
+                                list.add(reReply);
+                            }
+                        }
+                    }
                     adapter.notifyDataSetChanged();
                 } else {
-                    Log.d(TAG, "onResponse: Fail " + response.body().toString());
+                    Log.d(TAG, "onResponse: Fail " + response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<ArticleCommentFrame>> call, Throwable t) {
+            public void onFailure(Call<ArticleCommentResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 if (cnt_readArticleComment < 10) readArticle();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
@@ -192,15 +210,16 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
     public void UploadComment() {
         JsonObject paramObject = new JsonObject();
-        paramObject.addProperty("communityType", 1);
-        paramObject.addProperty("communityID", 1);
-        paramObject.addProperty("articleID", 1);
-        paramObject.addProperty("parentReplyID", parentReplyID);
+        paramObject.addProperty("communityType", communityType);
+        paramObject.addProperty("communityID", communityID);
+        paramObject.addProperty("articleID", articleID);
+        paramObject.addProperty("parentID", parentReplyID);
         paramObject.addProperty("isAnonymous", ck_isAnonymous.isChecked());
         paramObject.addProperty("content", comment.getText().toString());
 
-        RetrofitAdapter adapter = new RetrofitAdapter();
-        com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
+        Log.d(TAG, "올릴 때 " + String.valueOf(parentReplyID));
+
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
         Call<String> call = service.uploadComment(paramObject);
 
         call.enqueue(new retrofit2.Callback<String>() {
@@ -209,7 +228,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                 if (response.isSuccessful()) {
                     String result = response.body();
                 } else {
-                    Log.d(TAG, "onResponse: Fail " + response.body().toString());
+                    Log.d(TAG, "onResponse: Fail " + response.body());
                 }
             }
 
@@ -224,30 +243,22 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     }
 
     public void DeleteArticle() {
-        JsonObject paramObject = new JsonObject();
-        paramObject.addProperty("userId", 1);
-        paramObject.addProperty("parentReplyID", parentReplyID);
-        paramObject.addProperty("isAnonymous", ck_isAnonymous.isChecked());
-        paramObject.addProperty("content", comment.getText().toString());
-
-        RetrofitAdapter adapter = new RetrofitAdapter();
-        com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
-        Call<String> call = service.uploadComment(paramObject);
-
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
+        Call<String> call = service.deleteArticle(communityType, communityID, articleID);
         call.enqueue(new retrofit2.Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     String result = response.body();
                 } else {
-                    Log.d(TAG, "onResponse: Fail " + response.body().toString());
+                    Log.d(TAG, "onResponse: Fail " + response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
-                if (cnt_readArticleComment < 10) readArticle();
+                if (cnt_readArticleComment < 5) readArticle();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
                 cnt_readArticleComment++;
             }
@@ -264,7 +275,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.coral_pink));
         } else {
             parentReplyID = 0;
-            v.setBackgroundColor(ContextCompat.getColor(getContext(), Color.TRANSPARENT));
+            v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
         }
     }
 

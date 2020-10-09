@@ -1,11 +1,10 @@
 package com.dum.dodam.Login.Data;
 
-import com.dum.dodam.Home.dataframe.MyCommunityFrame;
+import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.httpConnection.BaseResponse;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("serial")
 public class UserJson extends BaseResponse implements Serializable {
@@ -23,9 +22,9 @@ public class UserJson extends BaseResponse implements Serializable {
     public int grade;
     public String nickName;
     // community List
-    public ArrayList<MyCommunityFrame> comAll;
-    public ArrayList<MyCommunityFrame> comRegion;
-    public ArrayList<MyCommunityFrame> comSchool;
+    public ArrayList<MyCommunityFrame2> comAll;
+    public ArrayList<MyCommunityFrame2> comRegion;
+    public ArrayList<MyCommunityFrame2> comSchool;
 
     public String getNickName() {
         return nickName;

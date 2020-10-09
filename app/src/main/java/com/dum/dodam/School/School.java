@@ -13,9 +13,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.dum.dodam.Home.Home;
 import com.dum.dodam.R;
 import com.dum.dodam.School.dataframe.CafeteriaFrame;
 import com.dum.dodam.School.dataframe.LunchFrame;
+import com.dum.dodam.School.dataframe.LunchResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
@@ -58,12 +60,10 @@ public class School extends Fragment {
         menu.add(new CafeteriaFrame());
         menu.add(new CafeteriaFrame());
         menu.add(new CafeteriaFrame());
-        menu.get(0).lunch_friday = "금요일 점심";
-        menu.get(2).lunch_wednesday = "수요일 점심";
 
         int this_week = getWeek() - 1;
 
-//        getCafeteriaMenu();
+        getCafeteriaMenu();
 
         adapter = new CafeteriaAdapter(menu);
 
@@ -75,6 +75,7 @@ public class School extends Fragment {
     }
 
     public void getCafeteriaMenu() {
+        Log.d(TAG, "getCafeteriaMenu");
         long now = System.currentTimeMillis();
         Date data = new Date(now);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yymm");
@@ -86,6 +87,10 @@ public class School extends Fragment {
                 FileInputStream fis = new FileInputStream(filename);
                 ObjectInputStream ois = new ObjectInputStream(fis);
                 menu = (ArrayList) ois.readObject();
+                adapter.notifyDataSetChanged();
+                for (CafeteriaFrame item : menu) {
+                    Log.d(TAG, "getCafeteriaMenu: " + item.lunch_friday);
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -99,42 +104,41 @@ public class School extends Fragment {
     }
 
     public void downloadCafeteriaList() {
+        Log.d(TAG, "downloadCafeteriaList");
+        RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
 
-        RetrofitAdapter rAdapter = new RetrofitAdapter();
-        RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getContext());
+        Call<LunchResponse> call = service.getCafeteriaList(0);
 
-        Call<ArrayList<LunchFrame>> call = service.getCafeteriaList();
-
-        call.enqueue(new retrofit2.Callback<ArrayList<LunchFrame>>() {
+        call.enqueue(new retrofit2.Callback<LunchResponse>() {
             @Override
-            public void onResponse(Call<ArrayList<LunchFrame>> call, retrofit2.Response<ArrayList<LunchFrame>> response) {
+            public void onResponse(Call<LunchResponse> call, retrofit2.Response<LunchResponse> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<LunchFrame> result = response.body();
+                    ArrayList<LunchFrame> result = response.body().body.get(0).cafeMenu;
                     int index;
                     for (LunchFrame item : result) {
-                        index = Integer.parseInt(item.week) - 1;
-                        if (item.weed_day.equals("월")) {
+                        index = Math.round(Float.parseFloat(item.week)) - 1;
+                        if (item.week_day == null) continue;
+                        if (item.week_day.equals("월")) {
                             menu.get(index).date_monday = item.date;
                             menu.get(index).lunch_monday = item.lunch;
-                        } else if (item.weed_day.equals("화")) {
+                        } else if (item.week_day.equals("화")) {
                             menu.get(index).date_tuesday = item.date;
                             menu.get(index).lunch_tuesday = item.lunch;
-                        } else if (item.weed_day.equals("수")) {
+                        } else if (item.week_day.equals("수")) {
                             menu.get(index).date_wednesday = item.date;
                             menu.get(index).lunch_wednesday = item.lunch;
-                        } else if (item.weed_day.equals("목")) {
+                        } else if (item.week_day.equals("목")) {
                             menu.get(index).date_thursday = item.date;
                             menu.get(index).lunch_thursday = item.lunch;
-                        } else if (item.weed_day.equals("금")) {
+                        } else if (item.week_day.equals("금")) {
                             menu.get(index).date_friday = item.date;
                             menu.get(index).lunch_friday = item.lunch;
                         }
                     }
-
                     adapter.notifyDataSetChanged();
 
-                    FileOutputStream fos = null;
                     try {
+                        FileOutputStream fos;
                         fos = getActivity().openFileOutput(filename, getContext().MODE_PRIVATE);
                         ObjectOutputStream oos = null;
                         oos = new ObjectOutputStream(fos);
@@ -153,7 +157,7 @@ public class School extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<LunchFrame>> call, Throwable t) {
+            public void onFailure(Call<LunchResponse> call, Throwable t) {
                 Log.d(TAG, "Cafeteria " + String.valueOf(cnt_cafeteria) + " " + t.getMessage());
                 if (cnt_cafeteria < 5) downloadCafeteriaList();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();

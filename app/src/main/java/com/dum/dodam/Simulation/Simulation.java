@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.R;
 import com.dum.dodam.Simulation.dataframe.ContestListFrame;
+import com.dum.dodam.Simulation.dataframe.ContestListResponse;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.dum.dodam.httpConnection.RetrofitService;
 
 import java.util.ArrayList;
 
@@ -56,42 +59,32 @@ public class Simulation extends Fragment implements ContestListAdapter.OnListIte
     }
 
     public void getContestList() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://49.50.164.11:5000/contest/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        RetrofitService service = retrofit.create(RetrofitService.class);
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
 
-        Call<ArrayList<ContestListFrame>> call = service.getContestList();
+        Call<ContestListResponse> call = service.getContestList();
 
-        call.enqueue(new Callback<ArrayList<ContestListFrame>>() {
+        call.enqueue(new Callback<ContestListResponse>() {
             @Override
-            public void onResponse(Call<ArrayList<ContestListFrame>> call, Response<ArrayList<ContestListFrame>> response) {
+            public void onResponse(Call<ContestListResponse> call, Response<ContestListResponse> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<ContestListFrame> result = response.body();
+                    ArrayList<ContestListFrame> result = response.body().body;
                     list.clear();
                     list.addAll(result);
                     adapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "Upload Fail", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Response but Fail in getContestList");
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<ContestListFrame>> call, Throwable t) {
+            public void onFailure(Call<ContestListResponse> call, Throwable t) {
                 Log.d(TAG, "getContestList" + t.getMessage());
                 if (cnt_getContestList < 5) getContestList();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
                 cnt_getContestList++;
             }
         });
-    }
-
-    public interface RetrofitService {
-        @GET("getList")
-        Call<ArrayList<ContestListFrame>> getContestList();
     }
 
     @Override

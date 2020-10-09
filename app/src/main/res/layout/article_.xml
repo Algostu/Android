@@ -27,14 +27,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/option_menu" />
 
-    <TextView
-        android:id="@+id/article_ID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Article ID"
-        android:visibility="gone"
-        tools:ignore="MissingConstraints" />
-
     <LinearLayout
         android:id="@+id/ll_who"
         android:layout_width="0dp"
@@ -141,30 +133,39 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
+        android:id="@+id/frame_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_ll"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
         app:layout_constraintTop_toBottomOf="@id/things">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_comment"
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:overScrollMode="never"
-            android:scrollbarFadeDuration="0"
-            android:scrollbarSize="5dp"
-            android:scrollbarThumbVertical="@android:color/darker_gray"
-            android:scrollbars="vertical"
-            tools:ignore="MissingConstraints" />
-    </ScrollView>
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:overScrollMode="never"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarSize="5dp"
+                android:scrollbarThumbVertical="@android:color/darker_gray"
+                android:scrollbars="vertical"
+                tools:ignore="MissingConstraints" />
+        </ScrollView>
+    </FrameLayout>
+
 
     <LinearLayout
+        android:id="@+id/bottom_ll"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"

@@ -35,9 +35,9 @@ import retrofit2.http.POST;
 public class ArticleWrite extends Fragment {
     private static final String TAG = "RHC";
 
-    private int user_id = 1;
     private boolean is_anonymous = true;
-    private int article_type;
+    private int communityType;
+    private int communityID;
     private String content;
     private String title;
 
@@ -46,8 +46,9 @@ public class ArticleWrite extends Fragment {
     private EditText et_content;
     private ImageButton btn_upload_article;
 
-    public ArticleWrite(int article_type) {
-        this.article_type = article_type;
+    public ArticleWrite(int communityType, int communityID) {
+        this.communityID = communityID;
+        this.communityType = communityType;
     }
 
     @Nullable
@@ -56,6 +57,7 @@ public class ArticleWrite extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         View view = inflater.inflate(R.layout.article_write, container, false);
+        view.setClickable(true);
 
         checkBox = view.findViewById(R.id.checkbox_isAnonymous);
         et_title = view.findViewById(R.id.et_title);
@@ -77,17 +79,13 @@ public class ArticleWrite extends Fragment {
 
 
                 JsonObject paramObject = new JsonObject();
-                paramObject.addProperty("articleType", article_type);
-                paramObject.addProperty("userId", user_id);
+                paramObject.addProperty("communityType", communityType);
+                paramObject.addProperty("communityID", communityID);
                 paramObject.addProperty("isAnonymous", is_anonymous);
                 paramObject.addProperty("title", title);
                 paramObject.addProperty("content", content);
 
                 Log.d(TAG, "JSON " + paramObject.toString());
-
-                Gson gson = new GsonBuilder()
-                        .setLenient()
-                        .create();
 
                 RetrofitAdapter adapter = new RetrofitAdapter();
                 com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());

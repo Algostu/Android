@@ -11,5 +11,6 @@
         <!--No Title Bar-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 </resources>

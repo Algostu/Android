@@ -50,7 +50,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         protected TextView time;
         protected TextView reply;
         protected TextView heart;
-        protected TextView article_ID;
+        protected TextView articleID;
 
         public Holder(View view) {
             super(view);
@@ -60,7 +60,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             this.time = (TextView) view.findViewById(R.id.time);
             this.reply = (TextView) view.findViewById(R.id.reply);
             this.heart = (TextView) view.findViewById(R.id.heart);
-            this.article_ID = (TextView) view.findViewById(R.id.article_ID);
+            this.articleID = (TextView) view.findViewById(R.id.article_ID);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,7 +79,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         holder.time.setText(list.get(position).writtenTime);
         holder.reply.setText(String.valueOf(list.get(position).reply));
         holder.heart.setText(String.valueOf(list.get(position).heart));
-        holder.article_ID.setText(String.valueOf(list.get(position).articleId));
+        holder.articleID.setText(String.valueOf(list.get(position).articleID));
         holder.itemView.setTag(position);
     }
 }

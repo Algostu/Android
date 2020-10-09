@@ -56,16 +56,16 @@ public class startUpActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
-        String autoLogin = sharedPref.getString("autoLogin",null);
+        String autoLogin = sharedPref.getString("autoLogin", null);
 
-        if (autoLogin != null ){
-            String expStr = sharedPref.getString("expDate",null);
+        if (autoLogin != null) {
+            String expStr = sharedPref.getString("expDate", null);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             Date expDate;
             Date curDate = new Date();
             try {
                 expDate = format.parse(expStr);
-                if(curDate.before(expDate)){
+                if (curDate.before(expDate)) {
                     // extend expired date
                     Calendar c = Calendar.getInstance();
                     c.setTime(curDate);
@@ -73,7 +73,7 @@ public class startUpActivity extends AppCompatActivity {
                     String expDateStr = format.format(c.getTime());
                     SharedPreferences.Editor edit = sharedPref.edit();
                     edit.putString("expDate", expDateStr);
-                    edit.clear();
+//                    edit.clear();
                     edit.commit();
                     // load user object and pass it to main Activity
                     Gson gson = new Gson();
@@ -81,7 +81,7 @@ public class startUpActivity extends AppCompatActivity {
                     UserJson user = gson.fromJson(json, UserJson.class);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("user",user);
+                    bundle.putSerializable("user", user);
                     intent.putExtras(bundle);
                     startActivity(intent);
                     return;
@@ -94,7 +94,7 @@ public class startUpActivity extends AppCompatActivity {
         return;
     }
 
-    public void replaceFragment(Fragment fragment){
+    public void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main, fragment);
         FragmentManager manager = getSupportFragmentManager();
@@ -111,10 +111,10 @@ public class startUpActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, retrofit2.Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
                     LoginResponse result = response.body();
-                    if (result.checkError(getApplicationContext()) !=0){
+                    if (result.checkError(getApplicationContext()) != 0) {
                         return;
                     }
-                    if (result.status.equals("<success>")){
+                    if (result.status.equals("<success>")) {
                         UserJson userInfo = result.body;
                         Log.d("KHK", user.toString());
                         // make curDate + 30 string as expired date
@@ -136,11 +136,10 @@ public class startUpActivity extends AppCompatActivity {
                         // make intent and start main activity
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("user",userInfo);
+                        bundle.putSerializable("user", userInfo);
                         intent.putExtras(bundle);
                         startActivity(intent);
-                    }
-                    else if (result.errorCode == 3){
+                    } else if (result.errorCode == 3) {
                         // if need to sign up
                         startUpActivity.this.replaceFragment(new SignUP());
                         Log.d(TAG, "onResponse: Fails " + response.body().status);
@@ -150,6 +149,7 @@ public class startUpActivity extends AppCompatActivity {
                     Log.d(TAG, "onResponse: Fails " + response.body());
                 }
             }
+
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
