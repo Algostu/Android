@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
+import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.R;
 
 import java.util.ArrayList;
@@ -18,11 +19,13 @@ public class MyCommunityAdapter extends RecyclerView.Adapter<MyCommunityAdapter.
     private ArrayList<MyCommunityFrame> list = new ArrayList<MyCommunityFrame>();
     private Context context;
     private OnListItemSelectedInterface mListener;
+    public UserJson user;
 
-    public MyCommunityAdapter(Context context, ArrayList<MyCommunityFrame> list, OnListItemSelectedInterface listener) {
+    public MyCommunityAdapter(Context context, ArrayList<MyCommunityFrame> list, OnListItemSelectedInterface listener, UserJson user) {
         this.context = context;
         this.list = list;
         this.mListener = listener;
+        this.user = user;
     }
 
     public interface OnListItemSelectedInterface {
@@ -41,15 +44,16 @@ public class MyCommunityAdapter extends RecyclerView.Adapter<MyCommunityAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyCommunityAdapter.Holder holder, final int position) {
         String community_name = new String();
-        if (1 == list.get(position).communityID) community_name = "교내 질문";
-        else if (2 == list.get(position).communityID) community_name = "교내 자유";
-        else if (3 == list.get(position).communityID) community_name = "동네 자유";
-        else if (4 == list.get(position).communityID) community_name = "동네 모집";
-        else if (5 == list.get(position).communityID) community_name = "동네 질문";
-        else if (6 == list.get(position).communityID) community_name = "입시 자유";
-        else if (7 == list.get(position).communityID) community_name = "학원 인강";
-        else if (8 == list.get(position).communityID) community_name = "아주대학교";
+        if (2 == list.get(position).communityType) community_name = "교내 " + user.comSchool.get(0).title;
+        else if (2 == list.get(position).communityType) community_name = "교내 " +  user.comSchool.get(1).title;
+        else if (1 == list.get(position).communityType) community_name = "동네 " +  user.comRegion.get(0).title;
+        else if (1 == list.get(position).communityType) community_name = "동네 " +  user.comRegion.get(1).title;
+        else if (1 == list.get(position).communityType) community_name = "동네 " +  user.comRegion.get(2).title;
+        else if (0 == list.get(position).communityType) community_name =  user.comAll.get(0).title;
+        else if (0 == list.get(position).communityType) community_name =  user.comAll.get(1).title;
+        else if (0 == list.get(position).communityType) community_name =  user.comAll.get(2).title;
 
+        holder.communityType = list.get(position).communityType;
         holder.communityID = list.get(position).communityID;
         holder.community_name.setText(community_name);
         holder.title.setText(list.get(position).title);
@@ -65,6 +69,7 @@ public class MyCommunityAdapter extends RecyclerView.Adapter<MyCommunityAdapter.
         protected TextView community_name;
         protected TextView title;
         protected int communityID;
+        protected int communityType;
 
         public Holder(View view) {
             super(view);

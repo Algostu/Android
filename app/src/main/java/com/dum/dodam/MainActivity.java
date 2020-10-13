@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.dum.dodam.Community.CommunityList;
 import com.dum.dodam.Home.Home;
+import com.dum.dodam.Home.dataframe.MyCommunityFrame;
+import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.School.School;
@@ -22,7 +24,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
-    private UserJson user;
+    public UserJson user;
     Intent intent;
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -63,6 +65,18 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Test", "schoolGender  :  " + user.schoolGender);
         Log.d("Test", "email  :  " + user.email);
         Log.d("Test", "userName  :  " + user.userName);
+
+        for (MyCommunityFrame2 r : user.comAll){
+            r.communityType = 0;
+        }
+
+        for (MyCommunityFrame2 r : user.comRegion){
+            r.communityType = 1;
+        }
+
+        for (MyCommunityFrame2 r : user.comSchool){
+            r.communityType = 2;
+        }
 
         navigation = findViewById(R.id.nav_bar);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

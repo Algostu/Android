@@ -54,7 +54,8 @@ public class startUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_main);
-
+        String keyHash = com.kakao.util.helper.Utility.getKeyHash(this /* context */);
+        Log.d(TAG, keyHash);
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .permitDiskReads()
                 .permitDiskWrites()

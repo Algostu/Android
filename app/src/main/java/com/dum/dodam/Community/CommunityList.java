@@ -10,9 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+
+import java.util.ArrayList;
 
 //        R.id.school_free        article_type = 2;
 //        R.id.school_question   article_type = 1;
@@ -26,29 +29,31 @@ import com.dum.dodam.R;
 public class CommunityList extends Fragment {
     private static final String TAG = "RHC";
 
-    UserJson user = ((MainActivity) getActivity()).getUser();
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ArrayList<MyCommunityFrame2> comAll = ((MainActivity) getActivity()).user.comAll;
+        ArrayList<MyCommunityFrame2> comRegion = ((MainActivity) getActivity()).user.comRegion;
+        ArrayList<MyCommunityFrame2> comSchool = ((MainActivity) getActivity()).user.comSchool;
+
         View view = inflater.inflate(R.layout.community_list, container, false);
-        textViewClickListener(view, R.id.school_free, 2, 2);
-        textViewClickListener(view, R.id.school_question, 1, 2);
-        textViewClickListener(view, R.id.region_free, 3, 1);
-        textViewClickListener(view, R.id.region_recruit, 4, 1);
-        textViewClickListener(view, R.id.region_question, 5, 1);
-        textViewClickListener(view, R.id.country_entry, 1, 0);
-        textViewClickListener(view, R.id.country_academy, 7, 0);
-        textViewClickListener(view, R.id.country_univ, 8, 0);
+        textViewClickListener(view, R.id.school_question, comSchool.get(0).communityID, 2, comSchool.get(0).title);
+        textViewClickListener(view, R.id.school_free, comSchool.get(1).communityID, 2, comSchool.get(1).title);
+        textViewClickListener(view, R.id.region_question, comRegion.get(0).communityID, 1, comRegion.get(0).title);
+        textViewClickListener(view, R.id.region_recruit, comRegion.get(1).communityID, 1, comRegion.get(1).title);
+        textViewClickListener(view, R.id.region_free, comRegion.get(2).communityID, 1, comRegion.get(2).title);
+        textViewClickListener(view, R.id.country_academy, comAll.get(0).communityID, 0, comAll.get(0).title);
+        textViewClickListener(view, R.id.country_question, comAll.get(1).communityID, 0, comAll.get(1).title);
+        textViewClickListener(view, R.id.country_free, comAll.get(2).communityID, 0, comAll.get(2).title);
         return view;
     }
 
-    public void textViewClickListener(View view, final int id, final int communityID, final int communityType) {
+    public void textViewClickListener(View view, final int id, final int communityID, final int communityType, final String title) {
         TextView textView = view.findViewById(id);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID));
+                ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID, title));
             }
         });
     }

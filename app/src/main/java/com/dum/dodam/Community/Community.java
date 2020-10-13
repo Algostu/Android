@@ -44,23 +44,25 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     private String community_name;
     private int communityID;
     private int communityType;
+    private String lastArticleWrittenString = "latest";
 
     private ArrayList<ArticleListFrame> list = new ArrayList<>();
 
-    public Community(int communityType, int communityID) {
+    public Community(int communityType, int communityID, String title) {
         this.communityID = communityID;
         this.communityType = communityType;
-
-        if (communityID == 2 || communityID == 3 || communityID == 6)
-            this.community_name = "자유 게시판";
-        else if (communityID == 1 || communityID == 5)
-            this.community_name = "질문 게시판";
-        else if (communityID == 4)
-            this.community_name = "모집 게시판";
-        else if (communityID == 7)
-            this.community_name = "학원&인강 게시판";
-        else
-            this.community_name = "대학 게시판";
+        this.community_name = title;
+//
+//        if (communityID == 2 || communityID == 3 || communityID == 6)
+//            this.community_name = "자유 게시판";
+//        else if (communityID == 1 || communityID == 5)
+//            this.community_name = "질문 게시판";
+//        else if (communityID == 4)
+//            this.community_name = "모집 게시판";
+//        else if (communityID == 7)
+//            this.community_name = "학원&인강 게시판";
+//        else
+//            this.community_name = "대학 게시판";
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -92,6 +94,19 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int curPosition = recyclerView.getAdapter().getItemCount()-1;
+                int lastVisibleItemPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                if (curPosition >= lastVisibleItemPosition -3){
+                    readArticleList();
+                }
+            }
+        });
+
         return view;
     }
 
@@ -116,8 +131,9 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         } else {
             date = list.get(list.size() - 1).writtenTime;
         }
-//        Call<ArticleListResponse> call = service.goArticle(communityType, communityID, date);
-        Call<ArticleListResponse> call = service.goArticle(0, 1, "latest");
+
+        Call<ArticleListResponse> call = service.goArticle(communityType, communityID, lastArticleWrittenString);
+//        Call<ArticleListResponse> call = service.goArticle(0, communityID, "latest");
 
         call.enqueue(new Callback<ArticleListResponse>() {
             @Override
@@ -125,6 +141,11 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                 if (response.isSuccessful()) {
                     ArticleListResponse result = response.body();
                     if (result.checkError(getActivity()) != 0) return;
+                    if (result.body.size() > 0){
+                        ArticleListFrame lastArticle = result.body.get(result.body.size()-1);
+                        lastArticleWrittenString=lastArticle.writtenTime;
+                    }
+
                     list.addAll(result.body);
                     adapter.notifyDataSetChanged();
                 } else {

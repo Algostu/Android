@@ -72,10 +72,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/school_free"
+                    android:id="@+id/school_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="자유 게시판"
+                    android:text="질문 게시판"
                     android:textSize="20dp" />
 
                 <View
@@ -87,11 +87,11 @@
                     android:background="@color/faded_gray" />
 
                 <TextView
-                    android:id="@+id/school_question"
+                    android:id="@+id/school_free"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="질문 게시판"
+                    android:text="자유 게시판"
                     android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>
@@ -134,10 +134,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/region_free"
+                    android:id="@+id/region_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="자유 게시판"
+                    android:text="질문 게시판"
                     android:textSize="20dp" />
 
                 <View
@@ -164,11 +164,11 @@
                     android:background="@color/faded_gray" />
 
                 <TextView
-                    android:id="@+id/region_question"
+                    android:id="@+id/region_free"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="질문 게시판"
+                    android:text="자유 게시판"
                     android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>
@@ -211,21 +211,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/country_entry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="자유 게시판"
-                    android:textSize="20dp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/faded_gray" />
-
-                <TextView
                     android:id="@+id/country_academy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -241,11 +226,26 @@
                     android:background="@color/faded_gray" />
 
                 <TextView
-                    android:id="@+id/country_univ"
+                    android:id="@+id/country_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="질문 게시판"
+                    android:textSize="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/faded_gray" />
+
+                <TextView
+                    android:id="@+id/country_free"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="대학 게시판"
+                    android:text="자유 게시판"
                     android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>

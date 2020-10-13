@@ -29,6 +29,7 @@ import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.kakao.usermgmt.response.model.User;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -65,7 +66,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
     private ArrayList<MyCommunityFrame> myCommunityList = new ArrayList<>();
     private ArrayList<HotArticleFrame> hotArticleList = new ArrayList<>();
-
+    public UserJson user;
     private TextView cafeteria;
 
     @Nullable
@@ -74,10 +75,12 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         View view = inflater.inflate(R.layout.home_, container, false);
         view.setClickable(true);
 
+        user = ((MainActivity)getActivity()).getUser();
+
         cafeteria = view.findViewById(R.id.cafeteria);
         setTodayCafeteria();
 
-        myCommunity_adapter = new MyCommunityAdapter(getContext(), myCommunityList, this);
+        myCommunity_adapter = new MyCommunityAdapter(getContext(), myCommunityList, this, user);
         setMyCommunity();
         myCommunity_recyclerView = (RecyclerView) view.findViewById(R.id.rv_my_community);
         myCommunity_recyclerView.setHasFixedSize(true);
@@ -85,7 +88,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         myCommunity_recyclerView.setLayoutManager(myCommunity_layoutManager);
         myCommunity_recyclerView.setAdapter(myCommunity_adapter);
 
-        hotArticle_adapter = new HotArticleAdapter(getContext(), hotArticleList, this);
+        hotArticle_adapter = new HotArticleAdapter(getContext(), hotArticleList, this, user);
         setHotArticle();
         hotArticle_recyclerView = (RecyclerView) view.findViewById(R.id.rv_hot_article);
         hotArticle_recyclerView.setHasFixedSize(true);
@@ -154,7 +157,9 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     public void onCommunityItemSelected(View v, int position) {
         MyCommunityAdapter.Holder holder = (MyCommunityAdapter.Holder) myCommunity_recyclerView.findViewHolderForAdapterPosition(position);
         int communityID = holder.communityID;
-        ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityID, 0));
+        String title= holder.community_name.getText().toString();
+        int communityType = holder.communityType;
+        ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID, title));
     }
 
     @Override
