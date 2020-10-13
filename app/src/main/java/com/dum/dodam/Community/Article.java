@@ -26,6 +26,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -221,6 +222,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     String result = response.body();
+                    refresh();
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
                 }
@@ -244,6 +246,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     String result = response.body();
+                    refresh();
                     Toast.makeText(getContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
                     getActivity().getSupportFragmentManager().popBackStack();
                 } else {
@@ -314,4 +317,10 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void refresh() {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.detach(this).attach(this).commit();
+    }
+
 }

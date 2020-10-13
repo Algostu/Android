@@ -24,9 +24,7 @@ import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -99,9 +97,9 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int curPosition = recyclerView.getAdapter().getItemCount()-1;
-                int lastVisibleItemPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                if (curPosition >= lastVisibleItemPosition -3){
+                int curPosition = recyclerView.getAdapter().getItemCount() - 1;
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                if (curPosition >= lastVisibleItemPosition - 3) {
                     readArticleList();
                 }
             }
@@ -122,16 +120,6 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     public void readArticleList() {
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
 
-        long now = System.currentTimeMillis();
-        Date data = new Date(now);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:MM:SS");
-        String date;
-        if (list.isEmpty()) {
-            date = dateFormat.format(data);
-        } else {
-            date = list.get(list.size() - 1).writtenTime;
-        }
-
         Call<ArticleListResponse> call = service.goArticle(communityType, communityID, lastArticleWrittenString);
 //        Call<ArticleListResponse> call = service.goArticle(0, communityID, "latest");
 
@@ -141,9 +129,9 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                 if (response.isSuccessful()) {
                     ArticleListResponse result = response.body();
                     if (result.checkError(getActivity()) != 0) return;
-                    if (result.body.size() > 0){
-                        ArticleListFrame lastArticle = result.body.get(result.body.size()-1);
-                        lastArticleWrittenString=lastArticle.writtenTime;
+                    if (result.body.size() > 0) {
+                        ArticleListFrame lastArticle = result.body.get(result.body.size() - 1);
+                        lastArticleWrittenString = lastArticle.writtenTime;
                     }
 
                     list.addAll(result.body);
@@ -167,6 +155,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     @Override
     public void onResume() {
         list.clear();
+        lastArticleWrittenString = "latest";
         readArticleList();
         super.onResume();
     }

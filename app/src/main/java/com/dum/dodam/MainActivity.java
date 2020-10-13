@@ -66,15 +66,15 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Test", "email  :  " + user.email);
         Log.d("Test", "userName  :  " + user.userName);
 
-        for (MyCommunityFrame2 r : user.comAll){
+        for (MyCommunityFrame2 r : user.comAll) {
             r.communityType = 0;
         }
 
-        for (MyCommunityFrame2 r : user.comRegion){
+        for (MyCommunityFrame2 r : user.comRegion) {
             r.communityType = 1;
         }
 
-        for (MyCommunityFrame2 r : user.comSchool){
+        for (MyCommunityFrame2 r : user.comSchool) {
             r.communityType = 2;
         }
 

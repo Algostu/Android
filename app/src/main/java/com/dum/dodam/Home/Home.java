@@ -68,6 +68,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     private ArrayList<HotArticleFrame> hotArticleList = new ArrayList<>();
     public UserJson user;
     private TextView cafeteria;
+    private TextView school_name;
 
     @Nullable
     @Override
@@ -75,10 +76,13 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         View view = inflater.inflate(R.layout.home_, container, false);
         view.setClickable(true);
 
-        user = ((MainActivity)getActivity()).getUser();
+        user = ((MainActivity) getActivity()).getUser();
 
         cafeteria = view.findViewById(R.id.cafeteria);
         setTodayCafeteria();
+
+        school_name = view.findViewById(R.id.school_name);
+        school_name.setText(user.schoolName);
 
         myCommunity_adapter = new MyCommunityAdapter(getContext(), myCommunityList, this, user);
         setMyCommunity();
@@ -157,7 +161,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     public void onCommunityItemSelected(View v, int position) {
         MyCommunityAdapter.Holder holder = (MyCommunityAdapter.Holder) myCommunity_recyclerView.findViewHolderForAdapterPosition(position);
         int communityID = holder.communityID;
-        String title= holder.community_name.getText().toString();
+        String title = holder.community_name.getText().toString();
         int communityType = holder.communityType;
         ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID, title));
     }
