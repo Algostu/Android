@@ -16,11 +16,14 @@ public class UserJson extends BaseResponse implements Serializable {
     public String email;
     public String contact;
     public String homePage;
+    public String authorized;
     // user information
     public int gender;
     public int age;
     public int grade;
     public String nickName;
+    public String userName;
+    public String signupDate;
     // community List
     public ArrayList<MyCommunityFrame2> comAll;
     public ArrayList<MyCommunityFrame2> comRegion;

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 
@@ -24,6 +25,8 @@ import com.dum.dodam.R;
 
 public class CommunityList extends Fragment {
     private static final String TAG = "RHC";
+
+    UserJson user = ((MainActivity) getActivity()).getUser();
 
     @Nullable
     @Override

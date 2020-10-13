@@ -3,12 +3,10 @@ package com.dum.dodam.Login;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -58,6 +56,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.mail.MessagingException;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -99,11 +99,14 @@ public class SIgnUP2 extends Fragment {
     private School school;
     private Button submit;
     private ImageView studentCard;
+    private EditText userName;
     private int grade;
     private boolean nickNamePossibleNot;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.signup2, container, false);
+
+        userName = view.findViewById(R.id.name);
 
         nickName = view.findViewById(R.id.nickName);
         nickNameOkay = view.findViewById(R.id.nickNameOkay);
@@ -193,8 +196,8 @@ public class SIgnUP2 extends Fragment {
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, 1);
-    }
-});
+            }
+        });
 
         submit = view.findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -229,33 +232,40 @@ public class SIgnUP2 extends Fragment {
                 paramObject.addProperty("nickName", nickName.getText().toString());
                 paramObject.addProperty("grade", grade);
                 paramObject.addProperty("userID", user.userID);
+                paramObject.addProperty("userName", userName.getText().toString());
                 paramObject.addProperty("accessToken", user.accessToken);
                 paramObject.addProperty("email", user.email);
                 paramObject.addProperty("gender", user.gender);
                 paramObject.addProperty("ageRange", user.ageRange);
 
-//                File file = new File(filePath);
-                RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), localImgFile);
+//                RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), localImgFile);
 
-                MultipartBody.Part image =
-                        MultipartBody.Part.createFormData("image", localImgFile.getName(), requestFile);
+//                MultipartBody.Part image =
+//                        MultipartBody.Part.createFormData("image", localImgFile.getName(), requestFile);
 
                 Log.d(TAG, "JSON " + paramObject.toString());
 
-                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), paramObject.toString());
+//                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), paramObject.toString());
 
                 RetrofitAdapter rAdapter = new RetrofitAdapter();
-                RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getActivity());
-                Call<BaseResponse> call = service.registerKAKAO(image, requestBody);
+                RetrofitService service = rAdapter.getInstance(getActivity());
+                Call<BaseResponse> call = service.registerKAKAO(paramObject);
                 call.enqueue(new Callback<BaseResponse>() {
                     @Override
                     public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                         if (!response.isSuccessful()) return;
                         BaseResponse response1 = response.body();
-                        if(response1.checkError(getContext())!=0) return;
+                        if (response1.checkError(getContext()) != 0) return;
                         if (response1.status.equals("<success>")) {
                             getActivity().getSupportFragmentManager().popBackStack();
-                            ((startUpActivity)getActivity()).replaceFragment(new Login());
+                            ((startUpActivity) getActivity()).replaceFragment(new Login());
+
+                            GMailSender gMailSender = new GMailSender("dum.dodamdodam@gmail.com", "ehekaeheka16#");
+                            try {
+                                gMailSender.sendMail2("인증 이메일", "내용", "dum.dodamdodam@gmail.com", localImgFile);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 
@@ -272,7 +282,6 @@ public class SIgnUP2 extends Fragment {
     }
 
 
-
     private void search(String query) {
 
         list.clear();
@@ -282,7 +291,7 @@ public class SIgnUP2 extends Fragment {
         }
 
         RetrofitAdapter rAdapter = new RetrofitAdapter();
-        RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getActivity());
+        RetrofitService service = rAdapter.getInstance(getActivity());
         Call<SearchResponse> call = service.searchSchoolName(query);
 
         call.enqueue(new retrofit2.Callback<SearchResponse>() {
@@ -312,7 +321,7 @@ public class SIgnUP2 extends Fragment {
         Uri imgUri = data.getData();
         String imgPath = getPath(getActivity().getApplicationContext(), imgUri);
 
-        if(imgUri != null && imgPath != null){
+        if (imgUri != null && imgPath != null) {
 
             InputStream in = null;//src
             try {
@@ -322,9 +331,10 @@ public class SIgnUP2 extends Fragment {
             }
 
             String extension = imgPath.substring(imgPath.lastIndexOf("."));
-            localImgFile = new File(getActivity().getApplicationContext().getFilesDir(), "localImgFile"+extension);
+            localImgFile = new File(getActivity().getApplicationContext().getFilesDir(), "localImgFile" + extension);
 
-            if(in != null) {
+
+            if (in != null) {
                 try {
                     OutputStream out = new FileOutputStream(localImgFile);//dst
                     try {
@@ -334,8 +344,7 @@ public class SIgnUP2 extends Fragment {
                         while ((len = in.read(buf)) > 0) {
                             out.write(buf, 0, len);
                         }
-                    }
-                    finally {
+                    } finally {
                         out.close();
                     }
                 } catch (FileNotFoundException e) {
@@ -387,7 +396,7 @@ public class SIgnUP2 extends Fragment {
     public static String getPath(final Context context, final Uri uri) {
 
         // DocumentProvider
-        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
@@ -396,7 +405,7 @@ public class SIgnUP2 extends Fragment {
 
                 if ("primary".equalsIgnoreCase(type)) {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }else{
+                } else {
                     Toast.makeText(context, "Could not get file path. Please try again", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -427,7 +436,7 @@ public class SIgnUP2 extends Fragment {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 

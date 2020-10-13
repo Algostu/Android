@@ -17,8 +17,9 @@ import retrofit2.http.Query;
 public class RetrofitAdapter {
     public static Retrofit retrofit = null;
 
+    public static RetrofitService getInstance(Context context) {
+        String baseUrl = "http://49.50.164.11:5000/";
 
-    public static RetrofitService getInstance(String baseUrl, Context context) {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();

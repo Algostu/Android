@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -88,20 +89,23 @@ public class ArticleWrite extends Fragment {
                 Log.d(TAG, "JSON " + paramObject.toString());
 
                 RetrofitAdapter adapter = new RetrofitAdapter();
-                com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
+                com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance(getContext());
 
-                Call<String> call = service.writeArticle(paramObject);
+                Call<BaseResponse> call = service.writeArticle(paramObject);
 
-                call.enqueue(new Callback<String>() {
+                call.enqueue(new Callback<BaseResponse>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
+                    public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                        BaseResponse response1 = response.body();
+                        if (response1.checkError(getContext()) != 0) return;
+
                         Toast.makeText(getContext(), "게시 성공!", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Write Article Response: " + response.body());
                         getActivity().getSupportFragmentManager().popBackStack();
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                    public void onFailure(Call<BaseResponse> call, Throwable t) {
                         Log.d(TAG, "onFailure: " + t.toString());
                         Toast.makeText(getContext(), "게시 실패ㅠㅠ", Toast.LENGTH_SHORT).show();
                     }

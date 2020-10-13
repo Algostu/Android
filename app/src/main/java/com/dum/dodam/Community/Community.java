@@ -105,7 +105,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     }
 
     public void readArticleList() {
-        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
 
         long now = System.currentTimeMillis();
         Date data = new Date(now);

@@ -1,7 +1,6 @@
-package com.dum.dodam.Simulation;
+package com.dum.dodam.Contest;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.dum.dodam.R;
-import com.dum.dodam.Simulation.dataframe.ContestListFrame;
+import com.dum.dodam.Contest.dataframe.ContestFrame;
 
-import java.io.BufferedInputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.Holder> {
-    private ArrayList<ContestListFrame> list = new ArrayList<ContestListFrame>();
+    private ArrayList<ContestFrame> list = new ArrayList<ContestFrame>();
     private OnListItemSelectedInterface mListener;
+    private Context context;
 
-    public ContestListAdapter(ArrayList<ContestListFrame> list, OnListItemSelectedInterface listener) {
+    public ContestListAdapter(Context context, ArrayList<ContestFrame> list, OnListItemSelectedInterface listener) {
+        this.context = context;
         this.list = list;
         this.mListener = listener;
     }
@@ -35,7 +34,7 @@ public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.
     @NonNull
     @Override
     public ContestListAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.simulation_contest_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contest_card, parent, false);
         ContestListAdapter.Holder holder = new ContestListAdapter.Holder(view);
 
         return holder;
@@ -48,12 +47,19 @@ public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.
 
     public class Holder extends RecyclerView.ViewHolder {
         protected TextView contestID;
-        protected ImageView image;
         protected TextView title;
+        protected TextView content;
+        protected ImageView imageView;
         protected TextView date;
         protected TextView prize;
-        protected TextView content;
-        protected TextView host;
+        protected TextView sponsor;
+
+        protected String firstPrize;
+        protected String homePage;
+        protected String imageUrl;
+        protected String start;
+        protected String end;
+        protected String area;
 
 
         public Holder(View view) {
@@ -63,8 +69,8 @@ public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.
             this.content = (TextView) view.findViewById(R.id.content);
             this.date = (TextView) view.findViewById(R.id.date);
             this.prize = (TextView) view.findViewById(R.id.prize);
-            this.host = (TextView) view.findViewById(R.id.host);
-            this.image = (ImageView) view.findViewById(R.id.image);
+            this.sponsor = (TextView) view.findViewById(R.id.host);
+            this.imageView = (ImageView) view.findViewById(R.id.image);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -78,21 +84,19 @@ public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ContestListAdapter.Holder holder, final int position) {
         holder.title.setText(list.get(position).title);
-        holder.content.setText(list.get(position).contents);
-        holder.contestID.setText(list.get(position).contestID);
-        holder.date.setText(list.get(position).receptionDate);
-        holder.prize.setText(String.valueOf(list.get(position).totalPrice));
-        holder.host.setText(String.valueOf(list.get(position).supporter));
-        try {
-            URL url = new URL(list.get(position).pictureUrl);
-            URLConnection conn = url.openConnection();
-            conn.connect();
-            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-            Bitmap bm = BitmapFactory.decodeStream(bis);
-            bis.close();
-            holder.image.setImageBitmap(bm);
-        } catch (Exception e) {
-        }
+        holder.content.setText(list.get(position).content);
+        holder.contestID.setText(String.valueOf(list.get(position).contestID));
+        holder.date.setText(list.get(position).start + " - " + list.get(position).end);
+        holder.prize.setText(String.valueOf(list.get(position).firstPrize));
+        holder.sponsor.setText(String.valueOf(list.get(position).sponsor));
+        holder.imageUrl = list.get(position).imageUrl;
+        Glide.with(context).load(holder.imageUrl).into(holder.imageView);
+        holder.firstPrize = list.get(position).firstPrize;
+        holder.homePage = list.get(position).homePage;
+        holder.start = list.get(position).start;
+        holder.end = list.get(position).end;
+        holder.area = list.get(position).area;
+
         holder.itemView.setTag(position);
     }
 }

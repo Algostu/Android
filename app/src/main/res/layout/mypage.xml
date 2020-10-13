@@ -1,15 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- guide line -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="15dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="15dp" />
+
+    <!--  title background  -->
     <TextView
+        android:id="@+id/title_bg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/saffron"
-        android:gravity="center"
-        android:text="MYPAGE"
-        android:textAlignment="center"
-        android:textSize="50dp" />
+        android:layout_height="45dp"
+        android:background="@color/classic_blue"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/mypage_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="마이 페이지"
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        app:layout_constraintLeft_toRightOf="@id/gd_left"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/profile_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_unicorn_17"
+        app:layout_constraintTop_toBottomOf="@id/mypage_title"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Name"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toRightOf="@id/profile_icon"
+        app:layout_constraintTop_toBottomOf="@id/mypage_title" />
+
+    <TextView
+        android:id="@+id/mail_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Email Address"
+        android:textColor="@color/faded_gray"
+        android:textSize="15dp"
+        app:layout_constraintLeft_toRightOf="@id/profile_icon"
+        app:layout_constraintTop_toBottomOf="@id/user_name" />
+
+    <ImageView
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_unconfirm"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mypage_title" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/faded_gray"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/mail_address" />
+
+    <TextView
+        android:id="@+id/nick_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Nickname"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintTop_toTopOf="@id/line" />
+
+    <TextView
+        android:id="@+id/school_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="School Name"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintTop_toBottomOf="@id/nick_name" />
+
+    <TextView
+        android:id="@+id/grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Grade"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toRightOf="@id/school_name"
+        app:layout_constraintTop_toBottomOf="@id/nick_name" />
+
+    <TextView
+        android:id="@+id/preage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="낭랑 19세"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintTop_toBottomOf="@id/school_name" />
+
+    <TextView
+        android:id="@+id/gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Male"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toRightOf="@id/preage"
+        app:layout_constraintTop_toBottomOf="@id/grade" />
+
+    <TextView
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="로그아웃"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@id/withdrawal"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left" />
+
+    <TextView
+        android:id="@+id/withdrawal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="회원탈퇴"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@id/ask_center"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="문의하기"
+        android:textColor="@color/faded_denim"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@id/ask_center"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right" />
+
+    <TextView
+        android:id="@+id/ask_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:autoLink="email"
+        android:linksClickable="true"
+        android:text="dum.dodamdodam@gmail.com"
+        android:textColor="@color/faded_denim"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

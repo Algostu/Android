@@ -155,12 +155,12 @@ public class Login extends Fragment {
                                 }
                             }
                             // 성별
-                            if (gender == null){
+                            if (gender == null) {
                                 Toast.makeText(getActivity(), "성별 정보를 제공해주셔야 합니다.", Toast.LENGTH_SHORT).show();
                             }
-                            ((startUpActivity)getActivity()).user = new UserInfo(userID, accessToken, kakaoAccount.getEmail()
-                                    ,kakaoAccount.getGender().getValue(),kakaoAccount.getAgeRange().getValue(), expTime);
-                            ((startUpActivity)getActivity()).login(userID, accessToken);
+                            ((startUpActivity) getActivity()).user = new UserInfo(userID, accessToken, kakaoAccount.getEmail()
+                                    , kakaoAccount.getGender().getValue(), kakaoAccount.getAgeRange().getValue(), expTime);
+                            ((startUpActivity) getActivity()).login(userID, accessToken);
                         }
                     });
         }

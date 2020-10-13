@@ -13,11 +13,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Community.dataframe.ArticleCommentFrame;
 import com.dum.dodam.Community.dataframe.ArticleCommentResponse;
+import com.dum.dodam.Community.dataframe.ArticleFrame;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
@@ -67,16 +66,11 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private EditText comment;
     private CheckBox ck_isAnonymous;
 
-    private View contentView;
-
     private int articleID;
     private int communityType;
     private int communityID;
     private int parentReplyID = 0;
-    private String edit;
-
-    private int contentHeight = 0;
-    private int previousHeight = 0;
+    private int edit;
 
     public Article(int articleID, int communityType, int communityID) {
         this.articleID = articleID;
@@ -88,8 +82,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.article_, container, false);
-        contentView = view.findViewById(R.id.frame_layout);
         view.setClickable(true);
+        setHasOptionsMenu(true);
         ((MainActivity) getActivity()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         toolbar = view.findViewById(R.id.toolbar);
@@ -140,7 +134,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
     public void readArticle() {
         RetrofitAdapter adapter = new RetrofitAdapter();
-        com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
+        com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance(getContext());
         Call<ArticleResponse> call = service.readArticle(articleID, communityType, communityID);
 
         call.enqueue(new retrofit2.Callback<ArticleResponse>() {
@@ -149,7 +143,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                 if (response.isSuccessful()) {
                     ArticleResponse result = response.body();
                     if (result.checkError(getActivity()) != 0) return;
-                    ArticleResponse.ArticleFrame articleFrame = result.body;
+                    ArticleFrame articleFrame = result.body;
                     writer.setText(articleFrame.nickName);
                     title.setText(articleFrame.title);
                     content.setText(articleFrame.content);
@@ -174,7 +168,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
     public void readArticleComment() {
         RetrofitAdapter rAdapter = new RetrofitAdapter();
-        com.dum.dodam.httpConnection.RetrofitService service = rAdapter.getInstance("http://49.50.164.11:5000/", getContext());
+        com.dum.dodam.httpConnection.RetrofitService service = rAdapter.getInstance(getContext());
         Call<ArticleCommentResponse> call = service.readArticleComment(articleID, communityType, communityID);
 
         call.enqueue(new retrofit2.Callback<ArticleCommentResponse>() {
@@ -219,7 +213,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
         Log.d(TAG, "올릴 때 " + String.valueOf(parentReplyID));
 
-        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
         Call<String> call = service.uploadComment(paramObject);
 
         call.enqueue(new retrofit2.Callback<String>() {
@@ -243,13 +237,15 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     }
 
     public void DeleteArticle() {
-        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
         Call<String> call = service.deleteArticle(communityType, communityID, articleID);
         call.enqueue(new retrofit2.Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     String result = response.body();
+                    Toast.makeText(getContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
                 }
@@ -281,12 +277,17 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        if (edit.equals("TRUE")) {
+        if (edit == 1) {
             MenuItem menu2 = menu.findItem(R.id.report);
             menu2.setVisible(false);
+            MenuItem menu1 = menu.findItem(R.id.delete);
+            menu1.setVisible(true);
+        } else {
+            MenuItem menu2 = menu.findItem(R.id.report);
+            menu2.setVisible(true);
+            MenuItem menu1 = menu.findItem(R.id.delete);
+            menu1.setVisible(false);
         }
-        MenuItem menu1 = menu.findItem(R.id.delete);
-        menu1.setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
 

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp">
 
     <TextView
         android:id="@+id/contestID"
@@ -26,13 +27,10 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="170dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
                 android:src="@drawable/ic_chiken_1" />
 
             <LinearLayout
@@ -91,9 +89,11 @@
                     android:layout_height="20dp"
                     android:layout_marginTop="10dp"
                     android:autoSizeTextType="uniform"
+                    android:maxLines="1"
                     android:text="Host"
                     android:textColor="@android:color/black"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    tools:ignore="UnusedAttribute" />
             </LinearLayout>
 
         </LinearLayout>

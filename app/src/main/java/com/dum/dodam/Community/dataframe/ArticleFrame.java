@@ -1,7 +1,7 @@
 package com.dum.dodam.Community.dataframe;
 
 public class ArticleFrame {
-    public String edit;
+    public int edit;
     public String articleID;
     public String isAnonymous;
     public String content;

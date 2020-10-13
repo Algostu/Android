@@ -1,7 +1,6 @@
 package com.dum.dodam.Community.dataframe;
 
 public class ArticleListFrame {
-
     public String articleID;
     public String title;
     public String content;

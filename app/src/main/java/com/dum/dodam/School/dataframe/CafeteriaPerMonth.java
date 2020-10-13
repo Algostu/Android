@@ -4,5 +4,6 @@ import java.util.ArrayList;
 
 public class CafeteriaPerMonth {
     public String version;
-    public ArrayList<LunchFrame> cafeMenu;
+    public ArrayList<LunchFrame> curMonth;
+    public ArrayList<LunchFrame> nextMonth;
 }

@@ -23,12 +23,24 @@ import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.School.dataframe.CafeteriaFrame;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -63,6 +75,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         view.setClickable(true);
 
         cafeteria = view.findViewById(R.id.cafeteria);
+        setTodayCafeteria();
 
         myCommunity_adapter = new MyCommunityAdapter(getContext(), myCommunityList, this);
         setMyCommunity();
@@ -84,9 +97,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     }
 
     public void setMyCommunity() {
-        RetrofitService service = RetrofitAdapter.getInstance("http://49.50.164.11:5000/", getContext());
+        RetrofitService service = RetrofitAdapter.getInstance(getContext());
         Call<MyCommunityResponse> call = service.getMyCommunity();
-
         call.enqueue(new retrofit2.Callback<MyCommunityResponse>() {
             @Override
             public void onResponse(Call<MyCommunityResponse> call, retrofit2.Response<MyCommunityResponse> response) {
@@ -112,7 +124,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
     public void setHotArticle() {
         RetrofitAdapter adapter = new RetrofitAdapter();
-        RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", getContext());
+        RetrofitService service = adapter.getInstance(getContext());
         Call<HotArticleResponse> call = service.getHotArticle();
 
         call.enqueue(new retrofit2.Callback<HotArticleResponse>() {
@@ -155,7 +167,67 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         ((MainActivity) getActivity()).replaceFragmentFull(new Article(articleID, communityType, communityID));
     }
 
-    public void setTodayCafeteria(String menu) {
-        cafeteria.setText(menu);
+    public void setTodayCafeteria() {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        String filename = "curCafeteria";
+        File file = new File(getContext().getFilesDir() + "/" + filename);
+        if (file.exists()) {
+            try {
+                FileReader fileReader = new FileReader(file);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                String line = bufferedReader.readLine();
+                while (line != null) {
+                    stringBuilder.append(line).append("\n");
+                    line = bufferedReader.readLine();
+                }
+                bufferedReader.close();
+                String response = stringBuilder.toString();
+
+                ArrayList<CafeteriaFrame> list = gson.fromJson(response, new TypeToken<ArrayList<CafeteriaFrame>>() {
+                }.getType());
+
+                String lunch = new String();
+
+                if (getWeekNDate().get(0) == 2) {
+                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
+                } else if (getWeekNDate().get(0) == 3) {
+                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
+                } else if (getWeekNDate().get(0) == 4) {
+                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
+                } else if (getWeekNDate().get(0) == 5) {
+                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
+                } else if (getWeekNDate().get(0) == 6) {
+                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
+                }
+                if (lunch.equals(" ")) cafeteria.setText("제공되는 식단이 없습니다.");
+                else {
+                    cafeteria.setText(lunch);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            cafeteria.setText("학교탭에서 업데이트 해주세요 ㅎㅎ");
+        }
+    }
+
+    public static ArrayList<Integer> getWeekNDate() {
+        ArrayList<Integer> result = new ArrayList<>();
+
+        Calendar c = Calendar.getInstance();
+        int this_week = c.get(Calendar.WEEK_OF_MONTH);
+//        int today = c.get(Calendar.DATE); //오늘 일자 저장
+        int sDayNum = c.get(Calendar.DAY_OF_WEEK);
+
+        result.add(sDayNum);
+        result.add(this_week);
+
+        return result;
     }
 }

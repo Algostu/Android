@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -54,11 +55,24 @@ public class startUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_main);
 
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .permitDiskReads()
+                .permitDiskWrites()
+                .permitNetwork().build());
+
         SharedPreferences sharedPref = getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
         String autoLogin = sharedPref.getString("autoLogin", null);
+        String auth = sharedPref.getString("auth", null);
+        int auth_int;
+        if (auth == null) {
+            this.replaceFragment(new Login());
+            return;
+        } else {
+            auth_int = Integer.parseInt(auth);
+        }
 
-        if (autoLogin != null) {
+        if (autoLogin != null && auth_int == 1) {
             String expStr = sharedPref.getString("expDate", null);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             Date expDate;
@@ -104,7 +118,7 @@ public class startUpActivity extends AppCompatActivity {
 
     public void login(long id, String token) {
         RetrofitAdapter adapter = new RetrofitAdapter();
-        RetrofitService service = adapter.getInstance("http://49.50.164.11:5000/", this);
+        RetrofitService service = adapter.getInstance(this);
         Call<LoginResponse> call = service.kakaoLogin(id, token);
         call.enqueue(new retrofit2.Callback<LoginResponse>() {
             @Override
@@ -112,6 +126,11 @@ public class startUpActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     LoginResponse result = response.body();
                     if (result.checkError(getApplicationContext()) != 0) {
+                        if (result.errorCode == 3) {
+                            // if need to sign up
+                            startUpActivity.this.replaceFragment(new SignUP());
+                            Log.d(TAG, "onResponse: Fails " + response.body().status);
+                        }
                         return;
                     }
                     if (result.status.equals("<success>")) {
@@ -132,6 +151,7 @@ public class startUpActivity extends AppCompatActivity {
                         editor.putString("autoLogin", "true");
                         editor.putString("userObject", json);
                         editor.putString("expDate", expDateStr);
+                        editor.putString("auth", userInfo.authorized);
                         editor.commit();
                         // make intent and start main activity
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -139,10 +159,6 @@ public class startUpActivity extends AppCompatActivity {
                         bundle.putSerializable("user", userInfo);
                         intent.putExtras(bundle);
                         startActivity(intent);
-                    } else if (result.errorCode == 3) {
-                        // if need to sign up
-                        startUpActivity.this.replaceFragment(new SignUP());
-                        Log.d(TAG, "onResponse: Fails " + response.body().status);
                     }
 
                 } else {

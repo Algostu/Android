@@ -16,12 +16,13 @@ import com.dum.dodam.Home.Home;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.School.School;
-import com.dum.dodam.Simulation.Simulation;
+import com.dum.dodam.Contest.Contest;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
+    private UserJson user;
     Intent intent;
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new CommunityList());
                     return true;
                 case R.id.item_simulation:
-                    replaceFragment(new Simulation());
+                    replaceFragment(new Contest());
                     return true;
                 case R.id.item_mypage:
                     replaceFragment(new Mypage());
@@ -55,13 +56,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         intent = getIntent();
 
-        UserJson user = (UserJson) intent.getSerializableExtra("user");
+        user = (UserJson) intent.getSerializableExtra("user");
         Log.d("Test", "nickName  :  " + user.nickName);
         Log.d("Test", "regionName  :  " + user.regionName);
         Log.d("Test", "townName  :  " + user.townName);
         Log.d("Test", "schoolGender  :  " + user.schoolGender);
         Log.d("Test", "email  :  " + user.email);
-
+        Log.d("Test", "userName  :  " + user.userName);
 
         navigation = findViewById(R.id.nav_bar);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -81,5 +82,9 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public UserJson getUser() {
+        return user;
     }
 }

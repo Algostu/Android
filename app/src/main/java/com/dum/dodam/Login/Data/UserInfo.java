@@ -6,9 +6,10 @@ public class UserInfo {
     public String gender;
     public String ageRange;
     public String accessToken;
+    public String userName;
     public long expTime;
 
-    public UserInfo(long userID, String accessToken, String email, String gender, String ageRange, long expTime){
+    public UserInfo(long userID, String accessToken, String email, String gender, String ageRange, long expTime) {
         this.userID = userID;
         this.accessToken = accessToken;
         this.email = email;
