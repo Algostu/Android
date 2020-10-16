@@ -101,4 +101,8 @@ public class MainActivity extends AppCompatActivity {
     public UserJson getUser() {
         return user;
     }
+
+    public void setNavigationMenu() {
+        navigation.setSelectedItemId(R.id.item_school);
+    }
 }

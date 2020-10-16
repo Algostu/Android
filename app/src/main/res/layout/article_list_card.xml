@@ -28,27 +28,31 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title"
+                android:maxLines="1"
+                android:text="                      "
                 android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/content"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contents"
+                android:layout_marginTop="5dp"
+                android:maxLines="1"
+                android:text="                                               "
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textSize="15dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/writer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Writer"
                     android:textColor="@color/faded_gray"
                     android:textSize="10dp"
                     app:layout_constraintLeft_toLeftOf="parent" />
@@ -69,7 +73,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:text="Time"
                     android:textColor="@color/faded_gray"
                     android:textSize="10dp"
                     app:layout_constraintLeft_toRightOf="@id/verticle_bar" />
@@ -87,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="Reply"
+                    android:text="            "
                     android:textColor="@color/faded_gray"
                     android:textSize="10dp"
                     app:layout_constraintRight_toLeftOf="@id/icon_heart" />
@@ -105,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="heart"
+                    android:text="            "
                     android:textColor="@color/faded_gray"
                     android:textSize="10dp"
                     app:layout_constraintRight_toRightOf="parent" />

@@ -42,6 +42,36 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <!--    <com.facebook.shimmer.ShimmerFrameLayout-->
+    <!--        android:id="@+id/shimmerLayout"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintLeft_toLeftOf="@id/gd_left"-->
+    <!--        app:layout_constraintRight_toRightOf="@id/gd_right"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/title_bg"-->
+    <!--        app:shimmer_repeat_mode="restart"-->
+    <!--        app:shimmer_shape="linear"-->
+    <!--        tools:ignore="MissingConstraints">-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <include layout="@layout/article_list_card"></include>-->
+
+    <!--            <include layout="@layout/article_list_card"></include>-->
+
+    <!--            <include layout="@layout/article_list_card"></include>-->
+
+    <!--            <include layout="@layout/article_list_card"></include>-->
+
+    <!--            <include layout="@layout/article_list_card"></include>-->
+
+    <!--            <include layout="@layout/article_list_card"></include>-->
+    <!--        </LinearLayout>-->
+    <!--    </com.facebook.shimmer.ShimmerFrameLayout>-->
+
     <!--  articles  -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_articles"

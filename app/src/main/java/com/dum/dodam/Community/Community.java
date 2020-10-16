@@ -22,6 +22,7 @@ import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     private int communityType;
     private String lastArticleWrittenString = "latest";
 
+//    private ShimmerFrameLayout shimmerFrameLayout;
     private ArrayList<ArticleListFrame> list = new ArrayList<>();
 
     public Community(int communityType, int communityID, String title) {
@@ -59,6 +61,10 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.article_list, container, false);
         view.setClickable(true);
+
+//        shimmerFrameLayout = view.findViewById(R.id.shimmerLayout);
+//        shimmerFrameLayout.startShimmer();
+
         TextView title = (TextView) view.findViewById(R.id.tv_title);
         title.setText(community_name + " 게시판");
         ImageButton btn_write_article = (ImageButton) view.findViewById(R.id.btn_write_article);
@@ -73,7 +79,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         adapter = new ArticleListAdapter(getContext(), list, this);
         Log.d("hi", "this is onCreateView");
 
-        if(list.size() == 0 && readArticleToggle == 0){
+        if (list.size() == 0 && readArticleToggle == 0) {
             readArticleList();
             readArticleToggle = 1;
         }
@@ -132,7 +138,8 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                     }
 
                     list.addAll(result.body);
-                    Log.d("hi", "this Length of list" + list.size());
+//                    shimmerFrameLayout.stopShimmer();
+//                    shimmerFrameLayout.setVisibility(View.GONE);
                     adapter.notifyDataSetChanged();
                     readArticleToggle = 0;
                 } else {
@@ -156,7 +163,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         Log.d("h", "this is onResume");
         list.clear();
         lastArticleWrittenString = "latest";
-        if(list.size() == 0 && readArticleToggle == 0){
+        if (list.size() == 0 && readArticleToggle == 0) {
             readArticleToggle = 1;
             readArticleList();
         }

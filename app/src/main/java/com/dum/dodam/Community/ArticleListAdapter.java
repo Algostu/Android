@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Community.dataframe.ArticleListFrame;
@@ -61,6 +62,12 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             this.reply = (TextView) view.findViewById(R.id.reply);
             this.heart = (TextView) view.findViewById(R.id.heart);
             this.articleID = (TextView) view.findViewById(R.id.article_ID);
+
+//            this.title.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+//            this.content.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+//            this.reply.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+//            this.heart.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
