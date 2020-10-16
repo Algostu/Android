@@ -208,6 +208,16 @@
     </RelativeLayout>
 
 
+    <ImageView
+        android:id="@+id/loadingView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/submit"
         android:layout_width="match_parent"
