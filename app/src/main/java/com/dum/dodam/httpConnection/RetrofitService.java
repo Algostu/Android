@@ -23,6 +23,12 @@ public interface RetrofitService {
     @GET("/auth/login")
     Call<LoginResponse> kakaoLogin(@Query("id") long id, @Query("token") String token);
 
+    @GET("/auth/logout")
+    Call<BaseResponse> kakaoLogout();
+
+    @GET("/auth/withdraw")
+    Call<BaseResponse> kakaoSignOut(@Query("id") long id);
+
     @POST("/auth/kakaoSignup")
     Call<BaseResponse> registerKAKAO(@Body JsonObject body);
 
