@@ -196,7 +196,6 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         mContext = context;
     }
 }
