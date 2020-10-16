@@ -67,26 +67,23 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
 
         recyclerView.setAdapter(adapter);
 
+        readContestList();
+
         if (!list.isEmpty()) getContestList(Integer.parseInt(list.get(list.size() - 1).contestID));
-        else {
-            readContestList();
-        }
         return view;
     }
 
     public void getContestList(final int contestID) {
-        Log.d(TAG, "download contest ID" + contestID);
-
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
 
-        Call<ContestListResponse> call = service.getContestList();
+        Call<ContestListResponse> call = service.getContestList(contestID);
 
         call.enqueue(new Callback<ContestListResponse>() {
             @Override
             public void onResponse(Call<ContestListResponse> call, Response<ContestListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<ContestFrame> result = response.body().body;
-
+                    if (result.size() == 0) return;
                     Log.d(TAG, "CONTEST RESULT" + result.size());
 
                     JSONArray jsArray = new JSONArray();//배열이 필요할때
@@ -112,7 +109,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
 
                     try {
                         Log.d(TAG, "CONTEST Write Start");
-//                        if (getContext() == null) return;
+                        if (getContext() == null) return;
                         File file = new File(mContext.getFilesDir(), "contest");
                         FileWriter fileWriter = null;
                         if (contestID == 0) fileWriter = new FileWriter(file, false);
@@ -143,7 +140,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
 
     public void readContestList() {
         String filename = "contest";
-//        if (getContext() == null) return;
+        if (getContext() == null) return;
         File file = new File(getContext().getFilesDir() + "/" + filename);
         if (file.exists()) {
             try {
