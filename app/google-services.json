@@ -8,6 +8,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:542431434590:android:b0f9293f59a582da9a61cf",
+        "android_client_info": {
+          "package_name": "com.dum.dodam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542431434590-7etv83ul5fn93ur9l9knik4vrjdl9utf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dum.dodam",
+            "certificate_hash": "375479ceb5aba2042b73451589b0783f9149c994"
+          }
+        },
+        {
+          "client_id": "542431434590-ld44rvepfihvcal1mdjsap2j0h5h2d0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAagFOPh0xgWXwSlHVGa_mCFL0KDGr3V9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542431434590-ld44rvepfihvcal1mdjsap2j0h5h2d0i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:542431434590:android:ac6835561c99b5b49a61cf",
         "android_client_info": {
           "package_name": "com.example.myapplication"
