@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.dum.dodam.Collage.SearchCollage;
 import com.dum.dodam.Community.CommunityList;
 import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new CommunityList());
                     return true;
                 case R.id.item_simulation:
-                    replaceFragment(new Contest());
+                    replaceFragment(new SearchCollage());
                     return true;
                 case R.id.item_mypage:
                     replaceFragment(new Mypage());
