@@ -215,7 +215,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 ArrayList<CafeteriaFrame> list = gson.fromJson(response, new TypeToken<ArrayList<CafeteriaFrame>>() {
                 }.getType());
 
-                String lunch = new String();
+                String lunch = " ";
 
                 if (getWeekNDate().get(0) == 2) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_monday;
@@ -228,6 +228,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 } else if (getWeekNDate().get(0) == 6) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_monday;
                 }
+                Log.d(TAG, "Home lunch" + lunch);
                 if (lunch.equals(" ")) cafeteria.setText("제공되는 식단이 없습니다.");
                 else {
                     cafeteria.setText(lunch);
@@ -247,7 +248,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
         Calendar c = Calendar.getInstance();
         int this_week = c.get(Calendar.WEEK_OF_MONTH);
-//        int today = c.get(Calendar.DATE); //오늘 일자 저장
         int sDayNum = c.get(Calendar.DAY_OF_WEEK);
 
         result.add(sDayNum);

@@ -28,32 +28,58 @@ import java.util.ArrayList;
 
 public class CommunityList extends Fragment {
     private static final String TAG = "RHC";
+    ArrayList<MyCommunityFrame2> comAll;
+    ArrayList<MyCommunityFrame2> comRegion;
+    ArrayList<MyCommunityFrame2> comSchool;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ArrayList<MyCommunityFrame2> comAll = ((MainActivity) getActivity()).user.comAll;
-        ArrayList<MyCommunityFrame2> comRegion = ((MainActivity) getActivity()).user.comRegion;
-        ArrayList<MyCommunityFrame2> comSchool = ((MainActivity) getActivity()).user.comSchool;
+        comAll = ((MainActivity) getActivity()).user.comAll;
+        comRegion = ((MainActivity) getActivity()).user.comRegion;
+        comSchool = ((MainActivity) getActivity()).user.comSchool;
 
         View view = inflater.inflate(R.layout.community_list, container, false);
-        textViewClickListener(view, R.id.school_question, comSchool.get(0).communityID, 2, comSchool.get(0).title);
-        textViewClickListener(view, R.id.school_free, comSchool.get(1).communityID, 2, comSchool.get(1).title);
-        textViewClickListener(view, R.id.region_question, comRegion.get(0).communityID, 1, comRegion.get(0).title);
-        textViewClickListener(view, R.id.region_recruit, comRegion.get(1).communityID, 1, comRegion.get(1).title);
-        textViewClickListener(view, R.id.region_free, comRegion.get(2).communityID, 1, comRegion.get(2).title);
-        textViewClickListener(view, R.id.country_academy, comAll.get(0).communityID, 0, comAll.get(0).title);
-        textViewClickListener(view, R.id.country_question, comAll.get(1).communityID, 0, comAll.get(1).title);
-        textViewClickListener(view, R.id.country_free, comAll.get(2).communityID, 0, comAll.get(2).title);
+
+        textViewClickListener(view, R.id.school_question, comSchool.get(0).communityID, 2);
+        textViewClickListener(view, R.id.school_free, comSchool.get(1).communityID, 2);
+        textViewClickListener(view, R.id.region_question, comRegion.get(0).communityID, 1);
+        textViewClickListener(view, R.id.region_recruit, comRegion.get(1).communityID, 1);
+        textViewClickListener(view, R.id.region_free, comRegion.get(2).communityID, 1);
+        textViewClickListener(view, R.id.country_academy, comAll.get(0).communityID, 0);
+        textViewClickListener(view, R.id.country_question, comAll.get(1).communityID, 0);
+        textViewClickListener(view, R.id.country_free, comAll.get(2).communityID, 0);
+
         return view;
     }
 
-    public void textViewClickListener(View view, final int id, final int communityID, final int communityType, final String title) {
+    public void textViewClickListener(View view, final int id, final int communityID, final int communityType) {
         TextView textView = view.findViewById(id);
+
+        String title = new String();
+        String type = "";
+        ArrayList<MyCommunityFrame2> com = new ArrayList<MyCommunityFrame2>();
+        if (0 == communityType) {
+            type = "전국 ";
+            com = comAll;
+        } else if (1 == communityType) {
+            type = "지역 ";
+            com = comRegion;
+        } else if (2 == communityType) {
+            type = "교내 ";
+            com = comSchool;
+        }
+        for (MyCommunityFrame2 frame : com) {
+            if (frame.communityID == communityID)
+                title = type + frame.title;
+        }
+        textView.setText(title);
+
+        final String finalTitle = title;
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID, title));
+                ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID, finalTitle));
             }
         });
     }

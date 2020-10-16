@@ -39,9 +39,11 @@
         android:id="@+id/school_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="아주 고등학교"
         android:textColor="@android:color/white"
         android:textSize="25dp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintTop_toTopOf="@id/gd_top" />
 
@@ -50,7 +52,7 @@
         android:id="@+id/cv_cafeteria"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"

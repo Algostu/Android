@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Home.dataframe.HotArticleFrame;
+import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.R;
 
@@ -43,14 +44,22 @@ public class HotArticleAdapter extends RecyclerView.Adapter<HotArticleAdapter.Ho
     @Override
     public void onBindViewHolder(@NonNull HotArticleAdapter.Holder holder, final int position) {
         String community_name = new String();
-        if (2 == list.get(position).communityType) community_name = "교내 " + user.comSchool.get(0).title;
-        else if (2 == list.get(position).communityType) community_name = "교내 " +  user.comSchool.get(1).title;
-        else if (1 == list.get(position).communityType) community_name = "동네 " +  user.comRegion.get(0).title;
-        else if (1 == list.get(position).communityType) community_name = "동네 " +  user.comRegion.get(1).title;
-        else if (1 == list.get(position).communityType) community_name = "동네 " +  user.comRegion.get(2).title;
-        else if (0 == list.get(position).communityType) community_name =  user.comAll.get(0).title;
-        else if (0 == list.get(position).communityType) community_name =  user.comAll.get(1).title;
-        else if (0 == list.get(position).communityType) community_name =  user.comAll.get(2).title;
+        String type = "";
+        ArrayList<MyCommunityFrame2> com = new ArrayList<MyCommunityFrame2>();
+        if (0 == list.get(position).communityType) {
+            type = "전국 ";
+            com = user.comAll;
+        } else if (1 == list.get(position).communityType) {
+            type = "지역 ";
+            com = user.comRegion;
+        } else if (2 == list.get(position).communityType) {
+            type = "교내 ";
+            com = user.comSchool;
+        }
+        for (MyCommunityFrame2 frame : com) {
+            if (frame.communityID == list.get(position).communityID)
+                community_name = type + frame.title;
+        }
 
         holder.communityID = list.get(position).communityID;
         holder.communityType = list.get(position).communityType;

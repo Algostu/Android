@@ -1,6 +1,7 @@
 package com.dum.dodam.Community;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dum.dodam.Community.dataframe.ArticleListFrame;
 import com.dum.dodam.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.Holder> {
     private ArrayList<ArticleListFrame> list = new ArrayList<ArticleListFrame>();
@@ -89,4 +93,6 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         holder.articleID.setText(String.valueOf(list.get(position).articleID));
         holder.itemView.setTag(position);
     }
+
+
 }

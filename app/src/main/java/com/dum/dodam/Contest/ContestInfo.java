@@ -57,6 +57,7 @@ public class ContestInfo extends Fragment {
         sponsor.setText(frame.sponsor);
         homepage.setText(frame.homePage);
 
+        Log.d("RHC", "CONTENT : " + frame.content);
         contents = frame.content.replace("■", "\n\n■");
 
         content.setText(contents);

@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/title_bg"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="55dp"
         android:background="@color/classic_blue"
         tools:ignore="MissingConstraints" />
 
@@ -36,6 +36,7 @@
         android:text="마이 페이지"
         android:textColor="#FFFFFF"
         android:textSize="25dp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/gd_left"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -46,7 +47,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_unicorn_17"
-        app:layout_constraintTop_toBottomOf="@id/mypage_title"
+        app:layout_constraintTop_toBottomOf="@id/title_bg"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -58,7 +59,7 @@
         android:text="Name"
         android:textSize="20dp"
         app:layout_constraintLeft_toRightOf="@id/profile_icon"
-        app:layout_constraintTop_toBottomOf="@id/mypage_title" />
+        app:layout_constraintTop_toBottomOf="@id/title_bg" />
 
     <TextView
         android:id="@+id/mail_address"
@@ -79,7 +80,7 @@
         android:layout_marginRight="20dp"
         android:src="@drawable/ic_unconfirm"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mypage_title" />
+        app:layout_constraintTop_toBottomOf="@id/title_bg" />
 
     <View
         android:id="@+id/line"

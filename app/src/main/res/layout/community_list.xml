@@ -22,14 +22,22 @@
         app:layout_constraintGuide_end="15dp" />
 
     <!--  title background  -->
+
+    <TextView
+        android:id="@+id/title_bg"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/classic_blue"
+        tools:ignore="MissingConstraints" />
+
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:text="Community"
-        android:textColor="@color/classic_blue"
-        android:textSize="35dp"
+        android:layout_marginTop="15dp"
+        android:text="게시판 모음"
+        android:textColor="@color/white"
+        android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/gd_left"
         app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +48,7 @@
         android:id="@+id/cv_school_community"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:cardCornerRadius="10dp"
