@@ -104,7 +104,7 @@ public class Mypage extends Fragment {
                 builder.setPositiveButton("예(로그아웃)",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getContext(),"로그아웃 성공!",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(),"로그아웃 중!",Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(getActivity(), startUpActivity.class);
                                 intent.putExtra("login", 1);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -130,7 +130,7 @@ public class Mypage extends Fragment {
                 builder.setPositiveButton("예(회원탈퇴)",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getContext(),"회원탈퇴 성공!",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(),"회원탈퇴 중!",Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(getActivity(), startUpActivity.class);
                                 intent.putExtra("login", 2);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
