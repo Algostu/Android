@@ -49,6 +49,8 @@ import retrofit2.http.Query;
 public class startUpActivity extends AppCompatActivity {
     private static final String TAG = "KHK";
     public UserInfo user;
+    Intent intent;
+    public int scenarioNo = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,17 @@ public class startUpActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
+
+        intent = getIntent();
+        if (intent != null && intent.hasExtra("login")) {
+            SharedPreferences.Editor edit = sharedPref.edit();
+            edit.clear();
+            edit.commit();
+            scenarioNo = intent.getIntExtra("login", 0);
+            this.replaceFragment(new Login());
+            return;
+        }
+
         String autoLogin = sharedPref.getString("autoLogin", null);
         String auth = sharedPref.getString("auth", null);
         int auth_int;

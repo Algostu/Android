@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dum.dodam.Community.dataframe.ArticleCommentFrame;
 import com.dum.dodam.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<ArticleCommentFrame> list = new ArrayList<ArticleCommentFrame>();
@@ -51,13 +54,37 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder1.content.setText(list.get(position).content);
             holder1.replyID = list.get(position).replyID;
             holder1.itemView.setTag(position);
+
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date wriDate;
+                wriDate = format.parse(list.get(position).writtenTime);
+                TIME_MAXIMUM timeDiff = new TIME_MAXIMUM();
+                String diffStr = timeDiff.calculateTime(wriDate);
+                holder1.writtenTime.setText(diffStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         } else {
             RecommentViewHolder holder2 = (RecommentViewHolder) holder;
             holder2.nickName.setText(list.get(position).nickName);
             holder2.writtenTime.setText(list.get(position).writtenTime);
             holder2.content.setText(list.get(position).content);
             holder2.itemView.setTag(position);
+
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date wriDate;
+                wriDate = format.parse(list.get(position).writtenTime);
+                TIME_MAXIMUM timeDiff = new TIME_MAXIMUM();
+                String diffStr = timeDiff.calculateTime(wriDate);
+                holder2.writtenTime.setText(diffStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {

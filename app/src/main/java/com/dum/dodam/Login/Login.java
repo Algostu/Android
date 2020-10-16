@@ -24,6 +24,7 @@ import com.kakao.auth.Session;
 import com.kakao.auth.authorization.accesstoken.AccessToken;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.usermgmt.response.model.AgeRange;
@@ -62,17 +63,32 @@ public class Login extends Fragment {
 //        btn_custom_login_out.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                UserManagement.getInstance()
-//                        .requestLogout(new LogoutResponseCallback() {
-//                            @Override
-//                            public void onCompleteLogout() {
-//                                Toast.makeText(LoginActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
+//
 //            }
 //        });
-
+        int scene = ((startUpActivity)getActivity()).scenarioNo;
+        if(scene == 1){
+            this.logout();
+        }
+        else if (scene == 2){
+            this.withdraw();
+        }
         return view;
+    }
+
+    public void withdraw(){
+
+    }
+
+    public void logout(){
+        UserManagement.getInstance()
+                .requestLogout(new LogoutResponseCallback() {
+                    @Override
+                    public void onCompleteLogout() {
+                        Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
     }
 
     @Override

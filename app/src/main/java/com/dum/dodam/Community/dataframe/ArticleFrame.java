@@ -6,7 +6,7 @@ public class ArticleFrame {
     public String isAnonymous;
     public String content;
     public String title;
-    public String viewNumber;
+    public int viewNumber;
     public String reply;
     public String heart;
     public String writtenTime;

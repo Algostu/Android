@@ -1,10 +1,6 @@
 package com.dum.dodam.Community;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,11 +34,12 @@ import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
-import com.facebook.shimmer.Shimmer;
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.JsonObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 
@@ -63,6 +60,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private TextView time;
     private TextView reply;
     private TextView heart;
+    private TextView view_count;
     private ImageView heart_ic;
     private androidx.appcompat.widget.Toolbar toolbar;
     private ActionBar actionbar;
@@ -113,6 +111,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         reply = view.findViewById(R.id.reply);
         heart = view.findViewById(R.id.heart);
         heart_ic = view.findViewById(R.id.icon_heart);
+        view_count = view.findViewById(R.id.view_count);
 
         comment = view.findViewById(R.id.comment);
         ck_isAnonymous = view.findViewById(R.id.ck_isAnonymous);
@@ -203,7 +202,18 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                     heart.setText(articleFrame.heart);
                     org_heart = Integer.parseInt(articleFrame.heart);
                     added_heart = articleFrame.heartPushed;
+                    view_count.setText(String.valueOf(articleFrame.viewNumber));
 
+                    try {
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date wriDate;
+                        wriDate = format.parse(articleFrame.writtenTime);
+                        TIME_MAXIMUM timeDiff = new TIME_MAXIMUM();
+                        String diffStr = timeDiff.calculateTime(wriDate);
+                        time.setText(diffStr);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 //                    writer.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
 //                    title.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
 //                    content.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));

@@ -92,6 +92,17 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         holder.heart.setText(String.valueOf(list.get(position).heart));
         holder.articleID.setText(String.valueOf(list.get(position).articleID));
         holder.itemView.setTag(position);
+
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date wriDate;
+            wriDate = format.parse(list.get(position).writtenTime);
+            TIME_MAXIMUM timeDiff = new TIME_MAXIMUM();
+            String diffStr = timeDiff.calculateTime(wriDate);
+            holder.time.setText(diffStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 
