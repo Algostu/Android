@@ -99,6 +99,7 @@ public class startUpActivity extends AppCompatActivity {
                     bundle.putSerializable("user", user);
                     intent.putExtras(bundle);
                     startActivity(intent);
+                    this.finish();
                     return;
                 }
             } catch (ParseException e) {
@@ -160,6 +161,8 @@ public class startUpActivity extends AppCompatActivity {
                         bundle.putSerializable("user", userInfo);
                         intent.putExtras(bundle);
                         startActivity(intent);
+                        finish();
+                        return;
                     }
 
                 } else {
