@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,6 +64,10 @@ public class School extends Fragment {
     private int cnt_cafeteria = 0;
     private String filename;
     private RecyclerView.Adapter adapter;
+
+    private TextView school_name;
+
+    UserJson user;
     ViewPager2 ViewPager_cafeteria;
 
     @Nullable
@@ -72,6 +77,11 @@ public class School extends Fragment {
         List<Integer> weekNToday = getWeekNDate();
         int this_week = weekNToday.get(1) - 1;
         int today = weekNToday.get(0);
+
+        user = ((MainActivity) getActivity()).getUser();
+
+        school_name = view.findViewById(school_name);
+        school_name.setText(user.schoolName);
 
         getCafeteriaMenu();
 
@@ -156,6 +166,7 @@ public class School extends Fragment {
 
         BufferedReader bReader = null;
         try {
+            if (getContext() == null) return;
             File file4 = new File(getContext().getFilesDir(), "versionCafeteria");
             bReader = new BufferedReader(new FileReader(file4));
             version = bReader.readLine();
@@ -211,6 +222,7 @@ public class School extends Fragment {
                     }
 
                     // Define the File Path and its Name
+                    if (getContext() == null) return;
                     File file = new File(getContext().getFilesDir(), "curCafeteria");
                     FileWriter fileWriter = null;
                     try {
@@ -253,6 +265,7 @@ public class School extends Fragment {
                     }
 
                     // Define the File Path and its Name
+                    if (getContext() == null) return;
                     File file2 = new File(getContext().getFilesDir(), "nextCafeteria");
                     FileWriter fileWriter2 = null;
                     try {
@@ -264,6 +277,7 @@ public class School extends Fragment {
                         e.printStackTrace();
                     }
 
+                    if (getContext() == null) return;
                     File file3 = new File(getContext().getFilesDir(), "versionCafeteria");
                     try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter(file3));

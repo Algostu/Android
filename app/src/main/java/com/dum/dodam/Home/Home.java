@@ -69,6 +69,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     public UserJson user;
     private TextView cafeteria;
     private TextView school_name;
+    private TextView user_name;
 
     @Nullable
     @Override
@@ -77,6 +78,9 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         view.setClickable(true);
 
         user = ((MainActivity) getActivity()).getUser();
+
+        user_name = view.findViewById(R.id.user_name);
+        user_name.setText(user.userName);
 
         cafeteria = view.findViewById(R.id.cafeteria);
         setTodayCafeteria();
