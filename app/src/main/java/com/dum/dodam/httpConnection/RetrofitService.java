@@ -1,5 +1,7 @@
 package com.dum.dodam.httpConnection;
 
+import com.dum.dodam.Collage.dataframe.CollageLogoResponse;
+import com.dum.dodam.Collage.dataframe.CollageResponse;
 import com.dum.dodam.Community.dataframe.ArticleCommentResponse;
 import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
@@ -32,6 +34,12 @@ public interface RetrofitService {
 
     @GET("/search/schoolList")
     Call<SearchResponse> searchSchoolName(@Query("schoolName") String schoolName);
+
+    @GET("/search/univList")
+    Call<CollageResponse> searchCollageName(@Query("univName") String univName);
+
+    @GET("/univ/logoImage")
+    Call<CollageLogoResponse> getUnivLogo(@Query("univID") int univID);
 
     @GET("/article/latestArticleList")
     Call<MyCommunityResponse> getMyCommunity();

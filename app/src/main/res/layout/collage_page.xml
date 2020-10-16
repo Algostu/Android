@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <!-- guide line -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="15dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="15dp" />
+
+    <!--  title background  -->
+    <TextView
+        android:id="@+id/title_bg"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/classic_blue"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tv_collage_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Collage name"
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/gd_left"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/iv_collage_logo"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:foregroundGravity="center"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/title_bg" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_menu"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="5dp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/iv_collage_logo"
+        tools:ignore="MissingConstraints">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="#CBC6C6"
+            tools:ignore="MissingConstraints" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/collage_news"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="NEWS"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/collage_community"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/collage_community"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="게시판"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/collage_news"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:id="@+id/rv_my_community"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="10dp"-->
+    <!--        android:overScrollMode="never"-->
+    <!--        android:scrollbarFadeDuration="0"-->
+    <!--        android:scrollbarSize="5dp"-->
+    <!--        android:scrollbarThumbVertical="@android:color/darker_gray"-->
+    <!--        android:scrollbars="vertical"-->
+    <!--        app:layout_constraintLeft_toLeftOf="@id/gd_left"-->
+    <!--        app:layout_constraintRight_toRightOf="@id/gd_right"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/cv_menu"-->
+    <!--        tools:ignore="MissingConstraints" />-->
+
+    <FrameLayout
+        android:id="@+id/frame_layout_collage_page"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/cv_menu" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

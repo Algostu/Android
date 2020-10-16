@@ -20,6 +20,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
+import com.dum.dodam.Contest.Contest;
+import com.dum.dodam.Home.dataframe.ContestFrame;
 import com.dum.dodam.Home.dataframe.HotArticleFrame;
 import com.dum.dodam.Home.dataframe.HotArticleResponse;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
@@ -54,7 +56,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
 
-public class Home extends Fragment implements HotArticleAdapter.OnListItemSelectedInterface, MyCommunityAdapter.OnListItemSelectedInterface {
+public class Home extends Fragment implements HotArticleAdapter.OnListItemSelectedInterface, MyCommunityAdapter.OnListItemSelectedInterface, ContestAdapter.OnListItemSelectedInterface {
     private static final String TAG = "RHC";
 
     private int cnt_myCommunity = 0;
@@ -66,15 +68,26 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     private RecyclerView hotArticle_recyclerView;
     private RecyclerView.Adapter hotArticle_adapter;
 
+    private RecyclerView contest_recyclerView;
+    private RecyclerView.Adapter contest_adapter;
+
     private RecyclerView.LayoutManager myCommunity_layoutManager;
     private RecyclerView.LayoutManager hotArticle_layoutManager;
+    private RecyclerView.LayoutManager contest_layoutManager;
 
     private ArrayList<MyCommunityFrame> myCommunityList = new ArrayList<>();
+    private ArrayList<com.dum.dodam.Contest.dataframe.ContestFrame> result = new ArrayList<>();
     private ArrayList<HotArticleFrame> hotArticleList = new ArrayList<>();
+    private ArrayList<ContestFrame> contestList = new ArrayList<>();
+
     public UserJson user;
     private TextView cafeteria;
     private TextView school_name;
     private TextView user_name;
+    private TextView pleaseTab;
+    private TextView more_contest;
+    private TextView title_contest;
+
     private LinearLayout today_lunch;
 
     @Nullable
@@ -97,12 +110,32 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             }
         });
 
+        pleaseTab = view.findViewById(R.id.pleaseTab);
+
         cafeteria = view.findViewById(R.id.cafeteria);
         setTodayCafeteria();
 
         school_name = view.findViewById(R.id.school_name);
         school_name.setText(user.schoolName);
 
+        more_contest = view.findViewById(R.id.more_contest);
+        title_contest = view.findViewById(R.id.title_contest);
+
+        title_contest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).replaceFragmentFull(new Contest());
+            }
+        });
+
+        more_contest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).replaceFragmentFull(new Contest());
+            }
+        });
+
+        // Recyclerview Community
         myCommunity_adapter = new MyCommunityAdapter(getContext(), myCommunityList, this, user);
         setMyCommunity();
         myCommunity_recyclerView = (RecyclerView) view.findViewById(R.id.rv_my_community);
@@ -111,6 +144,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         myCommunity_recyclerView.setLayoutManager(myCommunity_layoutManager);
         myCommunity_recyclerView.setAdapter(myCommunity_adapter);
 
+        // Recyclerview HotArticle
         hotArticle_adapter = new HotArticleAdapter(getContext(), hotArticleList, this, user);
         setHotArticle();
         hotArticle_recyclerView = (RecyclerView) view.findViewById(R.id.rv_hot_article);
@@ -118,6 +152,15 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         hotArticle_layoutManager = new LinearLayoutManager(getActivity());
         hotArticle_recyclerView.setLayoutManager(hotArticle_layoutManager);
         hotArticle_recyclerView.setAdapter(hotArticle_adapter);
+
+        // Contest
+        contest_adapter = new ContestAdapter(getContext(), contestList, this, user);
+        setContest();
+        contest_recyclerView = (RecyclerView) view.findViewById(R.id.rv_contest);
+        contest_recyclerView.setHasFixedSize(true);
+        contest_layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        contest_recyclerView.setLayoutManager(contest_layoutManager);
+        contest_recyclerView.setAdapter(contest_adapter);
 
         return view;
     }
@@ -174,6 +217,56 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 cnt_hotArticle++;
             }
         });
+    }
+
+    public void setContest() {
+        String filename = "contest";
+        if (getContext() == null) return;
+        File file = new File(getContext().getFilesDir() + "/" + filename);
+        if (file.exists()) {
+            try {
+                FileReader fileReader = new FileReader(file);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                String line = bufferedReader.readLine();
+                while (line != null) {
+                    stringBuilder.append(line).append("\n");
+                    line = bufferedReader.readLine();
+                }
+                bufferedReader.close();
+                String response = stringBuilder.toString();
+
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+
+                result = gson.fromJson(response, new TypeToken<ArrayList<com.dum.dodam.Contest.dataframe.ContestFrame>>() {
+                }.getType());
+
+                contestList.clear();
+                for (int i = 0; i < 10; i++) {
+                    ContestFrame frame = new ContestFrame();
+                    frame.contest_name = result.get(i).title;
+                    frame.imageUrl = result.get(i).imageUrl;
+                    frame.period = result.get(i).start + " - " + result.get(i).end;
+                    contestList.add(frame);
+                }
+                contest_adapter.notifyDataSetChanged();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            pleaseTab.setText("탭 해주세요 ㅎㅎ");
+            pleaseTab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity) getActivity()).replaceFragment(new Contest());
+                }
+            });
+        }
+
     }
 
     @Override
@@ -257,5 +350,10 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         result.add(this_week);
 
         return result;
+    }
+
+    @Override
+    public void onContestItemSelected(View v, int position) {
+
     }
 }
