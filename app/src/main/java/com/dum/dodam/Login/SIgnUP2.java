@@ -86,10 +86,6 @@ import static android.view.View.GONE;
 public class SIgnUP2 extends Fragment {
     private static final String TAG = "KHK";
 
-    private final int GET_GALLERY_IMAGE = 200;
-    private static final int REQUEST_CODE = 0;
-    Uri selectedImageUri;
-    String filePath;
     File localImgFile;
 
     private List<School> list;          // 데이터를 넣은 리스트변수
@@ -97,7 +93,6 @@ public class SIgnUP2 extends Fragment {
     private EditText editSearch;        // 검색어를 입력할 Input 창
     private SearchAdapter adapter;      // 리스트뷰에 연결할 아답터
 
-    private CheckBox checkBox;
     private EditText nickName;
     private TextView nickNameOkay;
     private TextView selectedSchool;
@@ -272,7 +267,7 @@ public class SIgnUP2 extends Fragment {
                         if (response1.checkError(getContext()) != 0) return;
                         if (response1.status.equals("<success>")) {
                             String info = "";
-                            info = info + "Name: " + userName + "\n";
+                            info = info + "Name: " + userName.toString() + "\n";
                             info = info + "School: " + school.schoolName + "\n";
 
                             GMailSender gMailSender = new GMailSender("dum.dodamdodam@gmail.com", "ehekaeheka16#");
