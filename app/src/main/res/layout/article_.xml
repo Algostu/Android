@@ -97,16 +97,16 @@
 
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginRight="5dp"
             android:src="@drawable/ic_comment"
             app:layout_constraintRight_toLeftOf="@id/reply" />
 
         <TextView
             android:id="@+id/reply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginRight="10dp"
             android:text="Reply"
             android:textColor="@color/faded_gray"
@@ -115,16 +115,17 @@
 
         <ImageView
             android:id="@+id/icon_heart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginRight="5dp"
             android:src="@drawable/ic_heart"
+            android:background="?attr/selectableItemBackground"
             app:layout_constraintRight_toLeftOf="@id/heart" />
 
         <TextView
             android:id="@+id/heart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginRight="10dp"
             android:text="heart"
             android:textColor="@color/faded_gray"

@@ -36,6 +36,7 @@ import com.dum.dodam.Community.dataframe.ArticleFrame;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.google.gson.JsonObject;
 
@@ -60,6 +61,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private TextView time;
     private TextView reply;
     private TextView heart;
+    private ImageView heart_ic;
     private androidx.appcompat.widget.Toolbar toolbar;
     private ActionBar actionbar;
 
@@ -71,6 +73,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private int communityType;
     private int communityID;
     private int parentReplyID = 0;
+    private int added_heart = 0;
+    private int org_heart;
     private int edit;
 
     public Article(int articleID, int communityType, int communityID) {
@@ -100,9 +104,48 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         time = view.findViewById(R.id.time);
         reply = view.findViewById(R.id.reply);
         heart = view.findViewById(R.id.heart);
+        heart_ic = view.findViewById(R.id.icon_heart);
+
         comment = view.findViewById(R.id.comment);
         ck_isAnonymous = view.findViewById(R.id.ck_isAnonymous);
         upload_comment = view.findViewById(R.id.upload_comment);
+
+        heart_ic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (added_heart == 0) added_heart = 1;
+                else added_heart = 0;
+                Log.d("hi", "image view");
+                RetrofitAdapter adapter = new RetrofitAdapter();
+                com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance(getContext());
+                Call<BaseResponse> call = service.modifyHeart(articleID, communityType, communityID, added_heart);
+
+                call.enqueue(new retrofit2.Callback<BaseResponse>() {
+                    @Override
+                    public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
+                        if (response.isSuccessful()) {
+                            BaseResponse result = response.body();
+                            if (result.checkError(getActivity()) != 0) return;
+                            heart.setText(String.valueOf(org_heart + added_heart));
+                            if ( added_heart == 0 ){
+                                heart_ic.setImageResource(R.drawable.ic_heart);
+                            }
+                            else{
+                                heart_ic.setImageResource(R.drawable.explodin_heart);
+                            }
+                        } else {
+                            Log.d(TAG, "onResponse: Fail " + response.body());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseResponse> call, Throwable t) {
+                        Log.d(TAG, "onFailure: " + t.getMessage());
+                        Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
         upload_comment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +194,16 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                     time.setText(articleFrame.writtenTime);
                     reply.setText(articleFrame.reply);
                     heart.setText(articleFrame.heart);
+                    org_heart = Integer.parseInt(articleFrame.heart);
+                    added_heart = articleFrame.heartPushed;
                     edit = articleFrame.edit;
+
+                    if ( added_heart == 0 ){
+                        heart_ic.setImageResource(R.drawable.ic_heart);
+                    }
+                    else{
+                        heart_ic.setImageResource(R.drawable.explodin_heart);
+                    }
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
                 }

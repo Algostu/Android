@@ -36,6 +36,9 @@ public interface RetrofitService {
     @GET("/article/read")
     Call<ArticleResponse> readArticle(@Query("articleID") int articleID, @Query("communityType") int communityType, @Query("communityID") int communityID);
 
+    @GET("/article/modifyHeart")
+    Call<BaseResponse> modifyHeart(@Query("articleID") int articleID, @Query("communityType") int communityType, @Query("communityID") int communityID, @Query("op") int op);
+
     @GET("/reply/read")
     Call<ArticleCommentResponse> readArticleComment(@Query("articleID") int articleID, @Query("communityType") int communityType, @Query("communityID") int communityID);
 

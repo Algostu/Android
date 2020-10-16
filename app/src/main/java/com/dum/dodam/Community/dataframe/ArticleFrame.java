@@ -11,4 +11,5 @@ public class ArticleFrame {
     public String heart;
     public String writtenTime;
     public String nickName;
+    public int heartPushed;
 }

@@ -15,6 +15,7 @@ public class BaseResponse implements Serializable {
     public int errorCode;
 
     public int checkError(Context context) {
+        if (context == null) return 1;
         String[] errorArray = status.split(":");
         status = errorArray[0];
         if (errorArray[0].equals("<success>")) {
