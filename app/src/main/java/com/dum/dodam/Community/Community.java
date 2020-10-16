@@ -38,6 +38,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     private RecyclerView.LayoutManager layoutManager;
     private static final String TAG = "RHC";
     private int cnt_readArticleList = 0;
+    private int readArticleToggle = 0;
 
     private String community_name;
     private int communityID;
@@ -81,8 +82,13 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         });
 
         adapter = new ArticleListAdapter(getContext(), list, this);
+        Log.d("hi", "this is onCreateView");
 
-        readArticleList();
+        if(list.size() == 0 && readArticleToggle == 0){
+            readArticleList();
+            readArticleToggle = 1;
+        }
+
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_articles);
 
@@ -99,7 +105,9 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                 super.onScrolled(recyclerView, dx, dy);
                 int curPosition = recyclerView.getAdapter().getItemCount() - 1;
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                if (curPosition >= lastVisibleItemPosition - 3) {
+
+                if ((lastVisibleItemPosition >= 15) && (curPosition >= lastVisibleItemPosition - 3)) {
+                    Log.d("hi", "last visible Item" + lastVisibleItemPosition);
                     readArticleList();
                 }
             }
@@ -135,7 +143,9 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                     }
 
                     list.addAll(result.body);
+                    Log.d("hi", "this Length of list" + list.size());
                     adapter.notifyDataSetChanged();
+                    readArticleToggle = 0;
                 } else {
                     Toast.makeText(getContext(), "Upload Fail", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onResponse: Fail");
@@ -154,9 +164,14 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
 
     @Override
     public void onResume() {
+        Log.d("h", "this is onResume");
         list.clear();
         lastArticleWrittenString = "latest";
-        readArticleList();
+        if(list.size() == 0 && readArticleToggle == 0){
+            readArticleToggle = 1;
+            readArticleList();
+        }
+
         super.onResume();
     }
 
