@@ -1,5 +1,6 @@
 package com.dum.dodam.Contest;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
     private RecyclerView.LayoutManager layoutManager;
     private static final String TAG = "RHC";
     private int cnt_getContestList = 0;
+    private Context mContext;
 
     ArrayList<ContestFrame> list = new ArrayList<>();
     ArrayList<ContestFrame> result = new ArrayList<>();
@@ -64,25 +66,25 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setAdapter(adapter);
+
         readContestList();
-        Log.d(TAG, "list is empty?: " + list.isEmpty());
-        Log.d(TAG, "list size " + list.size());
-//        if (!list.isEmpty()) getContestList(Integer.parseInt(list.get(list.size() - 1).contestID));
+
+        if (!list.isEmpty()) getContestList(Integer.parseInt(list.get(list.size() - 1).contestID));
         return view;
     }
 
     public void getContestList(final int contestID) {
-        Log.d(TAG, "download contest list");
-
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
 
-        Call<ContestListResponse> call = service.getContestList();
+        Call<ContestListResponse> call = service.getContestList(contestID);
 
         call.enqueue(new Callback<ContestListResponse>() {
             @Override
             public void onResponse(Call<ContestListResponse> call, Response<ContestListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<ContestFrame> result = response.body().body;
+                    if (result.size() == 0) return;
+                    Log.d(TAG, "CONTEST RESULT" + result.size());
 
                     JSONArray jsArray = new JSONArray();//배열이 필요할때
                     try {
@@ -105,14 +107,17 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
                         e.printStackTrace();
                     }
 
-                    File file = new File(getContext().getFilesDir(), "contest");
-                    FileWriter fileWriter = null;
                     try {
+                        Log.d(TAG, "CONTEST Write Start");
+                        if (getContext() == null) return;
+                        File file = new File(mContext.getFilesDir(), "contest");
+                        FileWriter fileWriter = null;
                         if (contestID == 0) fileWriter = new FileWriter(file, false);
                         else fileWriter = new FileWriter(file, true);
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                         bufferedWriter.write(jsArray.toString());
                         bufferedWriter.close();
+                        Log.d(TAG, "CONTEST Write End");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -126,7 +131,8 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
             public void onFailure(Call<ContestListResponse> call, Throwable t) {
                 Log.d(TAG, "getContestList" + t.getMessage());
                 if (cnt_getContestList < 5) getContestList(0);
-                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(((MainActivity) getContext()), "Please reloading", Toast.LENGTH_SHORT).show();
                 cnt_getContestList++;
             }
         });
@@ -134,9 +140,9 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
 
     public void readContestList() {
         String filename = "contest";
+        if (getContext() == null) return;
         File file = new File(getContext().getFilesDir() + "/" + filename);
         if (file.exists()) {
-            Log.d(TAG, "contest File exist");
             try {
                 FileReader fileReader = new FileReader(file);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -184,5 +190,12 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
         frame.end = holder.end;
 
         ((MainActivity) getActivity()).replaceFragmentFull(new ContestInfo(frame));
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mContext = context;
     }
 }

@@ -58,5 +58,5 @@ public interface RetrofitService {
     Call<LunchResponse> getCafeteriaList(@Query("version") String version);
 
     @GET("/contest/getList")
-    Call<ContestListResponse> getContestList();
+    Call<ContestListResponse> getContestList(@Query("version") int version);
 }

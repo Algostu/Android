@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.School.School;
 import com.dum.dodam.School.dataframe.CafeteriaFrame;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
@@ -69,6 +71,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     public UserJson user;
     private TextView cafeteria;
     private TextView school_name;
+    private TextView user_name;
+    private LinearLayout today_lunch;
 
     @Nullable
     @Override
@@ -77,6 +81,18 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         view.setClickable(true);
 
         user = ((MainActivity) getActivity()).getUser();
+
+        user_name = view.findViewById(R.id.user_name);
+        user_name.setText(user.userName);
+
+        today_lunch = view.findViewById(R.id.today_lunch);
+        today_lunch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).replaceFragment(new School());
+                ((MainActivity) getActivity()).setNavigationMenu();
+            }
+        });
 
         cafeteria = view.findViewById(R.id.cafeteria);
         setTodayCafeteria();
@@ -222,7 +238,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 e.printStackTrace();
             }
         } else {
-            cafeteria.setText("학교탭에서 업데이트 해주세요 ㅎㅎ");
+            cafeteria.setText("탭 해주세요 ㅎㅎ");
         }
     }
 

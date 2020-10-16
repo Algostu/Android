@@ -38,6 +38,8 @@ import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -77,6 +79,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private int org_heart;
     private int edit;
 
+//    private ShimmerFrameLayout shimmerFrameLayout;
+
     public Article(int articleID, int communityType, int communityID) {
         this.articleID = articleID;
         this.communityType = communityType;
@@ -89,6 +93,10 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         final View view = inflater.inflate(R.layout.article_, container, false);
         view.setClickable(true);
         setHasOptionsMenu(true);
+
+//        shimmerFrameLayout = view.findViewById(R.id.shimmerLayout);
+//        shimmerFrameLayout.startShimmer();
+
         ((MainActivity) getActivity()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         toolbar = view.findViewById(R.id.toolbar);
@@ -127,10 +135,9 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                             BaseResponse result = response.body();
                             if (result.checkError(getActivity()) != 0) return;
                             heart.setText(String.valueOf(org_heart + added_heart));
-                            if ( added_heart == 0 ){
+                            if (added_heart == 0) {
                                 heart_ic.setImageResource(R.drawable.ic_heart);
-                            }
-                            else{
+                            } else {
                                 heart_ic.setImageResource(R.drawable.explodin_heart);
                             }
                         } else {
@@ -196,12 +203,22 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                     heart.setText(articleFrame.heart);
                     org_heart = Integer.parseInt(articleFrame.heart);
                     added_heart = articleFrame.heartPushed;
+
+//                    writer.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+//                    title.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+//                    content.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+//                    reply.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+//                    heart.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+//                    time.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+//
+//                    shimmerFrameLayout.stopShimmer();
+//                    shimmerFrameLayout.setVisibility(View.GONE);
+
                     edit = articleFrame.edit;
 
-                    if ( added_heart == 0 ){
+                    if (added_heart == 0) {
                         heart_ic.setImageResource(R.drawable.ic_heart);
-                    }
-                    else{
+                    } else {
                         heart_ic.setImageResource(R.drawable.explodin_heart);
                     }
                 } else {
@@ -274,6 +291,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     String result = response.body();
+                    comment.setText("");
+                    comment.clearFocus();
                     refresh();
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
