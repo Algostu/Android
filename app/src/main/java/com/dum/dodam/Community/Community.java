@@ -50,17 +50,6 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         this.communityID = communityID;
         this.communityType = communityType;
         this.community_name = title;
-//
-//        if (communityID == 2 || communityID == 3 || communityID == 6)
-//            this.community_name = "자유 게시판";
-//        else if (communityID == 1 || communityID == 5)
-//            this.community_name = "질문 게시판";
-//        else if (communityID == 4)
-//            this.community_name = "모집 게시판";
-//        else if (communityID == 7)
-//            this.community_name = "학원&인강 게시판";
-//        else
-//            this.community_name = "대학 게시판";
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -70,7 +59,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         final View view = inflater.inflate(R.layout.article_list, container, false);
         view.setClickable(true);
         TextView title = (TextView) view.findViewById(R.id.tv_title);
-        title.setText(community_name);
+        title.setText(community_name + " 게시판");
         ImageButton btn_write_article = (ImageButton) view.findViewById(R.id.btn_write_article);
 
         btn_write_article.setOnClickListener(new View.OnClickListener() {

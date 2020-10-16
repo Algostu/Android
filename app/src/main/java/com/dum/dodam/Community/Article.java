@@ -222,6 +222,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     String result = response.body();
+                    comment.setText("");
+                    comment.clearFocus();
                     refresh();
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());

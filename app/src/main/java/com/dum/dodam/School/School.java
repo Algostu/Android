@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.dum.dodam.Home.Home;
+import com.dum.dodam.Login.Data.UserJson;
+import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.School.dataframe.CafeteriaFrame;
 import com.dum.dodam.School.dataframe.CafeteriaFrameList;
@@ -80,7 +82,7 @@ public class School extends Fragment {
 
         user = ((MainActivity) getActivity()).getUser();
 
-        school_name = view.findViewById(school_name);
+        school_name = view.findViewById(R.id.school_name);
         school_name.setText(user.schoolName);
 
         getCafeteriaMenu();
