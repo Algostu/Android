@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.dum.dodam.Collage.SearchCollage;
 import com.dum.dodam.Community.CommunityList;
-import com.dum.dodam.Contest.Contest;
 import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
