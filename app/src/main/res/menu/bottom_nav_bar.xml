@@ -5,30 +5,30 @@
         android:id="@+id/item_home"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="Home" />
+        android:title="홈" />
 
     <item
         android:id="@+id/item_school"
         android:enabled="true"
         android:icon="@drawable/ic_fork"
-        android:title="SCHOOL" />
+        android:title="급식" />
 
     <item
         android:id="@+id/item_community"
         android:enabled="true"
         android:icon="@drawable/ic_community"
-        android:title="COMMUNITY" />
+        android:title="게시판" />
 
     <item
         android:id="@+id/item_simulation"
         android:enabled="true"
         android:icon="@drawable/ic_contest"
-        android:title="SIMULATION" />
+        android:title="대학페이지" />
 
     <item
         android:id="@+id/item_mypage"
         android:enabled="true"
         android:icon="@drawable/ic_user"
-        android:title="MYPAGE" />
+        android:title="내 정보" />
 
 </menu>
