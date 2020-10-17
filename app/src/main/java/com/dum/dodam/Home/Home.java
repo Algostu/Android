@@ -354,6 +354,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
     @Override
     public void onContestItemSelected(View v, int position) {
-
+        ((MainActivity) getActivity()).replaceFragmentFull(new Contest());
     }
 }
