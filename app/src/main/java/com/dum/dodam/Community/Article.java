@@ -9,10 +9,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -30,7 +31,6 @@ import com.dum.dodam.Community.dataframe.ArticleCommentFrame;
 import com.dum.dodam.Community.dataframe.ArticleCommentResponse;
 import com.dum.dodam.Community.dataframe.ArticleFrame;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
-import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
@@ -52,6 +52,9 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    private LinearLayout bottom;
+    private CoordinatorLayout.LayoutParams layoutParams;
 
     private ArrayList<ArticleCommentFrame> list = new ArrayList<>();
     private TextView writer;
@@ -78,6 +81,19 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private int edit;
 
 //    private ShimmerFrameLayout shimmerFrameLayout;
+    public Article(){
+
+    }
+
+    public static Article newInstance(int articleID, int communityType, int communityID) {
+        Bundle args = new Bundle();
+        args.putInt("articleID", articleID);
+        args.putInt("communityType", communityType);
+        args.putInt("communityID", communityID);
+        Article f = new Article();
+        f.setArguments(args);
+        return f;
+    }
 
     public Article(int articleID, int communityType, int communityID) {
         this.articleID = articleID;
@@ -91,11 +107,16 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         final View view = inflater.inflate(R.layout.article_, container, false);
         view.setClickable(true);
         setHasOptionsMenu(true);
+        Bundle bundle=getArguments();
+        if (bundle != null){
+            this.articleID = bundle.getInt("articleID");
+            this.communityType = bundle.getInt("communityType");
+            this.communityID = bundle.getInt("communityID");
+        }
 
 //        shimmerFrameLayout = view.findViewById(R.id.shimmerLayout);
-//        shimmerFrameLayout.startShimmer();
+//        shimmerFrameLayout.startShimmer(
 
-        ((MainActivity) getActivity()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -111,7 +132,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         reply = view.findViewById(R.id.reply);
         heart = view.findViewById(R.id.heart);
         heart_ic = view.findViewById(R.id.icon_heart);
-        view_count = view.findViewById(R.id.view_count);
+//        view_count = view.findViewById(R.id.view_count);
 
         comment = view.findViewById(R.id.comment);
         ck_isAnonymous = view.findViewById(R.id.ck_isAnonymous);
@@ -172,7 +193,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_comment);
 
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true); //
 
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -180,6 +201,12 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     public void readArticle() {
@@ -202,7 +229,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                     heart.setText(articleFrame.heart);
                     org_heart = Integer.parseInt(articleFrame.heart);
                     added_heart = articleFrame.heartPushed;
-                    view_count.setText(String.valueOf(articleFrame.viewNumber));
+//                    view_count.setText(String.valueOf(articleFrame.viewNumber));
 
                     try {
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -266,6 +293,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                             }
                         }
                     }
+                    Log.d("debug", "replys num : " + list.size());
                     adapter.notifyDataSetChanged();
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
@@ -352,7 +380,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         int replyID = holder.replyID;
         if (parentReplyID == 0) {
             parentReplyID = replyID;
-            v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.coral_pink));
+            v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.coral_pink)); //왜 댓글만 색깔이 바뀌지??
         } else {
             parentReplyID = 0;
             v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));

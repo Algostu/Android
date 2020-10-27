@@ -17,6 +17,7 @@ public class UserJson extends BaseResponse implements Serializable {
     public String contact;
     public String homePage;
     public String authorized;
+    public int firstLogin;
     // user information
     public int gender;
     public int age;

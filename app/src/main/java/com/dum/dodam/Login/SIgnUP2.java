@@ -1,13 +1,13 @@
 package com.dum.dodam.Login;
 
+import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,21 +32,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.ViewTarget;
 import com.dum.dodam.Login.Adapter.SearchAdapter;
 import com.dum.dodam.Login.Data.School;
 import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.Login.Data.UserInfo;
-import com.dum.dodam.Login.Data.UserJson;
-import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import java.io.File;
@@ -61,27 +53,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.mail.MessagingException;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.Multipart;
-import retrofit2.http.POST;
-import retrofit2.http.Part;
-import retrofit2.http.Query;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-import static android.view.View.GONE;
 
 public class SIgnUP2 extends Fragment {
     private static final String TAG = "KHK";
@@ -110,17 +84,16 @@ public class SIgnUP2 extends Fragment {
         View view = inflater.inflate(R.layout.signup2, container, false);
 
         userName = view.findViewById(R.id.name);
-        loadingView = view.findViewById(R.id.loadingView);
 
-        Glide.with((startUpActivity) getContext()).load(R.raw.loading_circle).into(loadingView);
-        loadingView.setVisibility(GONE);
+
+//
 
 
         nickName = view.findViewById(R.id.nickName);
         nickNameOkay = view.findViewById(R.id.nickNameOkay);
-        nickNameOkay.setText("다시 입력 하세요.");
-        nickNameOkay.setTextColor(Color.parseColor("#F46F60"));
-        nickName.requestFocus();
+        nickNameOkay.setText("닉네임을 입력해주세요.");
+        nickNameOkay.setTextColor(Color.parseColor("#52D84D"));
+        userName.requestFocus();
         nickNamePossibleNot = true;
         nickName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -196,16 +169,19 @@ public class SIgnUP2 extends Fragment {
                 search(text);
             }
         });
-
-        studentCard = view.findViewById(R.id.im_student_card);
-        studentCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, 1);
-            }
-        });
+//        Glide.with((startUpActivity) getContext()).load(R.raw.loading_circle).into(loadingView);
+//        loadingView.setVisibility(GONE);
+//        Student Card Code
+//        studentCard = view.findViewById(R.id.im_student_card);
+//        studentCard.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//                photoPickerIntent.setType("image/*");
+//                startActivityForResult(photoPickerIntent, 1);
+//            }
+//        });
+//        loadingView = view.findViewById(R.id.loadingView);
 
         submit = view.findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -234,9 +210,8 @@ public class SIgnUP2 extends Fragment {
                     Toast.makeText(getActivity(), "성별이 다른 학교 입니다. 학교를 다시 선택해 주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                loadingView.setVisibility(View.VISIBLE);
 
-                JsonObject paramObject = new JsonObject();
+                final JsonObject paramObject = new JsonObject();
                 paramObject.addProperty("schoolID", school.schoolID);
                 paramObject.addProperty("nickName", nickName.getText().toString());
                 paramObject.addProperty("grade", grade);
@@ -247,46 +222,63 @@ public class SIgnUP2 extends Fragment {
                 paramObject.addProperty("gender", user.gender);
                 paramObject.addProperty("ageRange", user.ageRange);
 
+                Log.d(TAG, "JSON " + paramObject.toString());
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("회원가입");
+                builder.setMessage("회원가입하시겠습니까?\n 회원가입후에 학교인증을 1주일내에 완료해야합니다.");
+                builder.setPositiveButton("예(회원가입)",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                RetrofitAdapter rAdapter = new RetrofitAdapter();
+                                RetrofitService service = rAdapter.getInstance(getActivity());
+                                Call<BaseResponse> call = service.registerKAKAO(paramObject);
+                                call.enqueue(new Callback<BaseResponse>() {
+                                    @Override
+                                    public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                                        if (!response.isSuccessful()) return;
+                                        BaseResponse response1 = response.body();
+                                        if (response1.checkError(getContext()) != 0) return;
+                                        if (response1.status.equals("<success>"))
+                                            ((startUpActivity) getActivity()).replaceFragment(new Login());
+
+//                                        loadingView.setVisibility(View.VISIBLE);
+//                                        String info = "";
+//                                        info = info + "Name: " + userName.toString() + "\n";
+//                                        info = info + "School: " + school.schoolName + "\n";
+//
+//                                        GMailSender gMailSender = new GMailSender("dum.dodamdodam@gmail.com", "ehekaeheka16#");
+//
+//                                        try {
+//                                            gMailSender.sendMail2("인증 이메일", info, "dum.dodamdodam@gmail.com", localImgFile);
+//                                        } catch (Exception e) {
+//                                            e.printStackTrace();
+//                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<BaseResponse> call, Throwable t) {
+                                        Log.d(TAG, "onFailure: " + t.toString());
+                                        Toast.makeText(getContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+                builder.setNegativeButton("아니요",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                return;
+                            }
+                        });
+                builder.show();
+
 //                RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), localImgFile);
 
 //                MultipartBody.Part image =
 //                        MultipartBody.Part.createFormData("image", localImgFile.getName(), requestFile);
 
-                Log.d(TAG, "JSON " + paramObject.toString());
-
 //                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), paramObject.toString());
 
-                RetrofitAdapter rAdapter = new RetrofitAdapter();
-                RetrofitService service = rAdapter.getInstance(getActivity());
-                Call<BaseResponse> call = service.registerKAKAO(paramObject);
-                call.enqueue(new Callback<BaseResponse>() {
-                    @Override
-                    public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                        if (!response.isSuccessful()) return;
-                        BaseResponse response1 = response.body();
-                        if (response1.checkError(getContext()) != 0) return;
-                        if (response1.status.equals("<success>")) {
-                            String info = "";
-                            info = info + "Name: " + userName.toString() + "\n";
-                            info = info + "School: " + school.schoolName + "\n";
-
-                            GMailSender gMailSender = new GMailSender("dum.dodamdodam@gmail.com", "ehekaeheka16#");
-
-                            try {
-                                gMailSender.sendMail2("인증 이메일", info, "dum.dodamdodam@gmail.com", localImgFile);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            ((startUpActivity) getActivity()).replaceFragment(new Login());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<BaseResponse> call, Throwable t) {
-                        Log.d(TAG, "onFailure: " + t.toString());
-                        Toast.makeText(getContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
         });
 

@@ -16,8 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        android:windowSoftInputMode="stateHidden|adjustResize">
+        android:usesCleartextTraffic="true">
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -32,7 +31,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:configChanges="orientation|screenSize">
 
         </activity>
         <service android:name=".MyFireBaseMessagingService">

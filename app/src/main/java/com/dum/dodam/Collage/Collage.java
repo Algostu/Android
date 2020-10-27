@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.dum.dodam.Collage.dataframe.CollageFrame;
@@ -83,8 +82,8 @@ public class Collage extends Fragment {
             @Override
             public void onResponse(Call<CollageLogoResponse> call, retrofit2.Response<CollageLogoResponse> response) {
                 if (response.isSuccessful()) {
+                    if(response.body().checkError(getContext())!= 0) return;
                     CollageLogoFrame result = response.body().body;
-
                     Bitmap bitmap_signiture = StringToBitmap(result.signiture);
                     iv_collage_logo.setImageBitmap(bitmap_signiture);
                     Log.d("RHC", "on response: " + iv_collage_logo.toString());

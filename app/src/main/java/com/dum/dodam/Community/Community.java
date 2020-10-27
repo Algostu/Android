@@ -22,7 +22,6 @@ import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -176,6 +175,6 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         ArticleListAdapter.Holder holder = (ArticleListAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
         String article_ID = holder.articleID.getText().toString();
 
-        ((MainActivity) getActivity()).replaceFragmentFull(new Article(Integer.parseInt(article_ID), communityType, communityID));
+        ((MainActivity) getActivity()).replaceFragmentFull(Article.newInstance(Integer.parseInt(article_ID), communityType, communityID));
     }
 }

@@ -1,50 +1,32 @@
 package com.dum.dodam.Login;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import com.dum.dodam.Login.Data.LoginResponse;
-import com.dum.dodam.httpConnection.RetrofitAdapter;
-import com.dum.dodam.httpConnection.RetrofitService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.kakao.auth.AuthType;
-import com.kakao.usermgmt.response.model.AgeRange;
-import com.kakao.usermgmt.response.model.Gender;
-import com.kakao.usermgmt.response.model.UserAccount;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
 import com.dum.dodam.Login.Data.UserInfo;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 public class startUpActivity extends AppCompatActivity {
     private static final String TAG = "KHK";
@@ -78,15 +60,20 @@ public class startUpActivity extends AppCompatActivity {
 
         String autoLogin = sharedPref.getString("autoLogin", null);
         String auth = sharedPref.getString("auth", null);
-        int auth_int;
+        int auth_int = 0;
         if (auth == null) {
             this.replaceFragment(new Login());
             return;
         } else {
             auth_int = Integer.parseInt(auth);
+            if (auth_int == 0){
+                scenarioNo = -1;
+                this.replaceFragment(new Login());
+                return;
+            }
         }
 
-        if (autoLogin != null && auth_int == 1) {
+        if (autoLogin != null) {
             String expStr = sharedPref.getString("expDate", null);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             Date expDate;

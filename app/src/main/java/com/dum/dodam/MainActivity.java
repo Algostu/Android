@@ -1,10 +1,14 @@
 package com.dum.dodam;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -81,6 +85,26 @@ public class MainActivity extends AppCompatActivity {
             r.communityType = 2;
         }
 
+        // 처음 인증을 요구하는 메시지 출력
+        SharedPreferences sharedPref = getSharedPreferences(
+                "auto", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPref.edit();
+        String loginBefore = sharedPref.getString("loginBefore", null);
+
+        if(user.authorized.equals("0") && loginBefore == null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("환영합니다.");
+            builder.setMessage("가입하신 후 일주일 안에 인증을 완료해주세요.\n(마이페이지->인증)");
+            builder.setPositiveButton("확인",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            editor.putString("loginBefore", "true");
+                            editor.commit();
+                        }
+                    });
+            builder.show();
+        }
+
         navigation = findViewById(R.id.nav_bar);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.item_home);
@@ -95,10 +119,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         String token = task.getResult().getToken();
                         Log.d("FCM Log", "FCM 토큰: " + token);
-                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
     public void replaceFragment(Fragment fragment) {
@@ -122,5 +144,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void setNavigationMenu() {
         navigation.setSelectedItemId(R.id.item_school);
+    }
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.d("debug", "rotate");
     }
 }

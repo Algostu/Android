@@ -5,30 +5,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.collection.ArraySet;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.dum.dodam.Home.Home;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.School.dataframe.CafeteriaFrame;
-import com.dum.dodam.School.dataframe.CafeteriaFrameList;
 import com.dum.dodam.School.dataframe.LunchFrame;
 import com.dum.dodam.School.dataframe.LunchResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -38,25 +33,15 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.http.GET;
 
 public class School extends Fragment {
     static String TAG = "RHC";
@@ -196,6 +181,9 @@ public class School extends Fragment {
                     int before_index = 0;
                     try {
                         for (LunchFrame item : curMonth) {
+                            Log.d("dodam", "data" + item.date);
+                            Log.d("dodam", "week" + item.week);
+                            Log.d("dodam", "week_day" + item.week_day);
                             index = Math.round(Float.parseFloat(item.week)) - 1;
                             if (before_index != index) {
                                 current.put(jsonObject);
@@ -222,7 +210,8 @@ public class School extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
+                    current.put(jsonObject);
+                    Log.d("dodam", "cur Length" + current.length());
                     // Define the File Path and its Name
                     if (getContext() == null) return;
                     File file = new File(getContext().getFilesDir(), "curCafeteria");
@@ -235,15 +224,18 @@ public class School extends Fragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    jsonObject = new JSONObject();
                     getCafeteriaMenu();
                     adapter.notifyDataSetChanged();
+                    before_index = 0;
                     // NEXT MONTH
                     try {
                         for (LunchFrame item : nextMonth) {
                             index = Math.round(Float.parseFloat(item.week)) - 1;
                             if (before_index != index) {
-                                current.put(jsonObject);
+                                next.put(jsonObject);
                                 jsonObject = new JSONObject();
+                                before_index = index;
                             }
                             if (item.week_day.equals("월")) {
                                 jsonObject.put("date_monday", item.date);
@@ -265,7 +257,7 @@ public class School extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
+                    next.put(jsonObject);
                     // Define the File Path and its Name
                     if (getContext() == null) return;
                     File file2 = new File(getContext().getFilesDir(), "nextCafeteria");

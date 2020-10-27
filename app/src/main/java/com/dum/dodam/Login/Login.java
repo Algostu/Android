@@ -1,7 +1,5 @@
 package com.dum.dodam.Login;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,11 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.dum.dodam.Home.dataframe.HotArticleFrame;
-import com.dum.dodam.Home.dataframe.HotArticleResponse;
 import com.dum.dodam.Login.Data.UserInfo;
 import com.dum.dodam.R;
-
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
@@ -38,7 +33,6 @@ import com.kakao.usermgmt.response.model.Gender;
 import com.kakao.usermgmt.response.model.UserAccount;
 import com.kakao.util.exception.KakaoException;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -71,13 +65,19 @@ public class Login extends Fragment {
             }
         });
 
+        scene =  ((startUpActivity)getActivity()).scenarioNo;
+        if (scene == -1){
+            session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);
+            return inflater.inflate(R.layout.start_main, container, false);
+        }
+
 //        btn_custom_login_out.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //
 //            }
 //        });
-        scene =  ((startUpActivity)getActivity()).scenarioNo;
+
         // 로그아웃
         if(scene == 1){
             this.logout();

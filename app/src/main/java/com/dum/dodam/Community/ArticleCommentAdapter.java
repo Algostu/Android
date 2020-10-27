@@ -1,6 +1,7 @@
 package com.dum.dodam.Community;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +85,7 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 e.printStackTrace();
             }
         }
-
+        Log.d("debug", "position" + position);
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {

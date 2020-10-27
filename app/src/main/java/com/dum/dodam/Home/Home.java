@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,8 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
 import com.dum.dodam.Contest.Contest;
@@ -36,25 +33,16 @@ import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.kakao.usermgmt.response.model.User;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.http.GET;
 
 public class Home extends Fragment implements HotArticleAdapter.OnListItemSelectedInterface, MyCommunityAdapter.OnListItemSelectedInterface, ContestAdapter.OnListItemSelectedInterface {
     private static final String TAG = "RHC";
@@ -285,7 +273,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         int communityID = holder.communityID;
         int articleID = Integer.parseInt(holder.articleID.getText().toString());
 
-        ((MainActivity) getActivity()).replaceFragmentFull(new Article(articleID, communityType, communityID));
+        ((MainActivity) getActivity()).replaceFragmentFull(Article.newInstance(articleID, communityType, communityID));
     }
 
     public void setTodayCafeteria() {
@@ -313,16 +301,16 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
                 String lunch = " ";
 
-                if (getWeekNDate().get(0) == 2) {
+                if (getWeekNDate().get(0) == 1) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_monday;
+                } else if (getWeekNDate().get(0) == 2) {
+                    lunch = list.get(getWeekNDate().get(1)).lunch_tuesday;
                 } else if (getWeekNDate().get(0) == 3) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
+                    lunch = list.get(getWeekNDate().get(1)).lunch_wednesday;
                 } else if (getWeekNDate().get(0) == 4) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
+                    lunch = list.get(getWeekNDate().get(1)).lunch_thursday;
                 } else if (getWeekNDate().get(0) == 5) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
-                } else if (getWeekNDate().get(0) == 6) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
+                    lunch = list.get(getWeekNDate().get(1)).lunch_friday;
                 }
                 Log.d(TAG, "Home lunch" + lunch);
                 if (lunch.equals(" ")) cafeteria.setText("제공되는 식단이 없습니다.");
@@ -331,7 +319,16 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
+            } catch (IndexOutOfBoundsException e) {
+                cafeteria.setText("저장된 식단정보가 없습니다. 고객센터로 문의해주세요.");
+                String [] filenames = {"nextCafeteria", "curCafeteria", "versionCafeteria"};
+                for (String f : filenames){
+                    file = new File(getContext().getFilesDir() + "/" + f);
+                    file.delete();
+                }
+                e.printStackTrace();
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
@@ -345,9 +342,11 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         Calendar c = Calendar.getInstance();
         int this_week = c.get(Calendar.WEEK_OF_MONTH);
         int sDayNum = c.get(Calendar.DAY_OF_WEEK);
-
-        result.add(sDayNum);
+        Log.d(TAG, "this week:" + this_week);
+        Log.d(TAG, "sDayNum:" + sDayNum);
         result.add(this_week);
+        result.add(sDayNum);
+
 
         return result;
     }
