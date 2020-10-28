@@ -2,6 +2,7 @@ package com.dum.dodam.Community.dataframe;
 
 public class ArticleFrame {
     public int edit;
+    public int reported;
     public String articleID;
     public String isAnonymous;
     public String content;

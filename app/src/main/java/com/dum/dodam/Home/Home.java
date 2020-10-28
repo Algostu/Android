@@ -160,6 +160,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             @Override
             public void onResponse(Call<MyCommunityResponse> call, retrofit2.Response<MyCommunityResponse> response) {
                 if (response.isSuccessful()) {
+                    if (response.body().checkError(getContext()) != 0) return;
                     ArrayList<MyCommunityFrame> result = response.body().body;
                     myCommunityList.clear();
                     myCommunityList.addAll(result);
@@ -188,6 +189,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             @Override
             public void onResponse(Call<HotArticleResponse> call, retrofit2.Response<HotArticleResponse> response) {
                 if (response.isSuccessful()) {
+                    if (response.body().checkError(getContext()) != 0) return;
                     ArrayList<HotArticleFrame> result = response.body().body;
                     hotArticleList.clear();
                     hotArticleList.addAll(result);
@@ -312,7 +314,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 } else if (getWeekNDate().get(0) == 5) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_friday;
                 }
-                Log.d(TAG, "Home lunch" + lunch);
                 if (lunch.equals(" ")) cafeteria.setText("제공되는 식단이 없습니다.");
                 else {
                     cafeteria.setText(lunch);
@@ -321,14 +322,13 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 e.printStackTrace();
             } catch (IndexOutOfBoundsException e) {
                 cafeteria.setText("저장된 식단정보가 없습니다. 고객센터로 문의해주세요.");
-                String [] filenames = {"nextCafeteria", "curCafeteria", "versionCafeteria"};
-                for (String f : filenames){
+                String[] filenames = {"nextCafeteria", "curCafeteria", "versionCafeteria"};
+                for (String f : filenames) {
                     file = new File(getContext().getFilesDir() + "/" + f);
                     file.delete();
                 }
                 e.printStackTrace();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
@@ -342,8 +342,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         Calendar c = Calendar.getInstance();
         int this_week = c.get(Calendar.WEEK_OF_MONTH);
         int sDayNum = c.get(Calendar.DAY_OF_WEEK);
-        Log.d(TAG, "this week:" + this_week);
-        Log.d(TAG, "sDayNum:" + sDayNum);
         result.add(this_week);
         result.add(sDayNum);
 

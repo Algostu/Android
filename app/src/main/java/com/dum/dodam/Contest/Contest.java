@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,6 +61,8 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
         adapter = new ContestListAdapter(getContext(), list, this);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_contest);
+
+//        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
 
         recyclerView.setHasFixedSize(true);
 
