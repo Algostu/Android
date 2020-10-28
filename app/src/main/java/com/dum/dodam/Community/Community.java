@@ -1,5 +1,7 @@
 package com.dum.dodam.Community;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,9 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Community.dataframe.ArticleListFrame;
 import com.dum.dodam.Community.dataframe.ArticleListResponse;
+import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.google.android.gms.common.util.JsonUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -45,7 +49,9 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     private int communityType;
     private String lastArticleWrittenString = "latest";
 
-//    private ShimmerFrameLayout shimmerFrameLayout;
+    private UserJson user;
+
+    //    private ShimmerFrameLayout shimmerFrameLayout;
     private ArrayList<ArticleListFrame> list = new ArrayList<>();
 
     public Community(int communityType, int communityID, String title) {
@@ -61,6 +67,8 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         final View view = inflater.inflate(R.layout.article_list, container, false);
         view.setClickable(true);
 
+        user = ((MainActivity) getActivity()).getUser();
+
 //        shimmerFrameLayout = view.findViewById(R.id.shimmerLayout);
 //        shimmerFrameLayout.startShimmer();
 
@@ -71,13 +79,23 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         btn_write_article.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(communityType, communityID));
+
+                if (user.authorized.equals("0")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("게시 권한이 없습니다.");
+                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+                    builder.show();
+                } else {
+                    ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(communityType, communityID));
+                }
             }
         });
 
         adapter = new ArticleListAdapter(getContext(), list, this);
-        Log.d("hi", "this is onCreateView");
-
         if (list.size() == 0 && readArticleToggle == 0) {
             readArticleList();
             readArticleToggle = 1;
@@ -101,7 +119,6 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
 
                 if ((lastVisibleItemPosition >= 15) && (curPosition >= lastVisibleItemPosition - 3)) {
-                    Log.d("hi", "last visible Item" + lastVisibleItemPosition);
                     readArticleList();
                 }
             }
@@ -159,7 +176,6 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
 
     @Override
     public void onResume() {
-        Log.d("h", "this is onResume");
         list.clear();
         lastArticleWrittenString = "latest";
         if (list.size() == 0 && readArticleToggle == 0) {

@@ -57,13 +57,19 @@ public interface RetrofitService {
     Call<ArticleCommentResponse> readArticleComment(@Query("articleID") int articleID, @Query("communityType") int communityType, @Query("communityID") int communityID);
 
     @POST("/reply/write")
-    Call<String> uploadComment(@Body JsonObject body);
+    Call<BaseResponse> uploadComment(@Body JsonObject body);
+
+    @GET("/reply/delete")
+    Call<BaseResponse> deleteComment(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("articleID") int articleID, @Query("replyID") int replyID, @Query("isRereply") int isReReply);
 
     @POST("/article/write")
     Call<BaseResponse> writeArticle(@Body JsonObject body);
 
     @GET("/article/delete")
-    Call<String> deleteArticle(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("articleID") int articleID);
+    Call<BaseResponse> deleteArticle(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("articleID") int articleID);
+
+    @GET("/article/report")
+    Call<BaseResponse> reportArticle(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("articleID") int articleID);
 
     @GET("/article/articleList")
     Call<ArticleListResponse> goArticle(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
@@ -73,4 +79,5 @@ public interface RetrofitService {
 
     @GET("/contest/getList")
     Call<ContestListResponse> getContestList(@Query("version") int version);
+
 }

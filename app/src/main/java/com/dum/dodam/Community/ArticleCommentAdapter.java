@@ -1,6 +1,7 @@
 package com.dum.dodam.Community;
 
 import android.content.Context;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Community.dataframe.ArticleCommentFrame;
@@ -23,11 +25,13 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private ArrayList<ArticleCommentFrame> list = new ArrayList<ArticleCommentFrame>();
     private Context context;
     private OnListItemSelectedInterface mListener;
+    private OnListItemSelectedInterface2 mListener2;
 
-    public ArticleCommentAdapter(Context context, ArrayList<ArticleCommentFrame> list, OnListItemSelectedInterface listener) {
+    public ArticleCommentAdapter(Context context, ArrayList<ArticleCommentFrame> list, OnListItemSelectedInterface listener, OnListItemSelectedInterface2 listener2) {
         this.context = context;
         this.list = list;
         this.mListener = listener;
+        this.mListener2 = listener2;
     }
 
     @NonNull
@@ -53,8 +57,10 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder1.nickName.setText(list.get(position).nickName);
             holder1.writtenTime.setText(list.get(position).writtenTime);
             holder1.content.setText(list.get(position).content);
-            holder1.replyID = list.get(position).replyID;
             holder1.itemView.setTag(position);
+            holder1.replyID = list.get(position).replyID;
+            holder1.parentReplyID = list.get(position).parentReplyID;
+            holder1.edit = list.get(position).edit;
 
             try {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -73,6 +79,8 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder2.writtenTime.setText(list.get(position).writtenTime);
             holder2.content.setText(list.get(position).content);
             holder2.itemView.setTag(position);
+            holder2.replyID = list.get(position).replyID;
+            holder2.parentReplyID = list.get(position).parentReplyID;
 
             try {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -93,7 +101,11 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         protected TextView writtenTime;
         protected TextView content;
         protected int replyID;
+        protected int parentReplyID;
+        protected boolean edit;
         protected ImageView im_comment;
+        protected ImageView im_menu;
+        protected ConstraintLayout layout;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -101,11 +113,20 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             writtenTime = itemView.findViewById(R.id.writtenTime);
             content = itemView.findViewById(R.id.content);
             im_comment = itemView.findViewById(R.id.im_comment);
+            im_menu = itemView.findViewById(R.id.im_menu);
+            layout = itemView.findViewById(R.id.comment_bg);
 
             im_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mListener.onItemSelected(view, getAdapterPosition());
+                }
+            });
+
+            im_menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener2.onItemSelected2(view, getAdapterPosition());
                 }
             });
         }
@@ -115,6 +136,8 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         protected TextView nickName;
         protected TextView writtenTime;
         protected TextView content;
+        protected int replyID;
+        protected int parentReplyID;
 
         public RecommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -122,12 +145,12 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             writtenTime = itemView.findViewById(R.id.writtenTime);
             content = itemView.findViewById(R.id.content);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onItemSelected(v, getAdapterPosition());
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mListener.onItemSelected(v, getAdapterPosition());
+//                }
+//            });
         }
     }
 
@@ -141,6 +164,10 @@ public class ArticleCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public interface OnListItemSelectedInterface {
         void onItemSelected(View v, int position);
+    }
+
+    public interface OnListItemSelectedInterface2 {
+        void onItemSelected2(View v, int position);
     }
 
     @Override

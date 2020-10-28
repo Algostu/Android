@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
-import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 

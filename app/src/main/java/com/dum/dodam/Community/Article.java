@@ -1,6 +1,8 @@
 package com.dum.dodam.Community;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -43,7 +43,7 @@ import java.util.Date;
 
 import retrofit2.Call;
 
-public class Article extends Fragment implements ArticleCommentAdapter.OnListItemSelectedInterface {
+public class Article extends Fragment implements ArticleCommentAdapter.OnListItemSelectedInterface, ArticleCommentAdapter.OnListItemSelectedInterface2 {
     private static final String TAG = "RHC";
 
     private int cnt_readArticle = 0;
@@ -53,8 +53,6 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private LinearLayout bottom;
-    private CoordinatorLayout.LayoutParams layoutParams;
 
     private ArrayList<ArticleCommentFrame> list = new ArrayList<>();
     private TextView writer;
@@ -80,10 +78,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     private int org_heart;
     private int edit;
 
-//    private ShimmerFrameLayout shimmerFrameLayout;
-    public Article(){
-
-    }
+    private int before_select = -100;
+    private int reported;
 
     public static Article newInstance(int articleID, int communityType, int communityID) {
         Bundle args = new Bundle();
@@ -95,28 +91,18 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         return f;
     }
 
-    public Article(int articleID, int communityType, int communityID) {
-        this.articleID = articleID;
-        this.communityType = communityType;
-        this.communityID = communityID;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.article_, container, false);
         view.setClickable(true);
         setHasOptionsMenu(true);
-        Bundle bundle=getArguments();
-        if (bundle != null){
+        Bundle bundle = getArguments();
+        if (bundle != null) {
             this.articleID = bundle.getInt("articleID");
             this.communityType = bundle.getInt("communityType");
             this.communityID = bundle.getInt("communityID");
         }
-
-//        shimmerFrameLayout = view.findViewById(R.id.shimmerLayout);
-//        shimmerFrameLayout.startShimmer(
-
 
         toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -143,7 +129,6 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             public void onClick(View view) {
                 if (added_heart == 0) added_heart = 1;
                 else added_heart = 0;
-                Log.d("hi", "image view");
                 RetrofitAdapter adapter = new RetrofitAdapter();
                 com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance(getContext());
                 Call<BaseResponse> call = service.modifyHeart(articleID, communityType, communityID, added_heart);
@@ -187,7 +172,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
         readArticle();
 
-        adapter = new ArticleCommentAdapter(getContext(), list, this);
+        adapter = new ArticleCommentAdapter(getContext(), list, this, this);
 
         readArticleComment();
 
@@ -219,7 +204,11 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             public void onResponse(Call<ArticleResponse> call, retrofit2.Response<ArticleResponse> response) {
                 if (response.isSuccessful()) {
                     ArticleResponse result = response.body();
-                    if (result.checkError(getActivity()) != 0) return;
+                    if (result.checkError(getActivity()) == 3) {
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        return;
+                    } else if (result.checkError(getActivity()) != 0) return;
+
                     ArticleFrame articleFrame = result.body;
                     writer.setText(articleFrame.nickName);
                     title.setText(articleFrame.title);
@@ -252,6 +241,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 //                    shimmerFrameLayout.setVisibility(View.GONE);
 
                     edit = articleFrame.edit;
+                    reported = articleFrame.reported;
 
                     if (added_heart == 0) {
                         heart_ic.setImageResource(R.drawable.ic_heart);
@@ -293,7 +283,6 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                             }
                         }
                     }
-                    Log.d("debug", "replys num : " + list.size());
                     adapter.notifyDataSetChanged();
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
@@ -319,16 +308,15 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         paramObject.addProperty("isAnonymous", ck_isAnonymous.isChecked());
         paramObject.addProperty("content", comment.getText().toString());
 
-        Log.d(TAG, "올릴 때 " + String.valueOf(parentReplyID));
-
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
-        Call<String> call = service.uploadComment(paramObject);
+        Call<BaseResponse> call = service.uploadComment(paramObject);
 
-        call.enqueue(new retrofit2.Callback<String>() {
+        call.enqueue(new retrofit2.Callback<BaseResponse>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
                 if (response.isSuccessful()) {
-                    String result = response.body();
+                    BaseResponse result = response.body();
+                    if (result.checkError(getActivity()) != 0) return;
                     comment.setText("");
                     comment.clearFocus();
                     refresh();
@@ -338,7 +326,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 if (cnt_readArticleComment < 10) readArticle();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
@@ -349,12 +337,13 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
 
     public void DeleteArticle() {
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
-        Call<String> call = service.deleteArticle(communityType, communityID, articleID);
-        call.enqueue(new retrofit2.Callback<String>() {
+        Call<BaseResponse> call = service.deleteArticle(communityType, communityID, articleID);
+        call.enqueue(new retrofit2.Callback<BaseResponse>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
                 if (response.isSuccessful()) {
-                    String result = response.body();
+                    BaseResponse result = response.body();
+                    if (result.checkError(getActivity()) != 0) return;
                     refresh();
                     Toast.makeText(getContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
                     getActivity().getSupportFragmentManager().popBackStack();
@@ -364,7 +353,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 if (cnt_readArticleComment < 5) readArticle();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
@@ -378,12 +367,24 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     public void onItemSelected(View v, int position) {
         ArticleCommentAdapter.CommentViewHolder holder = (ArticleCommentAdapter.CommentViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
         int replyID = holder.replyID;
-        if (parentReplyID == 0) {
+
+        if (before_select != -100) {
+            ArticleCommentAdapter.CommentViewHolder tmp_holder = (ArticleCommentAdapter.CommentViewHolder) recyclerView.findViewHolderForAdapterPosition(before_select);
+            tmp_holder.layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+            before_select = position;
             parentReplyID = replyID;
-            v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.coral_pink)); //왜 댓글만 색깔이 바뀌지??
+            holder.layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray)); //왜 댓글만 색깔이 바뀌지??
+        }
+
+        if (parentReplyID == 0) {
+            before_select = position;
+            parentReplyID = replyID;
+            holder.layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray)); //왜 댓글만 색깔이 바뀌지??
         } else {
             parentReplyID = 0;
-            v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+            replyID = 0;
+            before_select = -100;
+            holder.layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
         }
     }
 
@@ -417,7 +418,18 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                 DeleteArticle();
                 break;
             case R.id.report:
-                //
+                if (reported != 0) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("이미 신고하였습니다.");
+                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+                    builder.show();
+                } else {
+                    ReportArticle();
+                }
                 break;
             case android.R.id.home:
                 //select back button
@@ -432,4 +444,87 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
         transaction.detach(this).attach(this).commit();
     }
 
+    @Override
+    public void onItemSelected2(View v, int position) {
+        final ArticleCommentAdapter.CommentViewHolder holder = (ArticleCommentAdapter.CommentViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+        if (holder.edit) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("삭제하기");
+            builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    DeleteComment(holder.replyID, holder.parentReplyID);
+                }
+            });
+
+            builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            });
+            builder.show();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("권한이 없습니다.");
+            builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                }
+            });
+            builder.show();
+        }
+    }
+
+    public void DeleteComment(int replyID, int isReReply) { // isrereply ==parentId
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
+        Call<BaseResponse> call = service.deleteComment(communityType, communityID, articleID, replyID, isReReply);
+        call.enqueue(new retrofit2.Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    BaseResponse result = response.body();
+                    if (result.checkError(getContext()) != 0) return;
+                    refresh();
+                    Toast.makeText(getContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+                if (cnt_readArticleComment < 5) readArticle();
+                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                cnt_readArticleComment++;
+            }
+        });
+    }
+
+    public void ReportArticle() { //communityType, communityID, articleID
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
+        Call<BaseResponse> call = service.reportArticle(communityType, communityID, articleID);
+        call.enqueue(new retrofit2.Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    BaseResponse result = response.body();
+                    if (result.checkError(getContext()) != 0) return;
+                    Toast.makeText(getContext(), "신고되었습니다.", Toast.LENGTH_SHORT).show();
+                    refresh();
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+                if (cnt_readArticleComment < 5) readArticle();
+                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                cnt_readArticleComment++;
+            }
+        });
+    }
 }
