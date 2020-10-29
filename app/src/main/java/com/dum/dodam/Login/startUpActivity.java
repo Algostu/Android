@@ -36,6 +36,7 @@ public class startUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "hello my startupActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_main);
         String keyHash = com.kakao.util.helper.Utility.getKeyHash(this /* context */);
@@ -49,6 +50,17 @@ public class startUpActivity extends AppCompatActivity {
                 "auto", Context.MODE_PRIVATE);
 
         intent = getIntent();
+        Gson gson = new Gson();
+
+        // 중복 실행 방지
+        if (!isTaskRoot()) {
+            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN.equals(intent.getAction())) {
+                Log.w("hello", "Main Activity is not the root.  Finishing Main Activity instead of launching.");
+                finish();
+                return;
+            }
+        }
+
         if (intent != null && intent.hasExtra("login")) {
             SharedPreferences.Editor edit = sharedPref.edit();
             edit.clear();
@@ -91,13 +103,14 @@ public class startUpActivity extends AppCompatActivity {
 //                    edit.clear();
                     edit.commit();
                     // load user object and pass it to main Activity
-                    Gson gson = new Gson();
-                    String json = sharedPref.getString("userObject", "");
-                    UserJson user = gson.fromJson(json, UserJson.class);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("user", user);
-                    intent.putExtras(bundle);
+                    // push 알람으로 실행할 경우
+                    Log.d("hello", "flags " + intent.getFlags());
+                    if ((int)intent.getFlags() / 100000000 == 3){
+                        intent.putExtra("notification", "1");
+                        intent.putExtra("notifyID", 2);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    }
                     startActivity(intent);
                     this.finish();
                     return;
@@ -157,9 +170,6 @@ public class startUpActivity extends AppCompatActivity {
                         editor.commit();
                         // make intent and start main activity
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("user", userInfo);
-                        intent.putExtras(bundle);
                         startActivity(intent);
                         finish();
                         return;

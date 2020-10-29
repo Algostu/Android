@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import com.dum.dodam.Home.dataframe.MyCommunityFrame;
 import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
+import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.R;
 import com.dum.dodam.School.School;
 import com.dum.dodam.School.dataframe.CafeteriaFrame;
@@ -75,6 +77,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     private TextView pleaseTab;
     private TextView more_contest;
     private TextView title_contest;
+    private ImageButton mySetting;
 
     private LinearLayout today_lunch;
 
@@ -149,6 +152,15 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         contest_layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         contest_recyclerView.setLayoutManager(contest_layoutManager);
         contest_recyclerView.setAdapter(contest_adapter);
+
+        mySetting = view.findViewById(R.id.setting_button);
+        mySetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).replaceFragmentFull(new Mypage());
+            }
+        });
+
 
         return view;
     }

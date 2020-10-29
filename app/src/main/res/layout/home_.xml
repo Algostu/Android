@@ -53,6 +53,16 @@
             app:layout_constraintLeft_toLeftOf="@id/gd_left"
             app:layout_constraintTop_toTopOf="@id/gd_top" />
 
+        <ImageButton
+            android:id="@+id/setting_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_baseline_people_outline_24"
+            app:layout_constraintRight_toRightOf="@id/gd_right"
+            app:layout_constraintTop_toTopOf="@id/gd_top"
+            />
+
         <TextView
             android:id="@+id/user_name"
             android:layout_width="0dp"

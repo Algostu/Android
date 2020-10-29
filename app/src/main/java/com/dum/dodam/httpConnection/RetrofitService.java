@@ -20,6 +20,9 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface RetrofitService {
+    @GET("/auth/registerFCM")
+    Call<BaseResponse> registerFCM(@Query("token") String token);
+
     @GET("/auth/login")
     Call<LoginResponse> kakaoLogin(@Query("id") long id, @Query("token") String token);
 

@@ -32,7 +32,11 @@
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".Login.startUpActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login.startUpActivity"/>
 
         </activity>
         <service android:name=".MyFireBaseMessagingService">
