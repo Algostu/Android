@@ -1,4 +1,4 @@
-package com.dum.dodam.Collage;
+package com.dum.dodam.Univ;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,13 +14,13 @@ import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.R;
 
-public class CollageNews extends Fragment {
+public class UnivNews extends Fragment {
 
     private WebView mWebView;
     private WebSettings mWebSettings;
     private String homepage;
 
-    public CollageNews(String homepage) {
+    public UnivNews(String homepage) {
         this.homepage = homepage;
     }
 

@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.dum.dodam.Collage.SearchCollage;
+import com.dum.dodam.Univ.SearchUniv;
 import com.dum.dodam.Community.CommunityList;
 import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
@@ -25,7 +25,6 @@ import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.School.School;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new CommunityList());
                     return true;
                 case R.id.item_simulation:
-                    replaceFragment(new SearchCollage());
+                    replaceFragment(new SearchUniv());
                     return true;
                 case R.id.item_mypage:
                     replaceFragment(new Mypage());

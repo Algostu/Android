@@ -1,6 +1,6 @@
-package com.dum.dodam.Collage.dataframe;
+package com.dum.dodam.Univ.dataframe;
 
-public class CollageNewsFrame {
+public class UnivNewsFrame {
     //    public ImageView images;
     public String content;
     public String writtenTime;

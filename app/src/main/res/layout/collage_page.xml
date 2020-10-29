@@ -26,12 +26,12 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
+            <!--            android:scaleType="centerCrop"-->
             <ImageView
-                android:id="@+id/iv_collage_logo"
+                android:id="@+id/iv_univ_logo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:scaleType="centerCrop" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -41,18 +41,35 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:subtitleTextColor="@android:color/black"
                 app:titleTextColor="@android:color/black" />
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!--    <com.google.android.material.tabs.TabLayout-->
+    <!--        android:id="@+id/tab_layout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="@color/classic_blue"-->
+    <!--        android:elevation="1dp"-->
+    <!--        app:layout_anchor="@id/app_bar"-->
+    <!--        app:layout_anchorGravity="bottom"-->
+    <!--        app:tabMode="fixed"-->
+    <!--        app:tabSelectedTextColor="@color/colorAccent"-->
+    <!--        app:tabTextColor="@color/white" />-->
+
     <!--    <include layout="@layout/content_scrolling" />-->
-    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="25dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".ScrollingActivity">
+
+        <!--        <androidx.viewpager.widget.ViewPager-->
+        <!--            android:id="@+id/viewpager"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_news"
@@ -60,7 +77,6 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:overScrollMode="never" />
-
     </androidx.core.widget.NestedScrollView>
 
     <TextView
@@ -68,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="15dp"
-        android:paddingBottom="30dp"
+        android:paddingBottom="75dp"
         android:text="입학처 바로가기"
         android:textColor="@color/white"
         android:textSize="15dp"

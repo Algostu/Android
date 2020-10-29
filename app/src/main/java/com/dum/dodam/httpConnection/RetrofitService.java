@@ -1,8 +1,5 @@
 package com.dum.dodam.httpConnection;
 
-import com.dum.dodam.Collage.dataframe.CollageLogoResponse;
-import com.dum.dodam.Collage.dataframe.CollageNewsResponse;
-import com.dum.dodam.Collage.dataframe.CollageResponse;
 import com.dum.dodam.Community.dataframe.ArticleCommentResponse;
 import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
@@ -12,6 +9,9 @@ import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.School.dataframe.LunchResponse;
+import com.dum.dodam.Univ.dataframe.UnivLogoResponse;
+import com.dum.dodam.Univ.dataframe.UnivNewsResponse;
+import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -37,10 +37,10 @@ public interface RetrofitService {
     Call<SearchResponse> searchSchoolName(@Query("schoolName") String schoolName);
 
     @GET("/search/univList")
-    Call<CollageResponse> searchCollageName(@Query("univName") String univName);
+    Call<UnivResponse> searchCollageName(@Query("univName") String univName);
 
     @GET("/univ/logoImage")
-    Call<CollageLogoResponse> getUnivLogo(@Query("univID") int univID);
+    Call<UnivLogoResponse> getUnivLogo(@Query("univID") int univID);
 
     @GET("/article/latestArticleList")
     Call<MyCommunityResponse> getMyCommunity();
@@ -82,6 +82,6 @@ public interface RetrofitService {
     Call<ContestListResponse> getContestList(@Query("version") int version);
 
     @GET("/article/articleList")
-    Call<CollageNewsResponse> readCollageNews(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
+    Call<UnivNewsResponse> readUnivNews(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
 
 }

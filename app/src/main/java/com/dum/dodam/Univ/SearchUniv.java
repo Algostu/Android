@@ -1,4 +1,4 @@
-package com.dum.dodam.Collage;
+package com.dum.dodam.Univ;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,9 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.dum.dodam.Collage.dataframe.CollageFrame;
-import com.dum.dodam.Collage.dataframe.CollageResponse;
-import com.dum.dodam.Community.Article;
+import com.dum.dodam.Univ.dataframe.UnivFrame;
+import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
@@ -30,15 +29,15 @@ import retrofit2.Call;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-public class SearchCollage extends Fragment {
+public class SearchUniv extends Fragment {
 
     private final String TAG = "RHC";
 
     private EditText et_input;
     private ListView listView;
-    private ArrayList<CollageFrame> list;
+    private ArrayList<UnivFrame> list;
 
-    private CollageSearchAdapter adapter;
+    private UnivSearchAdapter adapter;
 
     @Nullable
     @Override
@@ -49,16 +48,16 @@ public class SearchCollage extends Fragment {
         et_input = view.findViewById(R.id.et_input);
         listView = view.findViewById(R.id.listView);
 
-        list = new ArrayList<CollageFrame>();
-        adapter = new CollageSearchAdapter(getContext(), list);
+        list = new ArrayList<UnivFrame>();
+        adapter = new UnivSearchAdapter(getContext(), list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                CollageFrame collage = list.get(i);
+                UnivFrame collage = list.get(i);
                 InputMethodManager imm = (InputMethodManager) ((MainActivity) getActivity()).getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(et_input.getWindowToken(), 0);
-                ((MainActivity) getActivity()).replaceFragmentFull(new Collage(collage));
+                ((MainActivity) getActivity()).replaceFragmentFull(new Univ(collage));
             }
         });
         et_input.addTextChangedListener(new TextWatcher() {
@@ -90,13 +89,13 @@ public class SearchCollage extends Fragment {
 
         RetrofitAdapter rAdapter = new RetrofitAdapter();
         RetrofitService service = rAdapter.getInstance(getActivity());
-        Call<CollageResponse> call = service.searchCollageName(query);
+        Call<UnivResponse> call = service.searchCollageName(query);
 
-        call.enqueue(new retrofit2.Callback<CollageResponse>() {
+        call.enqueue(new retrofit2.Callback<UnivResponse>() {
             @Override
-            public void onResponse(Call<CollageResponse> call, retrofit2.Response<CollageResponse> response) {
+            public void onResponse(Call<UnivResponse> call, retrofit2.Response<UnivResponse> response) {
                 if (response.isSuccessful()) {
-                    CollageResponse result = response.body();
+                    UnivResponse result = response.body();
                     list.clear();
                     list.addAll(result.body);
                     adapter.notifyDataSetChanged();
@@ -106,7 +105,7 @@ public class SearchCollage extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<CollageResponse> call, Throwable t) {
+            public void onFailure(Call<UnivResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });

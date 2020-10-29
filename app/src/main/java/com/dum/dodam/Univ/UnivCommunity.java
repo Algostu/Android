@@ -1,4 +1,4 @@
-package com.dum.dodam.Collage;
+package com.dum.dodam.Univ;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.R;
 
-public class CollageCommunity extends Fragment {
+public class UnivCommunity extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

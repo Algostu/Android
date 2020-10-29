@@ -1,8 +1,6 @@
-package com.dum.dodam.Collage.dataframe;
+package com.dum.dodam.Univ.dataframe;
 
-import android.widget.ImageView;
-
-public class CollageFrame {
+public class UnivFrame {
     public String univName;
     public String subRegion;
     public String homePage;
