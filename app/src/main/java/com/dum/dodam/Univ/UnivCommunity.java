@@ -90,8 +90,6 @@ public class UnivCommunity extends Fragment {
         });
 
         adapter = new UnivNewsAdapter(getContext(), list);
-        Log.d(TAG, "list size " + list.size());
-        Log.d(TAG, "toggle " + readNewsToggle);
         if (list.size() == 0 && readNewsToggle == 0) {
             readUnivCommunity();
             readNewsToggle = 1;

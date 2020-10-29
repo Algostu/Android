@@ -10,6 +10,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/transparent"
         android:clipChildren="false"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -30,7 +31,7 @@
 
             <!--            android:scaleType="centerCrop"-->
             <ImageView
-                android:id="@+id/iv_univ_logo"
+                android:id="@+id/iv_univ_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
@@ -49,12 +50,13 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/classic_blue"
+            android:layout_gravity="bottom"
             android:elevation="1dp"
             app:tabGravity="center"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/colorAccent"
             app:tabTextColor="@color/white" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <!--    <include layout="@layout/content_scrolling" />-->
@@ -66,7 +68,7 @@
         android:paddingRight="15dp"
         android:paddingBottom="115dp"
         android:text="입학처 바로가기"
-        android:textColor="@color/white"
+        android:textColor="@android:color/black"
         android:textSize="15dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end" />
