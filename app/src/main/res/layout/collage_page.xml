@@ -1,134 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/white_gray"
+    android:fitsSystemWindows="true">
 
-    <!-- guide line -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gd_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="15dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gd_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="15dp" />
-
-    <!--  title background  -->
-    <TextView
-        android:id="@+id/title_bg"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/classic_blue"
-        tools:ignore="MissingConstraints" />
+        android:layout_height="200dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <TextView
-        android:id="@+id/tv_collage_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Collage name"
-        android:textColor="#FFFFFF"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@id/gd_left"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/iv_collage_logo"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="10dp"
-        android:foregroundGravity="center"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/title_bg" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_menu"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="5dp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/iv_collage_logo"
-        tools:ignore="MissingConstraints">
-
-        <View
-            android:layout_width="2dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:background="#CBC6C6"
-            tools:ignore="MissingConstraints" />
-
-        <LinearLayout
+        <!--        app:statusBarScrim="@android:color/transparent"-->
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:fitsSystemWindows="true"
+            app:collapsedTitleTextAppearance="@style/CollapsingTitleStyle"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleTextAppearance="@style/ExpandedTitleStyle"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
 
-            <TextView
-                android:id="@+id/collage_news"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="NEWS"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/collage_community"
-                app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/iv_collage_logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop" />
 
-            <TextView
-                android:id="@+id/collage_community"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="게시판"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/collage_news"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:subtitleTextColor="@android:color/black"
+                app:titleTextColor="@android:color/black" />
 
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:id="@+id/rv_my_community"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="10dp"-->
-    <!--        android:overScrollMode="never"-->
-    <!--        android:scrollbarFadeDuration="0"-->
-    <!--        android:scrollbarSize="5dp"-->
-    <!--        android:scrollbarThumbVertical="@android:color/darker_gray"-->
-    <!--        android:scrollbars="vertical"-->
-    <!--        app:layout_constraintLeft_toLeftOf="@id/gd_left"-->
-    <!--        app:layout_constraintRight_toRightOf="@id/gd_right"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/cv_menu"-->
-    <!--        tools:ignore="MissingConstraints" />-->
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/frame_layout_collage_page"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/cv_menu" />
+    <!--    <include layout="@layout/content_scrolling" />-->
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".ScrollingActivity">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_news"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:overScrollMode="never" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/go_web"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="15dp"
+        android:paddingBottom="30dp"
+        android:text="입학처 바로가기"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end" />
+
+    <!--    app:layout_anchor="@id/app_bar"-->
+    <!--    app:layout_anchorGravity="bottom|end"-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/classic_blue"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/classic_blue"
+        app:srcCompat="@drawable/ic_community" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

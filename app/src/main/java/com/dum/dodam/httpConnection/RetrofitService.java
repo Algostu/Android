@@ -1,16 +1,17 @@
 package com.dum.dodam.httpConnection;
 
 import com.dum.dodam.Collage.dataframe.CollageLogoResponse;
+import com.dum.dodam.Collage.dataframe.CollageNewsResponse;
 import com.dum.dodam.Collage.dataframe.CollageResponse;
 import com.dum.dodam.Community.dataframe.ArticleCommentResponse;
 import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
+import com.dum.dodam.Contest.dataframe.ContestListResponse;
 import com.dum.dodam.Home.dataframe.HotArticleResponse;
 import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.School.dataframe.LunchResponse;
-import com.dum.dodam.Contest.dataframe.ContestListResponse;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -72,12 +73,15 @@ public interface RetrofitService {
     Call<BaseResponse> reportArticle(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("articleID") int articleID);
 
     @GET("/article/articleList")
-    Call<ArticleListResponse> goArticle(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
+    Call<ArticleListResponse> readArticleList(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
 
     @GET("/cafeteria/read")
     Call<LunchResponse> getCafeteriaList(@Query("version") String version);
 
     @GET("/contest/getList")
     Call<ContestListResponse> getContestList(@Query("version") int version);
+
+    @GET("/article/articleList")
+    Call<CollageNewsResponse> readCollageNews(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
 
 }

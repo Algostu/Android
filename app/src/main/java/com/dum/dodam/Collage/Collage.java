@@ -10,31 +10,52 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Collage.dataframe.CollageFrame;
 import com.dum.dodam.Collage.dataframe.CollageLogoFrame;
 import com.dum.dodam.Collage.dataframe.CollageLogoResponse;
+import com.dum.dodam.Collage.dataframe.CollageNewsFrame;
+import com.dum.dodam.Collage.dataframe.CollageNewsResponse;
+import com.dum.dodam.Community.Community;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.RvItemDecoration;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Collage extends Fragment {
-    private final String TAG = "RHC";
+
+    private static final String TAG = "RHC";
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<CollageNewsFrame> list = new ArrayList<>();
+    ;
+
     private CollageFrame collage;
-
     private ImageView iv_collage_logo;
-    private TextView tv_collage_name;
-    private TextView collage_news;
-    private TextView collage_community;
+    private TextView go_web;
 
+    private String lastNewsWrittenTime = "latest";
+    private int cnt_readNews = 0;
+    private int readNewsToggle = 0;
 
     public Collage(CollageFrame collage) {
         this.collage = collage;
@@ -46,34 +67,97 @@ public class Collage extends Fragment {
         View view = inflater.inflate(R.layout.collage_page, container, false);
         view.setClickable(true);
 
-        iv_collage_logo = view.findViewById(R.id.iv_collage_logo);
-        tv_collage_name = view.findViewById(R.id.tv_collage_name);
-        collage_news = view.findViewById(R.id.collage_news);
-        collage_community = view.findViewById(R.id.collage_community);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
+        toolBarLayout.setTitle(collage.univName);
 
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Snackbar.make(view, "Move to ", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                ((MainActivity) getActivity()).replaceFragmentFull(new Community(1, 0, collage.univName));
+            }
+        });
+
+        iv_collage_logo = view.findViewById(R.id.iv_collage_logo);
         getUnivLogo(collage.univID);
 
-        collage_community.setOnClickListener(new View.OnClickListener() {
+        go_web = (TextView) view.findViewById(R.id.go_web);
+        go_web.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                replaceCollagePageFragment(new CollageCommunity());
+            public void onClick(View view) {
+                ((MainActivity) getActivity()).replaceFragmentFull(new CollageNews(collage.eduHomePage));
             }
         });
 
-        collage_news.setOnClickListener(new View.OnClickListener() {
+        adapter = new CollageNewsAdapter(getContext(), list);
+        if (list.size() == 0 && readNewsToggle == 0) {
+            readCollageNews();
+            readNewsToggle = 1;
+        }
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.rv_news);
+        recyclerView.addItemDecoration(new RvItemDecoration(getContext()));
+        recyclerView.setHasFixedSize(true); //
+
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onClick(View v) {
-                Log.d(TAG, "homepage" + collage.homePage);
-                replaceCollagePageFragment(new CollageNews(collage.eduHomePage));
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int curPosition = recyclerView.getAdapter().getItemCount() - 1;
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+
+                if ((lastVisibleItemPosition >= 15) && (curPosition >= lastVisibleItemPosition - 3)) {
+                    readCollageNews();
+                }
             }
         });
 
-        tv_collage_name.setText(collage.univName);
         return view;
     }
 
-    private void getUnivLogo(int univID) {
+    public void readCollageNews() {
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
+        Call<CollageNewsResponse> call = service.readCollageNews(0, 1, lastNewsWrittenTime);
+        call.enqueue(new Callback<CollageNewsResponse>() {
+            @Override
+            public void onResponse(Call<CollageNewsResponse> call, Response<CollageNewsResponse> response) {
+                if (response.isSuccessful()) {
+                    CollageNewsResponse result = response.body();
+                    if (result.checkError(getActivity()) != 0) return;
 
+                    if (result.body.size() > 0) {
+                        CollageNewsFrame lastArticle = result.body.get(result.body.size() - 1);
+                        lastNewsWrittenTime = lastArticle.writtenTime;
+                    }
+                    Log.d(TAG, "list size " + list.size());
+                    list.addAll(result.body);
+                    adapter.notifyDataSetChanged();
+                    readNewsToggle = 0;
+                } else {
+                    Toast.makeText(getContext(), "Upload Fail", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onResponse: Fail");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CollageNewsResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+                if (cnt_readNews < 5) readCollageNews();
+                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                cnt_readNews++;
+            }
+        });
+    }
+
+    private void getUnivLogo(int univID) {
         RetrofitAdapter rAdapter = new RetrofitAdapter();
         RetrofitService service = rAdapter.getInstance(getActivity());
         Call<CollageLogoResponse> call = service.getUnivLogo(univID);
@@ -82,13 +166,12 @@ public class Collage extends Fragment {
             @Override
             public void onResponse(Call<CollageLogoResponse> call, retrofit2.Response<CollageLogoResponse> response) {
                 if (response.isSuccessful()) {
-                    if(response.body().checkError(getContext())!= 0) return;
+                    if (response.body().checkError(getContext()) != 0) return;
                     CollageLogoFrame result = response.body().body;
                     Bitmap bitmap_signiture = StringToBitmap(result.signiture);
                     iv_collage_logo.setImageBitmap(bitmap_signiture);
-                    Log.d("RHC", "on response: " + iv_collage_logo.toString());
                 } else {
-                    Log.d(TAG, "onResponse: Fail " + response.body());
+                    Log.d(TAG, "onResponse: " + response.body());
                 }
             }
 
@@ -99,25 +182,26 @@ public class Collage extends Fragment {
         });
     }
 
-    public void replaceCollagePageFragment(Fragment fragment) {
-        FragmentTransaction transaction = ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-
-    }
-
     public static Bitmap StringToBitmap(String encodedString) {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            Log.d("RHC", "StringToBitmap: ");
             return bitmap;
         } catch (Exception e) {
             e.getMessage();
-            Log.d("RHC", "ChangeFail");
             return null;
         }
+    }
+
+    @Override
+    public void onResume() {
+        list.clear();
+        lastNewsWrittenTime = "latest";
+        if (list.size() == 0 && readNewsToggle == 0) {
+            readNewsToggle = 1;
+            readCollageNews();
+        }
+        super.onResume();
     }
 }
 

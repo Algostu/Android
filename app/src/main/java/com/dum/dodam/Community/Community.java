@@ -25,7 +25,6 @@ import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
-import com.google.android.gms.common.util.JsonUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -101,7 +100,6 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
             readArticleToggle = 1;
         }
 
-
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_articles);
 
         recyclerView.setHasFixedSize(true);
@@ -139,8 +137,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     public void readArticleList() {
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
 
-        Call<ArticleListResponse> call = service.goArticle(communityType, communityID, lastArticleWrittenString);
-//        Call<ArticleListResponse> call = service.goArticle(0, communityID, "latest");
+        Call<ArticleListResponse> call = service.readArticleList(communityType, communityID, lastArticleWrittenString);
 
         call.enqueue(new Callback<ArticleListResponse>() {
             @Override
@@ -182,7 +179,6 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
             readArticleToggle = 1;
             readArticleList();
         }
-
         super.onResume();
     }
 

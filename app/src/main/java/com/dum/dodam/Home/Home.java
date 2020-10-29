@@ -348,7 +348,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         result.add(this_week);
         result.add(sDayNum);
 
-
         return result;
     }
 
