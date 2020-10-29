@@ -53,10 +53,14 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     //    private ShimmerFrameLayout shimmerFrameLayout;
     private ArrayList<ArticleListFrame> list = new ArrayList<>();
 
-    public Community(int communityType, int communityID, String title) {
-        this.communityID = communityID;
-        this.communityType = communityType;
-        this.community_name = title;
+    public static Community newInstance(int communityType, int communityID, String community_name) {
+        Bundle args = new Bundle();
+        args.putString("community_name", community_name);
+        args.putInt("communityType", communityType);
+        args.putInt("communityID", communityID);
+        Community f = new Community();
+        f.setArguments(args);
+        return f;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -65,6 +69,12 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.article_list, container, false);
         view.setClickable(true);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            this.community_name = bundle.getString("community_name");
+            this.communityType = bundle.getInt("communityType");
+            this.communityID = bundle.getInt("communityID");
+        }
 
         user = ((MainActivity) getActivity()).getUser();
 

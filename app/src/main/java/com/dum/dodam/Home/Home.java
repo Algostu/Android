@@ -268,7 +268,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         int communityID = holder.communityID;
         String title = holder.community_name.getText().toString();
         int communityType = holder.communityType;
-        ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID, title));
+        ((MainActivity) getActivity()).replaceFragmentFull(Community.newInstance(communityType, communityID, title));
     }
 
     @Override

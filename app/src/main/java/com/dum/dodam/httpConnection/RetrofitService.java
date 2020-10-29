@@ -84,4 +84,7 @@ public interface RetrofitService {
     @GET("/article/articleList")
     Call<UnivNewsResponse> readUnivNews(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
 
+    @GET("/article/articleList")
+    Call<UnivNewsResponse> readUnivCommunity(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
+
 }

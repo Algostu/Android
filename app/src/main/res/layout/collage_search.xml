@@ -93,7 +93,7 @@
                 <ListView
                     android:id="@+id/listView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:divider="#999999"
                     android:dividerHeight="1dp" />
             </RelativeLayout>
@@ -154,10 +154,7 @@
                 android:scrollbarThumbVertical="@android:color/darker_gray"
                 android:scrollbars="horizontal"
                 tools:ignore="MissingConstraints" />
-
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
 
 

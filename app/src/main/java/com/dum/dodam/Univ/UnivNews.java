@@ -1,48 +1,137 @@
 package com.dum.dodam.Univ;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.R;
+import com.dum.dodam.RvItemDecoration;
+import com.dum.dodam.Univ.dataframe.UnivNewsFrame;
+import com.dum.dodam.Univ.dataframe.UnivNewsResponse;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UnivNews extends Fragment {
 
-    private WebView mWebView;
-    private WebSettings mWebSettings;
-    private String homepage;
+    private static final String TAG = "RHC";
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<UnivNewsFrame> list = new ArrayList<>();
 
-    public UnivNews(String homepage) {
-        this.homepage = homepage;
+    private String lastNewsWrittenTime = "latest";
+    private int cnt_readNews = 0;
+    private int readNewsToggle = 0;
+    private int communityType;
+    private int communityID;
+
+    public static UnivNews newInstance(int communityType, int communityID) {
+        Bundle args = new Bundle();
+        args.putInt("communityType", communityType);
+        args.putInt("communityID", communityID);
+        UnivNews f = new UnivNews();
+        f.setArguments(args);
+        return f;
     }
 
+    @Nullable
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.collage_news, container, false);
         view.setClickable(true);
 
-        mWebView = (WebView) view.findViewById(R.id.webview);
-        mWebView.setWebViewClient(new WebViewClient()); // 클릭시 새창 안뜨게
-        mWebSettings = mWebView.getSettings(); //세부 세팅 등록
-        mWebSettings.setJavaScriptEnabled(true); // 웹페이지 자바스클비트 허용 여부
-        mWebSettings.setSupportMultipleWindows(false); // 새창 띄우기 허용 여부
-        mWebSettings.setJavaScriptCanOpenWindowsAutomatically(false); // 자바스크립트 새창 띄우기(멀티뷰) 허용 여부
-        mWebSettings.setLoadWithOverviewMode(true); // 메타태그 허용 여부
-        mWebSettings.setUseWideViewPort(true); // 화면 사이즈 맞추기 허용 여부
-        mWebSettings.setSupportZoom(false); // 화면 줌 허용 여부
-        mWebSettings.setBuiltInZoomControls(false); // 화면 확대 축소 허용 여부
-        mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
-        mWebSettings.setCacheMode(WebSettings.LOAD_NO_CACHE); // 브라우저 캐시 허용 여부
-        mWebSettings.setDomStorageEnabled(true); // 로컬저장소 허용 여부
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            this.communityType = bundle.getInt("communityType");
+            this.communityID = bundle.getInt("communityID");
+        }
 
-        mWebView.loadUrl(homepage); // 웹뷰에 표시할 웹사이트 주소, 웹뷰 시작
+        adapter = new UnivNewsAdapter(getContext(), list);
+        Log.d(TAG, "list size " + list.size());
+        Log.d(TAG, "toggle " + readNewsToggle);
+        if (list.size() == 0 && readNewsToggle == 0) {
+            readUnivNews();
+            readNewsToggle = 1;
+        }
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.rv_news);
+        recyclerView.addItemDecoration(new RvItemDecoration(getContext()));
+        recyclerView.setHasFixedSize(true); //
+
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int curPosition = recyclerView.getAdapter().getItemCount() - 1;
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+
+                if ((lastVisibleItemPosition >= 15) && (curPosition >= lastVisibleItemPosition - 3)) {
+                    readUnivNews();
+                }
+            }
+        });
+
         return view;
+    }
+
+    public void readUnivNews() {
+        com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
+        Call<UnivNewsResponse> call = service.readUnivNews(communityType, communityID, lastNewsWrittenTime);
+        call.enqueue(new Callback<UnivNewsResponse>() {
+            @Override
+            public void onResponse(Call<UnivNewsResponse> call, Response<UnivNewsResponse> response) {
+                if (response.isSuccessful()) {
+                    UnivNewsResponse result = response.body();
+                    if (result.checkError(getActivity()) != 0) return;
+
+                    if (result.body.size() > 0) {
+                        UnivNewsFrame lastArticle = result.body.get(result.body.size() - 1);
+                        lastNewsWrittenTime = lastArticle.writtenTime;
+                    }
+                    list.addAll(result.body);
+                    adapter.notifyDataSetChanged();
+                    readNewsToggle = 0;
+                } else {
+                    Log.d(TAG, "onResponse: Fail");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UnivNewsResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+                if (cnt_readNews < 5) readUnivNews();
+                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                cnt_readNews++;
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        list.clear();
+        lastNewsWrittenTime = "latest";
+        if (list.size() == 0 && readNewsToggle == 0) {
+            readNewsToggle = 1;
+            readUnivNews();
+        }
+        super.onResume();
     }
 }
