@@ -87,9 +87,9 @@ public class Univ extends Fragment {
         iv_univ_bg = view.findViewById(R.id.iv_univ_bg);
 //      Temp Color
         if (univ.univName.equals("아주대학교")) {
-            iv_univ_bg.setImageDrawable(getResources().getDrawable(R.drawable.ajou_univ));
+            iv_univ_bg.setImageResource(R.drawable.ajou_univ);
         } else {
-            iv_univ_bg.setImageDrawable(getResources().getDrawable(R.color.classic_blue));
+            iv_univ_bg.setImageResource(R.color.classic_blue);
             tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.classic_blue));
         }
 //        getUnivLogo(univ.univID);

@@ -14,11 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.R;
+import com.dum.dodam.RvItemDecoration;
 import com.dum.dodam.Univ.dataframe.LiveShowFrame;
 import com.dum.dodam.Univ.dataframe.LiveShowResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
@@ -31,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LiveShow extends Fragment {
+public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSelectedInterface {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -41,6 +41,7 @@ public class LiveShow extends Fragment {
 
     private ArrayList<LiveShowFrame> list = new ArrayList<LiveShowFrame>();
     private int cnt_readLiveShow = 0;
+    private int added_heart = 0;
 
     @Nullable
     @Override
@@ -64,12 +65,13 @@ public class LiveShow extends Fragment {
             }
         });
 
-        adapter = new LiveShowAdapter(getContext(), list);
+        adapter = new LiveShowAdapter(getContext(), list, this);
 
-        readLiveShowList();
+//        readLiveShowList();
 
+        list.add(new LiveShowFrame("School", "Major", "content1", "content2", "content3", "time", "heart"));
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_liveshow);
-        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new RvItemDecoration(getContext()));
         recyclerView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(getActivity());
@@ -107,4 +109,45 @@ public class LiveShow extends Fragment {
         });
     }
 
+    @Override
+    public void onItemSelected(View v, int position) {
+        LiveShowAdapter.Holder holder = (LiveShowAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
+
+        if (added_heart == 0) added_heart = 1;
+        else added_heart = 0;
+
+        if (added_heart == 0) {
+            holder.heart_ic.setImageResource(R.drawable.ic_heart);
+        } else {
+            holder.heart_ic.setImageResource(R.drawable.explodin_heart);
+        }
+
+//        RetrofitAdapter adapter = new RetrofitAdapter();
+//        com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance(getContext());
+//        Call<BaseResponse> call = service.modifyHeart(articleID, communityType, communityID, added_heart);
+//
+//        call.enqueue(new retrofit2.Callback<BaseResponse>() {
+//            @Override
+//            public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
+//                if (response.isSuccessful()) {
+//                    BaseResponse result = response.body();
+//                    if (result.checkError(getActivity()) != 0) return;
+//                    heart.setText(String.valueOf(org_heart + added_heart));
+//                    if (added_heart == 0) {
+//                        heart_ic.setImageResource(R.drawable.ic_heart);
+//                    } else {
+//                        heart_ic.setImageResource(R.drawable.explodin_heart);
+//                    }
+//                } else {
+//                    Log.d(TAG, "onResponse: Fail " + response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<BaseResponse> call, Throwable t) {
+//                Log.d(TAG, "onFailure: " + t.getMessage());
+//                Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+    }
 }
