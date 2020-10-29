@@ -39,8 +39,8 @@ public class startUpActivity extends AppCompatActivity {
         Log.d(TAG, "hello my startupActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_main);
-        String keyHash = com.kakao.util.helper.Utility.getKeyHash(this /* context */);
-        Log.d(TAG, keyHash);
+        String keyHash = com.kakao.util.helper.Utility.getKeyHash(this);
+        Log.d("HASH_KEY", keyHash);
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .permitDiskReads()
                 .permitDiskWrites()
@@ -78,7 +78,7 @@ public class startUpActivity extends AppCompatActivity {
             return;
         } else {
             auth_int = Integer.parseInt(auth);
-            if (auth_int == 0){
+            if (auth_int == 0) {
                 scenarioNo = -1;
                 this.replaceFragment(new Login());
                 return;

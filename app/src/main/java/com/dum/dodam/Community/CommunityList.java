@@ -78,7 +78,7 @@ public class CommunityList extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID, finalTitle));
+                ((MainActivity) getActivity()).replaceFragmentFull(Community.newInstance(communityType, communityID, finalTitle));
             }
         });
     }

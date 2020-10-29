@@ -20,8 +20,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.dum.dodam.Alarm.AlarmTab;
 import com.dum.dodam.Alarm.Data.AlarmData;
-import com.dum.dodam.Collage.SearchCollage;
 import com.dum.dodam.Community.Article;
+import com.dum.dodam.Univ.SearchUniv;
 import com.dum.dodam.Community.CommunityList;
 import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new CommunityList());
                     return true;
                 case R.id.item_simulation:
-                    replaceFragment(new SearchCollage());
+                    replaceFragment(new SearchUniv());
                     return true;
                 case R.id.item_mypage:
                     replaceFragment(new AlarmTab());

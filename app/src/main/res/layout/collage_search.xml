@@ -44,11 +44,10 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_search"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="300dp"
         android:layout_marginTop="10dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="5dp"
-        app:layout_constraintBottom_toTopOf="@id/cv_last_search"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
         app:layout_constraintTop_toBottomOf="@id/title_bg"
@@ -93,7 +92,7 @@
                 <ListView
                     android:id="@+id/listView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:divider="#999999"
                     android:dividerHeight="1dp" />
             </RelativeLayout>
@@ -101,14 +100,13 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_last_search"
+        android:id="@+id/cv_liveshow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="60dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
         app:layout_constraintTop_toBottomOf="@id/cv_search"
@@ -117,6 +115,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <TextView
@@ -126,7 +125,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:text="최근 검색한 학교"
+                android:text="라이브 쇼"
                 android:textSize="15dp"
                 android:textStyle="bold" />
 
@@ -141,23 +140,17 @@
                 android:background="#CBC6C6"
                 tools:ignore="MissingConstraints" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_last_search"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal"
-                android:overScrollMode="never"
-                android:scrollbarFadeDuration="0"
-                android:scrollbarSize="5dp"
-                android:scrollbarThumbVertical="@android:color/darker_gray"
-                android:scrollbars="horizontal"
-                tools:ignore="MissingConstraints" />
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="지금 바로 라이브쇼에 참여해 보세요!"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
 
 

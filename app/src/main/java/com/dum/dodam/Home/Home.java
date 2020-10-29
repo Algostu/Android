@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -130,6 +131,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         myCommunity_adapter = new MyCommunityAdapter(getContext(), myCommunityList, this, user);
         setMyCommunity();
         myCommunity_recyclerView = (RecyclerView) view.findViewById(R.id.rv_my_community);
+        myCommunity_recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         myCommunity_recyclerView.setHasFixedSize(true);
         myCommunity_layoutManager = new LinearLayoutManager(getActivity());
         myCommunity_recyclerView.setLayoutManager(myCommunity_layoutManager);
@@ -139,6 +141,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         hotArticle_adapter = new HotArticleAdapter(getContext(), hotArticleList, this, user);
         setHotArticle();
         hotArticle_recyclerView = (RecyclerView) view.findViewById(R.id.rv_hot_article);
+        hotArticle_recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         hotArticle_recyclerView.setHasFixedSize(true);
         hotArticle_layoutManager = new LinearLayoutManager(getActivity());
         hotArticle_recyclerView.setLayoutManager(hotArticle_layoutManager);
@@ -277,7 +280,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         int communityID = holder.communityID;
         String title = holder.community_name.getText().toString();
         int communityType = holder.communityType;
-        ((MainActivity) getActivity()).replaceFragmentFull(new Community(communityType, communityID, title));
+        ((MainActivity) getActivity()).replaceFragmentFull(Community.newInstance(communityType, communityID, title));
     }
 
     @Override
@@ -356,7 +359,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         int sDayNum = c.get(Calendar.DAY_OF_WEEK);
         result.add(this_week);
         result.add(sDayNum);
-
 
         return result;
     }

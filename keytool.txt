@@ -1,0 +1,1 @@
+keytool -exportcert -alias dodam -keystore C:\Users\mangu\Desktop\Android\keyStore\dodam.jks | openssl sha1 -binary | openssl base64

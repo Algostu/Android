@@ -1,4 +1,4 @@
-package com.dum.dodam.Collage;
+package com.dum.dodam.Univ;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,18 +14,18 @@ import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.R;
 
-public class CollageNews extends Fragment {
+public class UnivWebView extends Fragment {
 
     private WebView mWebView;
     private WebSettings mWebSettings;
     private String homepage;
 
-    public CollageNews(String homepage) {
+    public UnivWebView(String homepage) {
         this.homepage = homepage;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.collage_news, container, false);
+        View view = inflater.inflate(R.layout.collage_webview, container, false);
         view.setClickable(true);
 
         mWebView = (WebView) view.findViewById(R.id.webview);

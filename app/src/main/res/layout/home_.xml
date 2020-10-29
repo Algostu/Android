@@ -166,7 +166,8 @@
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/title_my_community">
+                    android:layout_below="@id/title_my_community"
+                    android:layout_marginBottom="10dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_my_community"
@@ -218,7 +219,8 @@
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/title_hot_community">
+                    android:layout_below="@id/title_hot_community"
+                    android:layout_marginBottom="10dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_hot_article"

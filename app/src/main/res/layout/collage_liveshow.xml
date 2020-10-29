@@ -10,7 +10,6 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
         android:clipChildren="false"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -19,7 +18,7 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:clipChildren="false"
             android:fitsSystemWindows="true"
             app:collapsedTitleTextAppearance="@style/CollapsingTitleStyle"
@@ -29,15 +28,6 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
-            <!--            android:scaleType="centerCrop"-->
-            <ImageView
-                android:id="@+id/iv_univ_bg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax" />
-
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -45,52 +35,33 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:elevation="1dp"
-            app:tabGravity="center"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@color/white" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <!--    <include layout="@layout/content_scrolling" />-->
 
-    <TextView
-        android:id="@+id/go_web"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="15dp"
-        android:paddingBottom="115dp"
-        android:text="입학처 바로가기"
-        android:textColor="@android:color/black"
-        android:textSize="15dp"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end" />
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_liveshow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
+        android:overScrollMode="never"
+        android:scrollbarFadeDuration="0"
+        android:scrollbarSize="5dp"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <!--    app:layout_anchor="@id/app_bar"-->
-    <!--    app:layout_anchorGravity="bottom|end"-->
-    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-    <!--        android:id="@+id/fab"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="bottom|end"-->
-    <!--        android:layout_margin="20dp"-->
-    <!--        android:backgroundTint="@color/classic_blue"-->
-    <!--        android:tint="@android:color/white"-->
-    <!--        app:backgroundTint="@color/classic_blue"-->
-    <!--        app:srcCompat="@drawable/ic_community" />-->
+    <!--        app:layout_anchor="@id/app_bar"-->
+    <!--        app:layout_anchorGravity="bottom|end"-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/classic_blue"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/classic_blue"
+        app:srcCompat="@drawable/ic_instagram" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

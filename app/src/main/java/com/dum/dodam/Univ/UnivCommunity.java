@@ -1,31 +1,29 @@
-package com.dum.dodam.Community;
+package com.dum.dodam.Univ;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dum.dodam.Community.dataframe.ArticleListFrame;
-import com.dum.dodam.Community.dataframe.ArticleListResponse;
+import com.dum.dodam.Community.ArticleWrite;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.RvItemDecoration;
+import com.dum.dodam.Univ.dataframe.UnivNewsFrame;
+import com.dum.dodam.Univ.dataframe.UnivNewsResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -33,62 +31,49 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+public class UnivCommunity extends Fragment {
 
-public class Community extends Fragment implements ArticleListAdapter.OnListItemSelectedInterface {
-
+    private static final String TAG = "RHC";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private static final String TAG = "RHC";
-    private int cnt_readArticleList = 0;
-    private int readArticleToggle = 0;
+    private ArrayList<UnivNewsFrame> list = new ArrayList<>();
 
-    private String community_name;
-    private int communityID;
+    private String lastNewsWrittenTime = "latest";
+    private int cnt_readNews = 0;
+    private int readNewsToggle = 0;
     private int communityType;
-    private String lastArticleWrittenString = "latest";
+    private int communityID;
 
     private UserJson user;
 
-    //    private ShimmerFrameLayout shimmerFrameLayout;
-    private ArrayList<ArticleListFrame> list = new ArrayList<>();
-
-    public static Community newInstance(int communityType, int communityID, String community_name) {
+    public static UnivCommunity newInstance(int communityType, int communityID) {
         Bundle args = new Bundle();
-        args.putString("community_name", community_name);
         args.putInt("communityType", communityType);
         args.putInt("communityID", communityID);
-        Community f = new Community();
+        UnivCommunity f = new UnivCommunity();
         f.setArguments(args);
         return f;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.article_list, container, false);
+        View view = inflater.inflate(R.layout.collage_community, container, false);
         view.setClickable(true);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
-            this.community_name = bundle.getString("community_name");
             this.communityType = bundle.getInt("communityType");
             this.communityID = bundle.getInt("communityID");
         }
 
         user = ((MainActivity) getActivity()).getUser();
 
-//        shimmerFrameLayout = view.findViewById(R.id.shimmerLayout);
-//        shimmerFrameLayout.startShimmer();
-
-        TextView title = (TextView) view.findViewById(R.id.tv_title);
-        title.setText(community_name + " 게시판");
-        ImageButton btn_write_article = (ImageButton) view.findViewById(R.id.btn_write_article);
-
-        btn_write_article.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (user.authorized.equals("0")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("게시 권한이 없습니다.");
@@ -104,19 +89,18 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
             }
         });
 
-        adapter = new ArticleListAdapter(getContext(), list, this);
-        if (list.size() == 0 && readArticleToggle == 0) {
-            readArticleList();
-            readArticleToggle = 1;
+        adapter = new UnivNewsAdapter(getContext(), list);
+        if (list.size() == 0 && readNewsToggle == 0) {
+            readUnivCommunity();
+            readNewsToggle = 1;
         }
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_articles);
-
-        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new RvItemDecoration(getContext()));
+        recyclerView.setHasFixedSize(true); //
 
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-
         recyclerView.setAdapter(adapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -127,7 +111,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
 
                 if ((lastVisibleItemPosition >= 15) && (curPosition >= lastVisibleItemPosition - 3)) {
-                    readArticleList();
+                    readUnivCommunity();
                 }
             }
         });
@@ -135,48 +119,34 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         return view;
     }
 
-    @Override
-    public void onDestroy() {
-        BottomNavigationView navigation = getActivity().findViewById(R.id.nav_bar);
-        View nav_view = getActivity().findViewById(R.id.nav_view);
-        nav_view.setVisibility(View.VISIBLE);
-        navigation.setVisibility(View.VISIBLE);
-        super.onDestroy();
-    }
-
-    public void readArticleList() {
+    public void readUnivCommunity() {
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
-
-        Call<ArticleListResponse> call = service.readArticleList(communityType, communityID, lastArticleWrittenString);
-
-        call.enqueue(new Callback<ArticleListResponse>() {
+        Call<UnivNewsResponse> call = service.readUnivCommunity(communityType, communityID, lastNewsWrittenTime);
+        call.enqueue(new Callback<UnivNewsResponse>() {
             @Override
-            public void onResponse(Call<ArticleListResponse> call, Response<ArticleListResponse> response) {
+            public void onResponse(Call<UnivNewsResponse> call, Response<UnivNewsResponse> response) {
                 if (response.isSuccessful()) {
-                    ArticleListResponse result = response.body();
+                    UnivNewsResponse result = response.body();
                     if (result.checkError(getActivity()) != 0) return;
-                    if (result.body.size() > 0) {
-                        ArticleListFrame lastArticle = result.body.get(result.body.size() - 1);
-                        lastArticleWrittenString = lastArticle.writtenTime;
-                    }
 
+                    if (result.body.size() > 0) {
+                        UnivNewsFrame lastArticle = result.body.get(result.body.size() - 1);
+                        lastNewsWrittenTime = lastArticle.writtenTime;
+                    }
                     list.addAll(result.body);
-//                    shimmerFrameLayout.stopShimmer();
-//                    shimmerFrameLayout.setVisibility(View.GONE);
                     adapter.notifyDataSetChanged();
-                    readArticleToggle = 0;
+                    readNewsToggle = 0;
                 } else {
-                    Toast.makeText(getContext(), "Upload Fail", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onResponse: Fail");
                 }
             }
 
             @Override
-            public void onFailure(Call<ArticleListResponse> call, Throwable t) {
+            public void onFailure(Call<UnivNewsResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
-                if (cnt_readArticleList < 5) readArticleList();
+                if (cnt_readNews < 5) readUnivCommunity();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
-                cnt_readArticleList++;
+                cnt_readNews++;
             }
         });
     }
@@ -184,19 +154,11 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     @Override
     public void onResume() {
         list.clear();
-        lastArticleWrittenString = "latest";
-        if (list.size() == 0 && readArticleToggle == 0) {
-            readArticleToggle = 1;
-            readArticleList();
+        lastNewsWrittenTime = "latest";
+        if (list.size() == 0 && readNewsToggle == 0) {
+            readNewsToggle = 1;
+            readUnivCommunity();
         }
         super.onResume();
-    }
-
-    @Override
-    public void onItemSelected(View v, int position) {
-        ArticleListAdapter.Holder holder = (ArticleListAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
-        String article_ID = holder.articleID.getText().toString();
-
-        ((MainActivity) getActivity()).replaceFragmentFull(Article.newInstance(Integer.parseInt(article_ID), communityType, communityID));
     }
 }
