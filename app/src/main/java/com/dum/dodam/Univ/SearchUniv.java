@@ -14,12 +14,13 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.dum.dodam.Univ.dataframe.UnivFrame;
-import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.Univ.dataframe.UnivFrame;
+import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 
@@ -77,6 +78,15 @@ public class SearchUniv extends Fragment {
                 search(text);
             }
         });
+
+        CardView cv_liveshow = (CardView) view.findViewById(R.id.cv_liveshow);
+        cv_liveshow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getActivity()).replaceFragmentFull(new LiveShow());
+            }
+        });
+
         return view;
     }
 
