@@ -17,11 +17,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.RvItemDecoration;
 import com.dum.dodam.Univ.dataframe.LiveShowFrame;
 import com.dum.dodam.Univ.dataframe.LiveShowResponse;
+import com.dum.dodam.Univ.dataframe.UnivFrame;
+import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,6 +44,7 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
     private String TAG = "RHC";
 
     private ArrayList<LiveShowFrame> list = new ArrayList<LiveShowFrame>();
+    private UnivFrame univ = new UnivFrame();
     private int cnt_readLiveShow = 0;
     private int added_heart = 0;
 
@@ -65,11 +70,10 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
             }
         });
 
-        adapter = new LiveShowAdapter(getContext(), list, this);
+        adapter = new LiveShowAdapter(getContext(), list, this, this);
 
-//        readLiveShowList();
+        readLiveShowList();
 
-        list.add(new LiveShowFrame("School", "Major", "content1", "content2", "content3", "time", "heart"));
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_liveshow);
         recyclerView.addItemDecoration(new RvItemDecoration(getContext()));
         recyclerView.setHasFixedSize(true);
@@ -84,7 +88,7 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
 
     public void readLiveShowList() {
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
-        Call<LiveShowResponse> call = service.readLiveShowList();
+        Call<LiveShowResponse> call = service.readLiveShowList("latest");
         call.enqueue(new Callback<LiveShowResponse>() {
             @Override
             public void onResponse(Call<LiveShowResponse> call, Response<LiveShowResponse> response) {
@@ -149,5 +153,42 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
 //                Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
 //            }
 //        });
+    }
+
+    @Override
+    public void onItemSelected2(View v, int position) {
+        LiveShowAdapter.Holder holder = (LiveShowAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
+
+        search(holder.school.getText().toString());
+    }
+
+    public void search(String query) {
+        list.clear();
+        if (query.equals("")) {
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        RetrofitAdapter rAdapter = new RetrofitAdapter();
+        RetrofitService service = rAdapter.getInstance(getActivity());
+        Call<UnivResponse> call = service.searchCollageName(query);
+
+        call.enqueue(new retrofit2.Callback<UnivResponse>() {
+            @Override
+            public void onResponse(Call<UnivResponse> call, retrofit2.Response<UnivResponse> response) {
+                if (response.isSuccessful()) {
+                    UnivResponse result = response.body();
+                    univ = result.body.get(0);
+                    ((MainActivity) getActivity()).replaceFragmentFull(new Univ(univ));
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UnivResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
     }
 }

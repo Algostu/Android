@@ -20,8 +20,8 @@ public class UnivViewPageAdapter extends FragmentStatePagerAdapter {
 
     public UnivViewPageAdapter(@NonNull FragmentManager fm, UnivFrame univ) {
         super(fm);
-        fragments.add(UnivNews.newInstance(0, 1));
-        fragments.add(UnivCommunity.newInstance(0, 2));
+        fragments.add(UnivNews.newInstance(univ.univID));
+        fragments.add(UnivCommunity.newInstance(univ.univID));
     }
 
     @Nullable

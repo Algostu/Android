@@ -55,10 +55,7 @@ public class ArticleWrite extends Fragment {
     private EditText et_content;
     private ImageButton btn_upload_article;
 
-    private UserJson user;
-
-
-    InputMethodManager imm;
+    private InputMethodManager imm;
 
     public ArticleWrite(int communityType, int communityID) {
         this.communityID = communityID;
@@ -71,7 +68,6 @@ public class ArticleWrite extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-        user = ((MainActivity) getActivity()).getUser();
 
         View view = inflater.inflate(R.layout.article_write, container, false);
         view.setClickable(true);

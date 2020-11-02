@@ -102,8 +102,6 @@ public class Univ extends Fragment {
             }
         });
 
-        tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);
-
         pager = (ViewPager) view.findViewById(R.id.pager);
         viewPageAdapter = new UnivViewPageAdapter(getChildFragmentManager(), univ);
         pager.setAdapter(viewPageAdapter);

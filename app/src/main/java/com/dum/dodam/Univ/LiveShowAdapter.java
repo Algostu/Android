@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.R;
@@ -19,11 +21,13 @@ public class LiveShowAdapter extends RecyclerView.Adapter<LiveShowAdapter.Holder
     private ArrayList<LiveShowFrame> list = new ArrayList<LiveShowFrame>();
     private Context context;
     private LiveShowAdapter.OnListItemSelectedInterface mListener;
+    private LiveShowAdapter.OnListItemSelectedInterface mListener2;
 
-    public LiveShowAdapter(Context context, ArrayList<LiveShowFrame> list, LiveShowAdapter.OnListItemSelectedInterface listener) {
+    public LiveShowAdapter(Context context, ArrayList<LiveShowFrame> list, LiveShowAdapter.OnListItemSelectedInterface listener, LiveShowAdapter.OnListItemSelectedInterface listener2) {
         this.context = context;
         this.list = list;
         this.mListener = listener;
+        this.mListener2 = listener2;
     }
 
     @NonNull
@@ -48,8 +52,13 @@ public class LiveShowAdapter extends RecyclerView.Adapter<LiveShowAdapter.Holder
         protected TextView time;
         protected TextView heart;
         protected ImageView heart_ic;
+        protected CardView cv_liveshow;
 
-        public Holder(View view) {
+        protected int univID;
+        protected int liveShowID;
+        protected int userID;
+
+        public Holder(final View view) {
             super(view);
             this.school = (TextView) view.findViewById(R.id.school);
             this.major = (TextView) view.findViewById(R.id.major);
@@ -59,6 +68,7 @@ public class LiveShowAdapter extends RecyclerView.Adapter<LiveShowAdapter.Holder
             this.time = (TextView) view.findViewById(R.id.time);
             this.heart = (TextView) view.findViewById(R.id.heart);
             this.heart_ic = (ImageView) view.findViewById(R.id.icon_heart);
+            this.cv_liveshow = (CardView) view.findViewById(R.id.cv_liveshow);
 
             heart_ic.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -66,23 +76,40 @@ public class LiveShowAdapter extends RecyclerView.Adapter<LiveShowAdapter.Holder
                     mListener.onItemSelected(view, getAdapterPosition());
                 }
             });
+
+            cv_liveshow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener2.onItemSelected2(view, getAdapterPosition());
+                }
+            });
+
+
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull LiveShowAdapter.Holder holder, final int position) {
-        holder.school.setText(list.get(position).school);
+        String[] contents = list.get(position).content.split("\n");
+
+        holder.school.setText(list.get(position).univTitle);
         holder.major.setText(list.get(position).major);
-        holder.content1.setText(list.get(position).content1);
-        holder.content2.setText(list.get(position).content2);
-        holder.content3.setText(list.get(position).content3);
-        holder.time.setText(list.get(position).time);
+        holder.content1.setText(contents[0].trim());
+        holder.content2.setText(contents[1].trim());
+        holder.content3.setText(contents[2].trim());
+        holder.time.setText(list.get(position).writtenTime);
         holder.heart.setText(list.get(position).heart);
+
+        holder.univID = list.get(position).univID;
+        holder.liveShowID = list.get(position).liveShowID;
+        holder.userID = list.get(position).userID;
 
         holder.itemView.setTag(position);
     }
 
     public interface OnListItemSelectedInterface {
         void onItemSelected(View v, int position);
+
+        void onItemSelected2(View v, int position);
     }
 }
