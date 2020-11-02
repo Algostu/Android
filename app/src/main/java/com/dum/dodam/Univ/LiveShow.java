@@ -51,7 +51,7 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.collage_liveshow, container, false);
+        View view = inflater.inflate(R.layout.univ_liveshow, container, false);
         view.setClickable(true);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);

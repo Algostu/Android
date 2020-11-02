@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dum.dodam.Community.ArticleListAdapter;
 import com.dum.dodam.Univ.dataframe.UnivArticleFrame;
 import com.dum.dodam.Community.TIME_MAXIMUM;
 import com.dum.dodam.R;
@@ -33,7 +32,7 @@ public class UnivNewsAdapter extends RecyclerView.Adapter<UnivNewsAdapter.Holder
     @NonNull
     @Override
     public UnivNewsAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.collage_news_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.univ_news_card, parent, false);
         Holder holder = new Holder(view);
         return holder;
     }

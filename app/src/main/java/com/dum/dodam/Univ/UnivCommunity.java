@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Community.Article;
-import com.dum.dodam.Community.ArticleListAdapter;
 import com.dum.dodam.Community.ArticleWrite;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
@@ -59,7 +58,7 @@ public class UnivCommunity extends Fragment implements UnivCommunityAdapter.OnLi
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.collage_community, container, false);
+        View view = inflater.inflate(R.layout.univ_community, container, false);
         view.setClickable(true);
 
         Bundle bundle = getArguments();

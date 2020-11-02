@@ -53,7 +53,7 @@ public class Univ extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.collage_page, container, false);
+        View view = inflater.inflate(R.layout.univ_page, container, false);
         view.setClickable(true);
 
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);

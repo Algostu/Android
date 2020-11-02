@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.R;
@@ -33,7 +32,7 @@ public class LiveShowAdapter extends RecyclerView.Adapter<LiveShowAdapter.Holder
     @NonNull
     @Override
     public LiveShowAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.collage_liveshow_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.univ_liveshow_card, parent, false);
         Holder holder = new Holder(view);
         return holder;
     }

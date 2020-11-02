@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dum.dodam.Community.ArticleListAdapter;
 import com.dum.dodam.R;
 import com.dum.dodam.RvItemDecoration;
 import com.dum.dodam.Univ.dataframe.UnivArticleFrame;
@@ -50,7 +49,7 @@ public class UnivNews extends Fragment implements UnivNewsAdapter.OnListItemSele
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.collage_news, container, false);
+        View view = inflater.inflate(R.layout.univ_news, container, false);
         view.setClickable(true);
 
         Bundle bundle = getArguments();

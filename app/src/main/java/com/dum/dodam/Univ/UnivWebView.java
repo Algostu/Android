@@ -25,7 +25,7 @@ public class UnivWebView extends Fragment {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.collage_webview, container, false);
+        View view = inflater.inflate(R.layout.univ_webview, container, false);
         view.setClickable(true);
 
         mWebView = (WebView) view.findViewById(R.id.webview);
