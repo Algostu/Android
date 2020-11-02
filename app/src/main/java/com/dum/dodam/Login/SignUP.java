@@ -272,8 +272,9 @@ public class SignUP extends Fragment {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkBox1.isChecked() && checkBox2.isChecked() && checkBox3.isChecked())
+                if (checkBox1.isChecked() && checkBox2.isChecked() && checkBox3.isChecked()){
                     ((startUpActivity) getActivity()).replaceFragment(new SIgnUP2());
+                }
                 else {
                     Toast.makeText(getContext(), "필수 약관에 동의해야지만 가입할 수 있습니다.", Toast.LENGTH_LONG).show();
                 }

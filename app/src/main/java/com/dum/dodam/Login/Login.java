@@ -223,12 +223,12 @@ public class Login extends Fragment {
 
                             // debug
                             Log.i("KAKAO_API", "사용자 아이디: " + userID);
-                            Log.i("KAKAO_API", "사용자 나이: " + ageRange.getValue());
-                            Log.i("KAKAO_API", "사용자 이메일: " + email);
-                            Log.i("KAKAO_API", "사용자 성별: " + gender.getValue());
-                            Log.i("KAKAO_API", "사용자 토큰: " + accessToken);
-                            Log.i("KAKAO_API", "사용자 토큰 만료 시간: " + expTime);
-                            Log.i("KAKAO_API", "사용자 현재 시간: " + date.getTime());
+//                            Log.i("KAKAO_API", "사용자 나이: " + ageRange.getValue());
+//                            Log.i("KAKAO_API", "사용자 이메일: " + email);
+//                            Log.i("KAKAO_API", "사용자 성별: " + gender.getValue());
+//                            Log.i("KAKAO_API", "사용자 토큰: " + accessToken);
+//                            Log.i("KAKAO_API", "사용자 토큰 만료 시간: " + expTime);
+//                            Log.i("KAKAO_API", "사용자 현재 시간: " + date.getTime());
 
                             // 이메일
                             if (kakaoAccount == null) {
@@ -242,10 +242,18 @@ public class Login extends Fragment {
                                     return;
                                 }
                             }
-                            // 성별
-                            if (gender == null) {
-                                Toast.makeText(getActivity(), "성별 정보를 제공해주셔야 합니다.", Toast.LENGTH_SHORT).show();
+
+                            String genderStr;
+                            String ageStr;
+                            // 성별 또는 나이 정보가 누락된 경우
+                            if (gender == null || ageRange == null) {
+//                                Toast.makeText(getActivity(), "성별 정보 또는 나이정보가 누락되었습니다.", Toast.LENGTH_SHORT).show();
+                                ageStr = genderStr = "";
+                            } else {
+                                genderStr = kakaoAccount.getGender().getValue();
+                                ageStr = kakaoAccount.getAgeRange().getValue();
                             }
+
                             // 탈퇴
                             if(scene == 2){
                                 kakaoID = (int)userID;
@@ -254,7 +262,7 @@ public class Login extends Fragment {
                             }
                             // 가입 혹은 로그인
                             ((startUpActivity) getActivity()).user = new UserInfo(userID, accessToken, kakaoAccount.getEmail()
-                                    , kakaoAccount.getGender().getValue(), kakaoAccount.getAgeRange().getValue(), expTime);
+                                    , genderStr, ageStr, expTime);
                             ((startUpActivity) getActivity()).login(userID, accessToken);
                         }
                     });

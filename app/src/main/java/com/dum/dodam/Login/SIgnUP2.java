@@ -71,12 +71,16 @@ public class SIgnUP2 extends Fragment {
     private TextView nickNameOkay;
     private TextView selectedSchool;
     private Spinner gradeSpinner;
+    private Spinner genderSpinner;
+    private Spinner ageSpinner;
     private School school;
     private Button submit;
     private ImageView studentCard;
     private ImageView loadingView;
     private EditText userName;
 
+    private int isGender;
+    private int isAge;
     private int grade;
     private boolean nickNamePossibleNot;
 
@@ -136,6 +140,59 @@ public class SIgnUP2 extends Fragment {
 
             }
         });
+
+        isGender = 0;
+        genderSpinner = view.findViewById(R.id.gender);
+        if (((startUpActivity) getActivity()).user.gender.equals("")==false) {
+            genderSpinner.setEnabled(false);
+            isGender = 1;
+        }
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                isGender = 1;
+                if (i == 1){
+                    ((startUpActivity) getActivity()).user.gender = "male";
+                } else if(i==2) {
+                    ((startUpActivity) getActivity()).user.gender = "female";
+                } else {
+                    ((startUpActivity) getActivity()).user.gender = "";
+                    isGender = 0;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        isAge = 0;
+        ageSpinner = view.findViewById(R.id.age);
+        if (((startUpActivity) getActivity()).user.ageRange.equals("")==false) {
+            ageSpinner.setEnabled(false);
+            isAge = 1;
+        }
+        ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                isAge = 1;
+                if (i == 1){
+                    ((startUpActivity) getActivity()).user.ageRange = "14~19";
+                } else if(i==2) {
+                    ((startUpActivity) getActivity()).user.ageRange = "20~29";
+                } else {
+                    ((startUpActivity) getActivity()).user.ageRange = "";
+                    isAge = 0;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         selectedSchool = view.findViewById(R.id.selected_school);
         editSearch = view.findViewById(R.id.editSearch);
         listView = view.findViewById(R.id.listView);
@@ -206,10 +263,15 @@ public class SIgnUP2 extends Fragment {
                     Toast.makeText(getActivity(), "학교를 선택해 주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (user.gender == null || user.ageRange == null){
+                    Toast.makeText(getActivity(), "성별과 나이 정보가 입력되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!school.is_okay_to_enroll(user.gender)) {
                     Toast.makeText(getActivity(), "성별이 다른 학교 입니다. 학교를 다시 선택해 주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
 
                 final JsonObject paramObject = new JsonObject();
                 paramObject.addProperty("schoolID", school.schoolID);
