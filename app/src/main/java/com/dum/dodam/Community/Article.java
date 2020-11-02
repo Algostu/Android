@@ -433,8 +433,8 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
                 break;
             case android.R.id.home:
                 //select back button
-                getActivity().getSupportFragmentManager().popBackStack();
-                break;
+                getActivity().onBackPressed();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
