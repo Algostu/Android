@@ -11,7 +11,7 @@ import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.School.dataframe.LunchResponse;
 import com.dum.dodam.Univ.dataframe.LiveShowResponse;
 import com.dum.dodam.Univ.dataframe.UnivLogoResponse;
-import com.dum.dodam.Univ.dataframe.UnivNewsResponse;
+import com.dum.dodam.Univ.dataframe.UnivArticleResponse;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.google.gson.JsonObject;
 
@@ -86,12 +86,12 @@ public interface RetrofitService {
     Call<ContestListResponse> getContestList(@Query("version") int version);
 
     @GET("/article/articleList")
-    Call<UnivNewsResponse> readUnivNews(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
+    Call<UnivArticleResponse> readUnivNews(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
 
     @GET("/article/articleList")
-    Call<UnivNewsResponse> readUnivCommunity(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
+    Call<UnivArticleResponse> readUnivCommunity(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
 
-    @GET("/article/articleList")
-    Call<LiveShowResponse> readLiveShowList();
+    @GET("/univ/liveShowList")
+    Call<LiveShowResponse> readLiveShowList(@Query("writtenAfter") String writtenAfter);
 
 }

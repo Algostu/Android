@@ -181,7 +181,7 @@ public class School extends Fragment {
                     int before_index = 0;
                     try {
                         for (LunchFrame item : curMonth) {
-                            Log.d("dodam", "data" + item.date);
+                            Log.d("dodam", "date" + item.date);
                             Log.d("dodam", "week" + item.week);
                             Log.d("dodam", "week_day" + item.week_day);
                             index = Math.round(Float.parseFloat(item.week)) - 1;

@@ -45,7 +45,7 @@ public class UnivSearchAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         if (convertView == null) {
-            convertView = inflate.inflate(R.layout.collage_search_card, null);
+            convertView = inflate.inflate(R.layout.univ_search_card, null);
             viewHolder = new UnivSearchAdapter.ViewHolder();
             viewHolder.collage_name = (TextView) convertView.findViewById(R.id.collage_name);
             viewHolder.collage_logo = (ImageView) convertView.findViewById(R.id.collage_logo);

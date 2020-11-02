@@ -14,12 +14,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.Login.startUpActivity;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.w3c.dom.Text;
 
@@ -41,7 +44,8 @@ public class Mypage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.mypage, container, false);
+        final View view = inflater.inflate(R.layout.mypage, container, false);
+        view.setClickable(true);
 
         user = ((MainActivity) getActivity()).getUser();
 
@@ -176,6 +180,29 @@ public class Mypage extends Fragment {
                             }
                         });
                 builder.show();
+            }
+        });
+
+        TextView mypage_title = (TextView) view.findViewById(R.id.mypage_title);
+        mypage_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n확인을 누르면 사라집니다.", Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("확인", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                    }
+                });
+                snackbar.show();
+            }
+        });
+
+        userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n잠시 후 사라집니다.", Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
 

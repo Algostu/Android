@@ -15,13 +15,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.ArticleWrite;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.RvItemDecoration;
-import com.dum.dodam.Univ.dataframe.UnivNewsFrame;
-import com.dum.dodam.Univ.dataframe.UnivNewsResponse;
+import com.dum.dodam.Univ.dataframe.UnivArticleFrame;
+import com.dum.dodam.Univ.dataframe.UnivArticleResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -31,26 +32,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UnivCommunity extends Fragment {
+public class UnivCommunity extends Fragment implements UnivCommunityAdapter.OnListItemSelectedInterface {
 
     private static final String TAG = "RHC";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<UnivNewsFrame> list = new ArrayList<>();
+    private ArrayList<UnivArticleFrame> list = new ArrayList<>();
 
     private String lastNewsWrittenTime = "latest";
     private int cnt_readNews = 0;
     private int readNewsToggle = 0;
-    private int communityType;
-    private int communityID;
+    private int univID;
 
     private UserJson user;
 
-    public static UnivCommunity newInstance(int communityType, int communityID) {
+    public static UnivCommunity newInstance(int univID) {
         Bundle args = new Bundle();
-        args.putInt("communityType", communityType);
-        args.putInt("communityID", communityID);
+        args.putInt("univID", univID);
         UnivCommunity f = new UnivCommunity();
         f.setArguments(args);
         return f;
@@ -59,13 +58,12 @@ public class UnivCommunity extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.collage_community, container, false);
+        View view = inflater.inflate(R.layout.univ_community, container, false);
         view.setClickable(true);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            this.communityType = bundle.getInt("communityType");
-            this.communityID = bundle.getInt("communityID");
+            this.univID = bundle.getInt("univID");
         }
 
         user = ((MainActivity) getActivity()).getUser();
@@ -84,12 +82,12 @@ public class UnivCommunity extends Fragment {
                     });
                     builder.show();
                 } else {
-                    ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(communityType, communityID));
+                    ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(0, univID * 10 + 1));
                 }
             }
         });
 
-        adapter = new UnivNewsAdapter(getContext(), list);
+        adapter = new UnivCommunityAdapter(getContext(), list, this);
         if (list.size() == 0 && readNewsToggle == 0) {
             readUnivCommunity();
             readNewsToggle = 1;
@@ -121,28 +119,28 @@ public class UnivCommunity extends Fragment {
 
     public void readUnivCommunity() {
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
-        Call<UnivNewsResponse> call = service.readUnivCommunity(communityType, communityID, lastNewsWrittenTime);
-        call.enqueue(new Callback<UnivNewsResponse>() {
+        Call<UnivArticleResponse> call = service.readUnivCommunity(0, univID * 10 + 1, lastNewsWrittenTime);
+        call.enqueue(new Callback<UnivArticleResponse>() {
             @Override
-            public void onResponse(Call<UnivNewsResponse> call, Response<UnivNewsResponse> response) {
+            public void onResponse(Call<UnivArticleResponse> call, Response<UnivArticleResponse> response) {
                 if (response.isSuccessful()) {
-                    UnivNewsResponse result = response.body();
+                    UnivArticleResponse result = response.body();
                     if (result.checkError(getActivity()) != 0) return;
 
                     if (result.body.size() > 0) {
-                        UnivNewsFrame lastArticle = result.body.get(result.body.size() - 1);
+                        UnivArticleFrame lastArticle = result.body.get(result.body.size() - 1);
                         lastNewsWrittenTime = lastArticle.writtenTime;
                     }
                     list.addAll(result.body);
                     adapter.notifyDataSetChanged();
                     readNewsToggle = 0;
                 } else {
-                    Log.d(TAG, "onResponse: Fail");
+                    Log.d(TAG, "onResponse readUnivCommunity: Fail");
                 }
             }
 
             @Override
-            public void onFailure(Call<UnivNewsResponse> call, Throwable t) {
+            public void onFailure(Call<UnivArticleResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 if (cnt_readNews < 5) readUnivCommunity();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
@@ -160,5 +158,13 @@ public class UnivCommunity extends Fragment {
             readUnivCommunity();
         }
         super.onResume();
+    }
+
+    @Override
+    public void onItemSelected(View v, int position) {
+        UnivCommunityAdapter.Holder holder = (UnivCommunityAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
+        String article_ID = holder.articleID.getText().toString();
+
+        ((MainActivity) getActivity()).replaceFragmentFull(Article.newInstance(Integer.parseInt(article_ID), 0, univID * 10 + 1));
     }
 }
