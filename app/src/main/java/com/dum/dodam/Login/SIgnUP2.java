@@ -146,52 +146,56 @@ public class SIgnUP2 extends Fragment {
         if (((startUpActivity) getActivity()).user.gender.equals("")==false) {
             genderSpinner.setEnabled(false);
             isGender = 1;
-        }
-        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                isGender = 1;
-                if (i == 1){
-                    ((startUpActivity) getActivity()).user.gender = "male";
-                } else if(i==2) {
-                    ((startUpActivity) getActivity()).user.gender = "female";
-                } else {
-                    ((startUpActivity) getActivity()).user.gender = "";
-                    isGender = 0;
+        } else {
+            genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    isGender = 1;
+                    if (i == 1){
+                        ((startUpActivity) getActivity()).user.gender = "male";
+                    } else if(i==2) {
+                        ((startUpActivity) getActivity()).user.gender = "female";
+                    } else {
+                        ((startUpActivity) getActivity()).user.gender = "";
+                        isGender = 0;
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
+                }
+            });
+        }
+
 
         isAge = 0;
         ageSpinner = view.findViewById(R.id.age);
         if (((startUpActivity) getActivity()).user.ageRange.equals("")==false) {
             ageSpinner.setEnabled(false);
             isAge = 1;
-        }
-        ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                isAge = 1;
-                if (i == 1){
-                    ((startUpActivity) getActivity()).user.ageRange = "14~19";
-                } else if(i==2) {
-                    ((startUpActivity) getActivity()).user.ageRange = "20~29";
-                } else {
-                    ((startUpActivity) getActivity()).user.ageRange = "";
-                    isAge = 0;
+        } else {
+            ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    isAge = 1;
+                    if (i == 1){
+                        ((startUpActivity) getActivity()).user.ageRange = "14~19";
+                    } else if(i==2) {
+                        ((startUpActivity) getActivity()).user.ageRange = "20~29";
+                    } else {
+                        ((startUpActivity) getActivity()).user.ageRange = "";
+                        isAge = 0;
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
+                }
+            });
+        }
+
 
         selectedSchool = view.findViewById(R.id.selected_school);
         editSearch = view.findViewById(R.id.editSearch);
