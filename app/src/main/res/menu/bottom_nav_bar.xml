@@ -10,8 +10,8 @@
     <item
         android:id="@+id/item_school"
         android:enabled="true"
-        android:icon="@drawable/ic_fork"
-        android:title="급식" />
+        android:icon="@drawable/ic_calendar"
+        android:title="스케줄러" />
 
     <item
         android:id="@+id/item_community"
