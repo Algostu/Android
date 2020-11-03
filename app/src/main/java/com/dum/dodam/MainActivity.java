@@ -7,9 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,12 +24,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.dum.dodam.Alarm.AlarmTab;
 import com.dum.dodam.Alarm.Data.AlarmData;
 import com.dum.dodam.Community.Article;
-import com.dum.dodam.Univ.SearchUniv;
 import com.dum.dodam.Community.CommunityList;
 import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.School.School;
+import com.dum.dodam.Univ.SearchUniv;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
@@ -75,6 +78,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        View view = getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getWindow().setStatusBarColor(Color.parseColor("#f2f2f2"));
+            }
+        }else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            getWindow().setStatusBarColor(Color.BLACK);
+        }
+
         Log.d("debug", "hello my mainActivity");
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPref = getSharedPreferences(
@@ -135,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             navigation.setSelectedItemId(R.id.item_mypage);
             // Notification 제거
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(intent.getIntExtra("notifyID", 0));
+            notificationManager.cancelAll();
         } else {
             navigation.setSelectedItemId(R.id.item_home);
         }

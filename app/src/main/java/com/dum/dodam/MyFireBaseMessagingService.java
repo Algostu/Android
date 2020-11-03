@@ -23,13 +23,15 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Random;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
     String json;
     ArrayList<AlarmData> alarmDataArr;
     AlarmData alarmData;
-    int notifyID = 2;
+    Random rnd = new Random();
+    int notifyID = rnd.nextInt(100);
     String id = "my_channel_02";
     CharSequence name = "fcm_nt";
     String description = "push";
@@ -99,7 +101,6 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         mNotificationManager.createNotificationChannel(mChannel);
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notifyID = 2;
         String CHANNEL_ID = "my_channel_02";
 
         try {

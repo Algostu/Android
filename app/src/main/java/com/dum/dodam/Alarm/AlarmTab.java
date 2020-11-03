@@ -51,6 +51,7 @@ public class AlarmTab extends Fragment {
         actionbar.setDisplayShowCustomEnabled(true);
         actionbar.setDisplayShowTitleEnabled(false);//기본 제목을 없애줍니다.
         actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setDisplayHomeAsUpEnabled(false);
 
         return view;
     }
