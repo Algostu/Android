@@ -55,7 +55,6 @@
             app:tabBackground="@color/white_gray"
             app:tabGravity="center"
             app:tabMode="fixed" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <!--    <include layout="@layout/content_scrolling" />-->
@@ -78,5 +77,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
