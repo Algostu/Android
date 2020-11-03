@@ -1,9 +1,6 @@
 package com.dum.dodam.Community;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,23 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.dum.dodam.Login.Data.UserJson;
-import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -68,7 +56,6 @@ public class ArticleWrite extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-
         View view = inflater.inflate(R.layout.article_write, container, false);
         view.setClickable(true);
 

@@ -39,17 +39,18 @@
 
     <!--    <include layout="@layout/content_scrolling" />-->
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_liveshow"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
+        android:layout_height="match_parent"
         android:overScrollMode="never"
         android:scrollbarFadeDuration="0"
         android:scrollbarSize="5dp"
         android:scrollbarThumbVertical="@android:color/darker_gray"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
     <!--        app:layout_anchor="@id/app_bar"-->
     <!--        app:layout_anchorGravity="bottom|end"-->

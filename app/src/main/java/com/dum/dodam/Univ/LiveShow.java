@@ -1,6 +1,7 @@
 package com.dum.dodam.Univ;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,6 +61,9 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle("라이브 쇼");
         toolbar.setSubtitle("대학생의 생생한 경험담을 듣고싶다면?!");
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.title);
+        toolBarLayout.setCollapsedTitleTypeface(typeface);
+        toolBarLayout.setExpandedTitleTypeface(typeface);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

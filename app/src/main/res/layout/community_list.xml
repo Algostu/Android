@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/font_hello_title"
+        android:fontFamily="@font/title"
         android:text="게시판 모음"
         android:textSize="23sp"
         android:textStyle="bold"
@@ -69,10 +69,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:shadowColor="@color/classic_blue"
                 android:text="교내 게시판"
                 android:textAlignment="center"
-                android:textSize="23sp"
+                android:textColor="@color/classic_blue"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -131,10 +131,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:shadowColor="@color/classic_blue"
                 android:text="동네 게시판"
                 android:textAlignment="center"
-                android:textSize="23sp"
+                android:textColor="@color/classic_blue"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -208,10 +208,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:shadowColor="@color/classic_blue"
                 android:text="입시 게시판"
                 android:textAlignment="center"
-                android:textSize="23sp"
+                android:textColor="@color/classic_blue"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout

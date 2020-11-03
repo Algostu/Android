@@ -12,7 +12,6 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/classic_blue"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -33,7 +32,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginVertical="5dp"
-                        android:fontFamily="@font/font_hello_title"
+                        android:fontFamily="@font/title"
                         android:gravity="center_horizontal|left"
                         android:text="알림"
                         android:textSize="23sp" />
@@ -43,15 +42,12 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
+            style="@style/AppTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/background_light"
             android:elevation="1dp"
-            app:tabBackground="@color/white_gray"
             app:tabGravity="fill"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@color/classic_blue" />
+            app:tabMode="fixed"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager

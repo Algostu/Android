@@ -1,8 +1,8 @@
 package com.dum.dodam.Univ;
 
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -28,7 +29,6 @@ import com.dum.dodam.Univ.dataframe.UnivLogoFrame;
 import com.dum.dodam.Univ.dataframe.UnivLogoResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 
@@ -45,7 +45,7 @@ public class Univ extends Fragment {
     private ViewPager pager;
     private UnivViewPageAdapter viewPageAdapter;
     private CollapsingToolbarLayout toolBarLayout;
-    private AppBarLayout appBarLayout;
+    //    private AppBarLayout appBarLayout;
     private Toolbar toolbar;
 
     public Univ(UnivFrame univ) {
@@ -63,29 +63,29 @@ public class Univ extends Fragment {
         toolBarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(univ.univName);
 
-        tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);
-        appBarLayout = (AppBarLayout) view.findViewById(R.id.app_bar);
-        if (univ.univName.equals("아주대학교")) {
-            appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-                int scrollRange = -1;
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.title);
+        toolBarLayout.setCollapsedTitleTypeface(typeface);
+        toolBarLayout.setExpandedTitleTypeface(typeface);
 
-                @Override
-                public void onOffsetChanged(final AppBarLayout appBarLayout, int verticalOffset) {
-                    //Initialize the size of the scroll
-                    if (scrollRange == -1) {
-                        scrollRange = appBarLayout.getTotalScrollRange();
-                    }
-                    //Check if the view is collapsed
-                    if (scrollRange + verticalOffset == 0) {
-                        tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.classic_blue));
-                        tab_layout.setTabTextColors(ColorStateList.valueOf(getResources().getColor(R.color.white)));
-                    } else {
-                        tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
-                    }
-                }
-            });
-        }
-
+//        appBarLayout = (AppBarLayout) view.findViewById(R.id.app_bar);
+//        appbar가 접히는지에 따른 이벤트 발생
+//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            int scrollRange = -1;
+//
+//            @Override
+//            public void onOffsetChanged(final AppBarLayout appBarLayout, int verticalOffset) {
+//                //Initialize the size of the scroll
+//                if (scrollRange == -1) {
+//                    scrollRange = appBarLayout.getTotalScrollRange();
+//                }
+//                //Check if the view is collapsed
+//                if (scrollRange + verticalOffset == 0) {
+//                    tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
+//                } else {
+//                    tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+//                }
+//            }
+//        });
 
         iv_univ_bg = view.findViewById(R.id.iv_univ_bg);
 //      Temp Color
@@ -93,9 +93,6 @@ public class Univ extends Fragment {
             iv_univ_bg.setImageResource(R.drawable.ajou_univ);
             Drawable alpha = iv_univ_bg.getDrawable();
             alpha.setAlpha(150);
-        } else {
-            iv_univ_bg.setImageResource(R.color.classic_blue);
-            tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.classic_blue));
         }
 //        getUnivLogo(univ.univID);
 
@@ -111,6 +108,8 @@ public class Univ extends Fragment {
         viewPageAdapter = new UnivViewPageAdapter(getChildFragmentManager(), univ);
         pager.setAdapter(viewPageAdapter);
 
+        tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);
+        tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
         tab_layout.setupWithViewPager(pager);
 //        tab_layout.getTabAt(0).setIcon(R.drawable.ic_add_photo);
 
