@@ -60,9 +60,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
-        android:backgroundTint="@color/classic_blue"
+        android:backgroundTint="@color/saffron"
         android:tint="@android:color/white"
-        app:backgroundTint="@color/classic_blue"
+        app:backgroundTint="@color/saffron"
         app:srcCompat="@drawable/ic_instagram" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

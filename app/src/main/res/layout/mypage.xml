@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <!-- guide line -->
     <androidx.constraintlayout.widget.Guideline
@@ -22,21 +22,15 @@
         app:layout_constraintGuide_end="15dp" />
 
     <!--  title background  -->
-    <TextView
-        android:id="@+id/title_bg"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/classic_blue"
-        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/mypage_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/title"
         android:text="마이 페이지"
-        android:textColor="#FFFFFF"
-        android:textSize="25dp"
+        android:textSize="23sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/gd_left"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,7 +42,8 @@
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_unicorn_17"
-        app:layout_constraintTop_toBottomOf="@id/title_bg"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintTop_toBottomOf="@id/mypage_title"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -60,7 +55,7 @@
         android:text="Name"
         android:textSize="20dp"
         app:layout_constraintLeft_toRightOf="@id/profile_icon"
-        app:layout_constraintTop_toBottomOf="@id/title_bg" />
+        app:layout_constraintTop_toBottomOf="@id/mypage_title" />
 
     <TextView
         android:id="@+id/mail_address"
@@ -81,7 +76,7 @@
         android:layout_marginRight="20dp"
         android:src="@drawable/ic_unconfirm"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bg" />
+        app:layout_constraintTop_toBottomOf="@id/mypage_title" />
 
     <View
         android:id="@+id/line"
