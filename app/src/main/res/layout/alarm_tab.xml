@@ -21,11 +21,11 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+                    android:id="@+id/toolbar2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_collapseMode="pin"
-                    app:menu="@menu/option_menu">
+                    app:menu="@menu/option_alarm_menu">
 
                     <TextView
                         android:id="@+id/tab_title"

@@ -1,18 +1,24 @@
 package com.dum.dodam.Alarm.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Alarm.Data.AlarmData;
 import com.dum.dodam.Community.TIME_MAXIMUM;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
+import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 
 import java.text.ParseException;
@@ -55,24 +61,49 @@ public class alarmAdapter extends RecyclerView.Adapter<alarmAdapter.Holder> {
         return (null != list ? list.size() : 0);
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends RecyclerView.ViewHolder{
         protected TextView title;
         protected TextView content;
         protected TextView time;
+        protected ConstraintLayout bg;
 
         public Holder(View view) {
             super(view);
             this.title = (TextView) view.findViewById(R.id.title);
             this.content = (TextView) view.findViewById(R.id.content);
             this.time = (TextView) view.findViewById(R.id.time);
+            this.bg = (ConstraintLayout) view.findViewById(R.id.comment);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    bg.setBackgroundColor(Color.parseColor("#FFFFFF"));
                     mListener.onItemSelected(v, getAdapterPosition());
                 }
             });
+
+            view.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View v){
+                    Log.d("hello", "long clicked");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("삭제알림");
+                    builder.setMessage("알림을 삭제 하시겠습니까?");
+                    builder.setPositiveButton("확인",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    int position = getAdapterPosition();
+                                    ((MainActivity)context).deleteAlarm(list, position);
+                                    notifyItemRemoved(position);
+                                }
+                            });
+                    builder.show();
+                    return true;
+                }
+            });
+
         }
+
     }
 
     @Override
@@ -103,6 +134,13 @@ public class alarmAdapter extends RecyclerView.Adapter<alarmAdapter.Holder> {
         int lastIndex = content.length() > 15 ? 15 : content.length();
         holder.content.setText(list.get(position).title + " : " + content.substring(0, lastIndex));
         holder.itemView.setTag(position);
+
+//        배경색
+        if(list.get(position).read == 0){
+            holder.bg.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        } else {
+            holder.bg.setBackgroundColor(Color.parseColor("#FCEDD4"));
+        }
 
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

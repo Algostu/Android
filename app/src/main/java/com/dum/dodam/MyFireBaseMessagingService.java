@@ -81,6 +81,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         // 새로운 알람 추가 (맨 앞에)
         alarmData = gson.fromJson(messageBody, AlarmData.class);
         alarmData.title = messageTitle;
+        alarmData.read = 1;
         alarmDataArr.add(0, alarmData);
         // 알람 저장 (나중에 동기화 문제 발생 가능)
         editor.putString("alarm", gson.toJson(alarmDataArr));

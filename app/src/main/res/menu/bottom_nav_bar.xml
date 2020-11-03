@@ -28,7 +28,7 @@
     <item
         android:id="@+id/item_mypage"
         android:enabled="true"
-        android:icon="@drawable/ic_user"
-        android:title="내 정보" />
+        android:icon="@drawable/is_baseline_alarm"
+        android:title="알림" />
 
 </menu>

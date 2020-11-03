@@ -13,7 +13,6 @@
         android:id="@+id/rv_alarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="15dp"
         android:overScrollMode="never" />
 </androidx.core.widget.NestedScrollView>
 

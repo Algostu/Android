@@ -3,11 +3,15 @@ package com.dum.dodam.Alarm.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +31,8 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
     private RecyclerView.Adapter adapter;
     private ArrayList<AlarmData> list;
     private RecyclerView.LayoutManager layoutManager;
+    private androidx.appcompat.widget.Toolbar toolbar;
+    private ActionBar actionbar;
 
     public SubPage1() {
     }
@@ -47,6 +53,10 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
         view.setClickable(true);
 
         user = ((MainActivity) getActivity()).getUser();
+
+        toolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
 
         list = ((MainActivity) getActivity()).getAlarmList();
         Log.d("subPage debug", "list size : " + list.size());
@@ -72,6 +82,26 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.d("hello", "ho");
+        switch (item.getItemId()) {
+            case R.id.delete_all:
+                list = ((MainActivity)getActivity()).deleteAlarm();
+                break;
+            case R.id.delete_read:
+                ((MainActivity)getActivity()).deleteAlarm(list);
+                break;
+        }
+        refresh();
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void refresh() {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.detach(this).attach(this).commit();
+    }
+
+    @Override
     public void onResume() {
         Log.d("subPage debug", "list size : " + list.size());
         list = ((MainActivity) getActivity()).getAlarmList();
@@ -82,13 +112,9 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
 
     @Override
     public void onItemSelected(View v, int position) {
-        AlarmData alarmData = list.get(position);
-        ArrayList<AlarmData> new_list = ((MainActivity)getActivity()).checkAlarm(position);
-        Log.d("subPage debug", "list size : " + list.size());
-        if(new_list!=null){
-            list = new_list;
-            adapter.notifyDataSetChanged();
-            Log.d("subPage debug", "list size changed : " + list.size());
-        }
+        list.get(position).read = 0;
+        ((MainActivity)getActivity()).checkAlarm(list, position);
     }
+
+
 }
