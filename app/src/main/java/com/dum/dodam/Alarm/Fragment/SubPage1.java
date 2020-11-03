@@ -3,15 +3,12 @@ package com.dum.dodam.Alarm.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,10 +51,6 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
 
         user = ((MainActivity) getActivity()).getUser();
 
-        toolbar = view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-
         list = ((MainActivity) getActivity()).getAlarmList();
         Log.d("subPage debug", "list size : " + list.size());
         adapter = new alarmAdapter(getContext(), list, this, user);
@@ -78,28 +71,11 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
             }
         });
 
+
+
         return view;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Log.d("hello", "ho");
-        switch (item.getItemId()) {
-            case R.id.delete_all:
-                list = ((MainActivity)getActivity()).deleteAlarm();
-                break;
-            case R.id.delete_read:
-                ((MainActivity)getActivity()).deleteAlarm(list);
-                break;
-        }
-        refresh();
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void refresh() {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.detach(this).attach(this).commit();
-    }
 
     @Override
     public void onResume() {
