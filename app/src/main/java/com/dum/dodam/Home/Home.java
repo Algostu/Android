@@ -21,6 +21,7 @@ import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
 import com.dum.dodam.Contest.Contest;
 import com.dum.dodam.Contest.ContestInfo;
+import com.dum.dodam.Contest.dataframe.ContestListResponse;
 import com.dum.dodam.Home.dataframe.ContestFrame;
 import com.dum.dodam.Home.dataframe.HotArticleFrame;
 import com.dum.dodam.Home.dataframe.HotArticleResponse;
@@ -38,21 +39,32 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Home extends Fragment implements HotArticleAdapter.OnListItemSelectedInterface, MyCommunityAdapter.OnListItemSelectedInterface, ContestAdapter.OnListItemSelectedInterface {
     private static final String TAG = "RHC";
 
+    private boolean firstTime = true;
     private int cnt_myCommunity = 0;
     private int cnt_hotArticle = 0;
+    private int cnt_getContestList = 0;
+    private int cnt_cafeteria = 0;
 
     private RecyclerView myCommunity_recyclerView;
     private RecyclerView.Adapter myCommunity_adapter;
@@ -130,7 +142,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
         // Recyclerview Community
         myCommunity_adapter = new MyCommunityAdapter(getContext(), myCommunityList, this, user);
-        setMyCommunity();
         myCommunity_recyclerView = (RecyclerView) view.findViewById(R.id.rv_my_community);
         myCommunity_recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         myCommunity_recyclerView.setHasFixedSize(true);
@@ -140,7 +151,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
         // Recyclerview HotArticle
         hotArticle_adapter = new HotArticleAdapter(getContext(), hotArticleList, this, user);
-        setHotArticle();
         hotArticle_recyclerView = (RecyclerView) view.findViewById(R.id.rv_hot_article);
         hotArticle_recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         hotArticle_recyclerView.setHasFixedSize(true);
@@ -165,6 +175,11 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             }
         });
 
+        if (firstTime){
+            setHotArticle();
+            setMyCommunity();
+            firstTime = false;
+        }
 
         return view;
     }
@@ -229,62 +244,123 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         String filename = "contest";
         if (getContext() == null) return;
         File file = new File(getContext().getFilesDir() + "/" + filename);
-        if (file.exists()) {
-            try {
-                FileReader fileReader = new FileReader(file);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                String line = bufferedReader.readLine();
-                while (line != null) {
-                    stringBuilder.append(line).append("\n");
-                    line = bufferedReader.readLine();
-                }
-                bufferedReader.close();
-                String response = stringBuilder.toString();
-
-                Gson gson = new GsonBuilder()
-                        .setLenient()
-                        .create();
-
-                result = gson.fromJson(response, new TypeToken<ArrayList<com.dum.dodam.Contest.dataframe.ContestFrame>>() {
-                }.getType());
-
-                contestList.clear();
-                for (int i = 0; i < 10; i++) {
-                    ContestFrame frame = new ContestFrame();
-                    frame.title = result.get(i).title;
-                    frame.imageUrl = result.get(i).imageUrl;
-                    frame.title = result.get(i).title;
-                    frame.content = result.get(i).content;
-                    frame.area = result.get(i).area;
-                    frame.sponsor = result.get(i).sponsor;
-                    frame.prize = result.get(i).prize;
-                    frame.firstPrize = result.get(i).firstPrize;
-                    frame.homePage = result.get(i).homePage;
-                    frame.imageUrl = result.get(i).imageUrl;
-                    frame.start = result.get(i).start;
-                    frame.end = result.get(i).end;
-
-                    contestList.add(frame);
-                }
-                contest_adapter.notifyDataSetChanged();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            pleaseTab.setText("탭 해주세요 ㅎㅎ");
-            pleaseTab.setOnClickListener(new View.OnClickListener() {
+        if (!file.exists()) {
+            final int contestID = 0;
+            com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
+            Call<ContestListResponse> call = service.getContestList(contestID);
+            call.enqueue(new Callback<ContestListResponse>() {
                 @Override
-                public void onClick(View v) {
-                    ((MainActivity) getActivity()).replaceFragment(new Contest());
+                public void onResponse(Call<ContestListResponse> call, Response<ContestListResponse> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<com.dum.dodam.Contest.dataframe.ContestFrame> result = response.body().body;
+                        if (result.size() == 0) return;
+                        Log.d(TAG, "CONTEST RESULT" + result.size());
+
+                        JSONArray jsArray = new JSONArray();//배열이 필요할때
+                        try {
+                            for (int i = 0; i < result.size(); i++) {
+                                JSONObject sObject = new JSONObject();//배열 내에 들어갈 json
+                                sObject.put("contestID", result.get(i).contestID);
+                                sObject.put("title", result.get(i).title);
+                                sObject.put("content", result.get(i).content);
+                                sObject.put("area", result.get(i).area);
+                                sObject.put("sponsor", result.get(i).sponsor);
+                                sObject.put("prize", result.get(i).prize);
+                                sObject.put("firstPrize", result.get(i).firstPrize);
+                                sObject.put("homePage", result.get(i).homePage);
+                                sObject.put("imageUrl", result.get(i).imageUrl);
+                                sObject.put("start", result.get(i).start);
+                                sObject.put("end", result.get(i).end);
+                                jsArray.put(sObject);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            Log.d(TAG, "CONTEST Write Start");
+                            if (getContext() == null) return;
+                            File file = new File(getContext().getFilesDir(), "contest");
+                            FileWriter fileWriter = null;
+                            if (contestID == 0) fileWriter = new FileWriter(file, false);
+                            else fileWriter = new FileWriter(file, true);
+                            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                            bufferedWriter.write(jsArray.toString());
+                            bufferedWriter.close();
+                            Log.d(TAG, "CONTEST Write End");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        setContestView();
+                    } else {
+                        Log.d(TAG, "Response but Fail in getContestList");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ContestListResponse> call, Throwable t) {
+                    Log.d(TAG, "getContestList" + t.getMessage());
+                    if (cnt_getContestList < 5) setContest();
+                    else
+                        Toast.makeText(((MainActivity) getContext()), "Please reloading", Toast.LENGTH_SHORT).show();
+                    cnt_getContestList++;
                 }
             });
+        } else {
+            setContestView();
         }
 
     }
 
+    public void setContestView(){
+        String filename = "contest";
+        if (getContext() == null) return;
+        File file = new File(getContext().getFilesDir() + "/" + filename);
+        if (!file.exists()) { return; }
+        try {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = bufferedReader.readLine();
+            while (line != null) {
+                stringBuilder.append(line).append("\n");
+                line = bufferedReader.readLine();
+            }
+            bufferedReader.close();
+            String response = stringBuilder.toString();
+
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
+            result = gson.fromJson(response, new TypeToken<ArrayList<com.dum.dodam.Contest.dataframe.ContestFrame>>() {
+            }.getType());
+
+            contestList.clear();
+            for (int i = 0; i < 10; i++) {
+                ContestFrame frame = new ContestFrame();
+                frame.title = result.get(i).title;
+                frame.imageUrl = result.get(i).imageUrl;
+                frame.title = result.get(i).title;
+                frame.content = result.get(i).content;
+                frame.area = result.get(i).area;
+                frame.sponsor = result.get(i).sponsor;
+                frame.prize = result.get(i).prize;
+                frame.firstPrize = result.get(i).firstPrize;
+                frame.homePage = result.get(i).homePage;
+                frame.imageUrl = result.get(i).imageUrl;
+                frame.start = result.get(i).start;
+                frame.end = result.get(i).end;
+
+                contestList.add(frame);
+            }
+            contest_adapter.notifyDataSetChanged();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onCommunityItemSelected(View v, int position) {
         MyCommunityAdapter.Holder holder = (MyCommunityAdapter.Holder) myCommunity_recyclerView.findViewHolderForAdapterPosition(position);

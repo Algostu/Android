@@ -48,6 +48,9 @@ import retrofit2.Call;
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     public UserJson user;
+    public Home home;
+    public CommunityList comm;
+    public SearchUniv sear;
     Intent intent;
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -56,16 +59,16 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.item_home:
-                    replaceFragment(new Home());
+                    replaceFragment(home);
                     return true;
                 case R.id.item_school:
                     replaceFragment(new School());
                     return true;
                 case R.id.item_community:
-                    replaceFragment(new CommunityList());
+                    replaceFragment(comm);
                     return true;
                 case R.id.item_simulation:
-                    replaceFragment(new SearchUniv());
+                    replaceFragment(sear);
                     return true;
                 case R.id.item_mypage:
                     replaceFragment(new AlarmTab());
@@ -78,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        home = new Home();
+        comm = new CommunityList();
+        sear = new SearchUniv();
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (view != null) {
