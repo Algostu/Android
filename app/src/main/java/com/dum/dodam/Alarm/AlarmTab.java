@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
@@ -43,6 +44,7 @@ public class AlarmTab extends Fragment {
         viewPage.setAdapter(pageAdapter);
 
         tabs = (TabLayout) view.findViewById(R.id.tabs);
+        tabs.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
         tabs.setupWithViewPager(viewPage);
 
         toolbar = view.findViewById(R.id.toolbar2);
@@ -76,10 +78,10 @@ public class AlarmTab extends Fragment {
         Log.d("hello", "ho");
         switch (item.getItemId()) {
             case R.id.delete_all:
-                ((MainActivity)getActivity()).deleteAlarm(false);
+                ((MainActivity) getActivity()).deleteAlarm(false);
                 break;
             case R.id.delete_read:
-                ((MainActivity)getActivity()).deleteAlarm(true);
+                ((MainActivity) getActivity()).deleteAlarm(true);
                 break;
         }
         refresh();

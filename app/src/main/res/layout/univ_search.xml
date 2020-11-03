@@ -98,7 +98,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:divider="#999999"
-                    android:dividerHeight="1dp" />
+                    android:dividerHeight="1dp"
+                    android:drawSelectorOnTop="true" />
             </RelativeLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
