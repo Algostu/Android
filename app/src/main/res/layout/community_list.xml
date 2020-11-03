@@ -21,26 +21,28 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="15dp" />
 
-    <!--  title background  -->
-
-    <TextView
-        android:id="@+id/title_bg"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/classic_blue"
-        tools:ignore="MissingConstraints" />
-
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/font_hello_title"
         android:text="게시판 모음"
-        android:textColor="@color/white"
-        android:textSize="25dp"
+        android:textSize="23sp"
         android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@id/gd_left"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginVertical="3dp"
+        android:background="@color/faded_gray"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
         tools:ignore="MissingConstraints" />
 
     <!-- School Community -->
@@ -48,13 +50,13 @@
         android:id="@+id/cv_school_community"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="9dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:cardCornerRadius="10dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_line"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -65,18 +67,18 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:shadowColor="@color/classic_blue"
                 android:text="교내 게시판"
-                android:textSize="23dp"
+                android:textAlignment="center"
+                android:textSize="23sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -90,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginEnd="30dp"
                     android:layout_marginBottom="5dp"
                     android:background="@color/faded_gray" />
 
@@ -100,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="자유 게시판"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -127,18 +129,18 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:shadowColor="@color/classic_blue"
                 android:text="동네 게시판"
-                android:textSize="23dp"
+                android:textAlignment="center"
+                android:textSize="23sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -146,13 +148,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="질문 게시판"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginEnd="30dp"
                     android:layout_marginBottom="5dp"
                     android:background="@color/faded_gray" />
 
@@ -161,13 +163,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="모집 게시판"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginEnd="30dp"
                     android:layout_marginBottom="5dp"
                     android:background="@color/faded_gray" />
 
@@ -177,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="자유 게시판"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -204,18 +206,18 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:shadowColor="@color/classic_blue"
                 android:text="입시 게시판"
-                android:textSize="23dp"
+                android:textAlignment="center"
+                android:textSize="23sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -223,13 +225,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="학원&amp;인강 게시판"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginEnd="30dp"
                     android:layout_marginBottom="5dp"
                     android:background="@color/faded_gray" />
 
@@ -238,13 +240,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="질문 게시판"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginEnd="30dp"
                     android:layout_marginBottom="5dp"
                     android:background="@color/faded_gray" />
 
@@ -254,7 +256,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="자유 게시판"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
