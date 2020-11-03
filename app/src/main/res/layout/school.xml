@@ -27,37 +27,40 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="10dp" />
 
-    <!--  title background  -->
-    <TextView
-        android:id="@+id/title_bg"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/classic_blue"
-        tools:ignore="MissingConstraints" />
-
     <TextView
         android:id="@+id/school_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:fontFamily="@font/font_hello_title"
         android:text="아주 고등학교"
-        android:textColor="@android:color/white"
-        android:textSize="25dp"
+        android:textSize="23sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintTop_toTopOf="@id/gd_top" />
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginVertical="3dp"
+        android:background="@color/faded_gray"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/school_name"
+        tools:ignore="MissingConstraints" />
 
     <!-- 내 게시판 -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_cafeteria"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="9dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/school_name"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_line"
         tools:ignore="MissingConstraints">
 
         <RelativeLayout
@@ -68,13 +71,14 @@
 
             <TextView
                 android:id="@+id/title_cafeteria"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:text="오늘의 메뉴"
+                android:textAlignment="center"
                 android:textColor="@color/classic_blue"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent" />
 
