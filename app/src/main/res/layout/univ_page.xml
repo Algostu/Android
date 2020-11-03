@@ -24,7 +24,6 @@
             android:fitsSystemWindows="true"
             app:collapsedTitleTextAppearance="@style/CollapsingTitleStyle"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginBottom="20dp"
             app:expandedTitleTextAppearance="@style/ExpandedTitleStyle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
@@ -55,7 +54,7 @@
             app:tabGravity="center"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@color/white" />
+            app:tabTextColor="@android:color/black" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -79,18 +78,5 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <!--    app:layout_anchor="@id/app_bar"-->
-    <!--    app:layout_anchorGravity="bottom|end"-->
-    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-    <!--        android:id="@+id/fab"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="bottom|end"-->
-    <!--        android:layout_margin="20dp"-->
-    <!--        android:backgroundTint="@color/classic_blue"-->
-    <!--        android:tint="@android:color/white"-->
-    <!--        app:backgroundTint="@color/classic_blue"-->
-    <!--        app:srcCompat="@drawable/ic_community" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
