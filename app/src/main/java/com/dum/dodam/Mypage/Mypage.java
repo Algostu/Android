@@ -5,9 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -201,7 +203,12 @@ public class Mypage extends Fragment {
         userName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n잠시 후 사라집니다.", Snackbar.LENGTH_LONG);
+                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n잠시 후 사라집니다.", Snackbar.LENGTH_SHORT);
+                View view = snackbar.getView();
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+                params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+
+                view.setLayoutParams(params);
                 snackbar.show();
             }
         });

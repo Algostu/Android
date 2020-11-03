@@ -16,200 +16,173 @@
         app:srcCompat="@drawable/signup_main"
         tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/nametext"
+    <RelativeLayout
+        android:id="@+id/relative_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:text="이름"
-        android:textColor="#3C4041"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_marginTop="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/name"
-        app:layout_constraintTop_toBottomOf="@id/imageView10" />
-
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:ems="10"
-        android:hint="이름"
-        android:inputType="textPersonName"
-        app:layout_constraintLeft_toRightOf="@id/nametext"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView10" />
+        app:layout_constraintTop_toBottomOf="@id/imageView10"
+        tools:ignore="MissingConstraints">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:text="별명"
-        android:textColor="#3C4041"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/nickName"
-        app:layout_constraintTop_toBottomOf="@id/name" />
+        <LinearLayout
+            android:id="@+id/ll_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/nickName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:ems="10"
-        android:hint="별명"
-        android:inputType="textPersonName"
-        app:layout_constraintLeft_toRightOf="@id/textView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name" />
+            <TextView
+                android:id="@+id/nametext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="이름"
+                android:textColor="#3C4041"
+                android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView"
-        android:text="별명은 한글,숫자로 이루어진 5자 이상 15자 이하 문자열입니다."
-        android:textSize="10sp"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintLeft_toRightOf="@id/textView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nickName"
-        tools:ignore="MissingConstraints" />
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/nametext"
+                android:ems="10"
+                android:hint="이름"
+                android:inputType="textPersonName" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/nickNameOkay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/textView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView4"
-        tools:ignore="MissingConstraints" />
+        <LinearLayout
+            android:id="@+id/ll_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_name"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/gender_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="25dp"
-        android:text="성별"
-        android:textColor="#3C4041"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/gender_layout"
-        app:layout_constraintTop_toBottomOf="@id/nickNameOkay"
-        tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="별명"
+                android:textColor="#3C4041"
+                android:textSize="18sp" />
 
-    <LinearLayout
-        android:id="@+id/gender_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/gender_text"
-        app:layout_constraintTop_toBottomOf="@id/nickNameOkay">
+            <EditText
+                android:id="@+id/nickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:ems="10"
+                android:hint="별명"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_nickname"
+            android:layout_marginTop="10dp"
+            android:text="별명은 한글,숫자로 이루어진 5자 이상 15자 이하 문자열입니다."
+            android:textSize="10sp"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/nickNameOkay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView4"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/gender_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nickNameOkay"
+            android:layout_marginTop="15dp"
+            android:text="성별"
+            android:textColor="#3C4041"
+            android:textSize="18sp"
+            tools:ignore="MissingConstraints" />
 
         <Spinner
             android:id="@+id/gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/nickNameOkay"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/gender_text"
             android:entries="@array/gender"
             android:spinnerMode="dialog"
             tools:ignore="MissingConstraints" />
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/age_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="10dp"
-        android:text="나이"
-        android:textColor="#3C4041"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/age_layout"
-        app:layout_constraintTop_toBottomOf="@id/gender_layout"
-        tools:ignore="MissingConstraints" />
-
-    <LinearLayout
-        android:id="@+id/age_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toRightOf="@id/age_text"
-        app:layout_constraintTop_toBottomOf="@id/gender_layout">
+        <TextView
+            android:id="@+id/age_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gender_text"
+            android:layout_marginTop="15dp"
+            android:text="나이"
+            android:textColor="#3C4041"
+            android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="100dp"
+            android:layout_below="@id/gender_text"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/age_text"
             android:entries="@array/age"
             android:spinnerMode="dialog"
             tools:ignore="MissingConstraints" />
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/grade_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="10dp"
-        android:text="학년"
-        android:textColor="#3C4041"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/grade_layout"
-        app:layout_constraintTop_toBottomOf="@id/age_layout"
-        tools:ignore="MissingConstraints" />
-
-    <LinearLayout
-        android:id="@+id/grade_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toRightOf="@id/grade_text"
-        app:layout_constraintTop_toBottomOf="@id/age_layout">
+        <TextView
+            android:id="@+id/grade_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/age_text"
+            android:layout_marginTop="15dp"
+            android:text="학년"
+            android:textColor="#3C4041"
+            android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/age_text"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/grade_text"
             android:entries="@array/grade"
-            android:spinnerMode="dialog"
-            tools:ignore="MissingConstraints" />
-    </LinearLayout>
+            android:spinnerMode="dialog" />
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/grade_text"
+            android:layout_marginTop="15dp"
+            android:text="학교"
+            android:textColor="#3C4041"
+            android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="10dp"
-        android:text="학교"
-        android:textColor="#3C4041"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/grade_layout"
-        tools:ignore="MissingConstraints" />
+        <TextView
+            android:id="@+id/selected_school"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/grade_text"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/textView3"
+            android:text="학교를 선택해 주세요"
+            android:textColor="#3C4041"
+            android:textSize="15sp" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/selected_school"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="7dp"
-        android:layout_marginTop="10dp"
-        android:text="학교를 선택해 주세요"
-        android:textColor="#3C4041"
-        android:textSize="15sp"
-        app:layout_constraintLeft_toRightOf="@id/textView3"
-        app:layout_constraintTop_toBottomOf="@id/grade_layout"
-        tools:ignore="MissingConstraints" />
 
     <!--    Student Card XML -->
     <!--    <TextView-->
@@ -263,7 +236,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="10dp"
         android:hint="학교를 검색하세요."
-        app:layout_constraintTop_toBottomOf="@id/textView3"
+        app:layout_constraintTop_toBottomOf="@id/relative_layout"
         tools:ignore="MissingConstraints" />
 
     <RelativeLayout
@@ -281,7 +254,6 @@
             android:dividerHeight="1dp" />
     </RelativeLayout>
 
-
     <Button
         android:id="@+id/submit"
         android:layout_width="match_parent"
@@ -290,6 +262,5 @@
         android:background="@drawable/signup"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
