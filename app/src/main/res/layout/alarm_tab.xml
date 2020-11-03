@@ -26,7 +26,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
                     app:layout_collapseMode="pin"
-                    app:menu="@menu/option_alarm_menu">
+                    app:menu="@menu/option_menu_alarm">
 
                     <TextView
                         android:id="@+id/tab_title"

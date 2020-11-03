@@ -253,37 +253,36 @@ public class MainActivity extends AppCompatActivity {
         return alarmDataArr;
     }
 
-    public ArrayList<AlarmData> deleteAlarm(ArrayList<AlarmData> alarmDataArr){
+    public ArrayList<AlarmData> deleteAlarm(boolean readOnly){
         // 저장되어있는 알람 중 오래된것들 삭제
         SharedPreferences sharedPref = getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
         Gson gson = new Gson();
-        AlarmData alarmData;
-        SharedPreferences.Editor editor = sharedPref.edit();
-        Iterator<AlarmData> i = alarmDataArr.iterator();
-        while (i.hasNext()) {
-            AlarmData alarm = i.next(); // must be called before you can call i.remove()
-            // Do something
-            try {
-                if (alarm.read == 0)
-                    i.remove();
-            } catch (Exception e) {
-                e.printStackTrace();
+        ArrayList<AlarmData> alarmDataArr;
+        if (readOnly){
+            String json = sharedPref.getString("alarm", "");
+            if (json.equals("")==true){
+                alarmDataArr = new ArrayList<AlarmData>();
+                Log.d("alarm debug", "no data stored");
+            } else {
+                Log.d("alarm debug", "data are stored");
+                Type listType = new TypeToken<ArrayList<AlarmData>>(){}.getType();
+                alarmDataArr = gson.fromJson(json, listType);
             }
+            Iterator<AlarmData> i = alarmDataArr.iterator();
+            while (i.hasNext()) {
+                AlarmData alarm = i.next(); // must be called before you can call i.remove()
+                // Do something
+                try {
+                    if (alarm.read == 0)
+                        i.remove();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            alarmDataArr = new ArrayList<>();
         }
-
-        editor.putString("alarm", gson.toJson(alarmDataArr));
-        editor.commit();
-
-        return alarmDataArr;
-    }
-
-    public ArrayList<AlarmData> deleteAlarm(){
-        // 저장되어있는 알람 중 오래된것들 삭제
-        SharedPreferences sharedPref = getSharedPreferences(
-                "auto", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        ArrayList<AlarmData> alarmDataArr = new ArrayList<>();
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("alarm", gson.toJson(alarmDataArr));
         editor.commit();
