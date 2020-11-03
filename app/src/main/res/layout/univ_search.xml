@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/font_hello_title"
+        android:fontFamily="@font/title"
         android:text="대학 검색하기"
         android:textSize="23sp"
         android:textStyle="bold"
@@ -126,12 +126,11 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
                 android:text="라이브 쇼"
                 android:textAlignment="center"
-                android:textSize="23sp"
+                android:textColor="@color/classic_blue"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <View
