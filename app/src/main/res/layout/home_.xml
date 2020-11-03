@@ -6,9 +6,7 @@
     android:layout_marginBottom="51dp"
     android:nestedScrollingEnabled="false">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white_gray">
@@ -36,23 +34,60 @@
             app:layout_constraintGuide_begin="10dp" />
 
         <!--  title background  -->
-        <TextView
-            android:id="@+id/title_bg"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="@color/classic_blue"
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:src="@drawable/ic_unicorn_17"
+            app:layout_constraintLeft_toLeftOf="@id/gd_left"
+            app:layout_constraintTop_toBottomOf="@id/gd_top"
             tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/school_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/font_hello_title"
             android:text="아주 고등학교"
-            android:textColor="@android:color/white"
-            android:textSize="25dp"
+            android:textSize="23sp"
             android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@id/gd_left"
+            app:layout_constraintLeft_toRightOf="@id/icon"
             app:layout_constraintTop_toTopOf="@id/gd_top" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/font_hello_title"
+            android:text="user"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@id/icon"
+            app:layout_constraintTop_toBottomOf="@id/school_name" />
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/font_hello_title"
+            android:text="님, 안녕하세요!"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@id/user_name"
+            app:layout_constraintTop_toBottomOf="@id/school_name" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/faded_gray"
+            app:layout_constraintLeft_toLeftOf="@id/gd_left"
+            app:layout_constraintRight_toRightOf="@id/gd_right"
+            app:layout_constraintTop_toBottomOf="@id/tv1"
+            tools:ignore="MissingConstraints" />
 
         <ImageButton
             android:id="@+id/setting_button"
@@ -60,36 +95,15 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:src="@drawable/ic_baseline_people_outline_24"
+            android:tint="@android:color/black"
             app:layout_constraintRight_toRightOf="@id/gd_right"
             app:layout_constraintTop_toTopOf="@id/gd_top" />
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="user"
-            android:textColor="@android:color/white"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@id/gd_left"
-            app:layout_constraintTop_toBottomOf="@id/school_name" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="님, 안녕하세요!"
-            android:textColor="@android:color/white"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="@id/user_name"
-            app:layout_constraintTop_toBottomOf="@id/school_name" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_school"
             android:layout_width="0dp"
             android:layout_height="130dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
             app:layout_constraintLeft_toLeftOf="@id/gd_left"
@@ -105,18 +119,14 @@
                 android:padding="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="3dp"
                     android:text="오늘의 급식"
+                    android:textAlignment="center"
                     android:textColor="@color/classic_blue"
-                    android:textSize="15dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
-
-                <View
-                    android:layout_width="80dp"
-                    android:layout_height="2dp"
-                    android:background="@color/faded_gray" />
 
                 <TextView
                     android:id="@+id/cafeteria"
@@ -150,9 +160,10 @@
 
                 <TextView
                     android:id="@+id/title_my_community"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="최신 게시판"
+                    android:textAlignment="center"
                     android:textColor="@color/classic_blue"
                     android:textSize="20dp"
                     android:textStyle="bold"
@@ -201,11 +212,12 @@
 
                 <TextView
                     android:id="@+id/title_hot_community"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="HOT 게시물"
+                    android:textAlignment="center"
                     android:textColor="@color/classic_blue"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_goneMarginBottom="10dp" />
@@ -252,10 +264,11 @@
 
                 <TextView
                     android:id="@+id/title_contest"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="공모전 모아보기"
+                    android:textAlignment="center"
                     android:textColor="@color/classic_blue"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -279,10 +292,9 @@
                     android:id="@+id/pleaseTab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_toEndOf="@id/title_contest"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
