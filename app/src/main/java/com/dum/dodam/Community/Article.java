@@ -407,7 +407,7 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.option_menu, menu);
+        menuInflater.inflate(R.menu.option_menu_article, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

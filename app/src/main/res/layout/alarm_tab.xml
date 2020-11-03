@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
@@ -18,12 +17,14 @@
 
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/white_gray">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/transparent"
                     app:layout_collapseMode="pin"
                     app:menu="@menu/option_alarm_menu">
 
@@ -32,12 +33,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginVertical="5dp"
+                        android:fontFamily="@font/font_hello_title"
                         android:gravity="center_horizontal|left"
                         android:text="알림"
-                        android:textColor="@color/white"
-                        android:textSize="25dp" />
+                        android:textSize="23sp" />
                 </androidx.appcompat.widget.Toolbar>
-
             </com.google.android.material.appbar.AppBarLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -47,12 +47,11 @@
             android:layout_height="wrap_content"
             android:background="@android:color/background_light"
             android:elevation="1dp"
-            app:tabBackground="@color/white"
+            app:tabBackground="@color/white_gray"
             app:tabGravity="fill"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@color/colorPrimary" />
-
+            app:tabTextColor="@color/classic_blue" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager

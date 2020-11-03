@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dum.dodam.Home.dataframe.ContestFrame;
-import com.dum.dodam.Home.dataframe.HotArticleFrame;
-import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.R;
 
@@ -29,7 +27,6 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.Holder> 
         this.context = context;
         this.list = list;
         this.mListener = listener;
-        this.user = user;
     }
 
     public interface OnListItemSelectedInterface {
@@ -46,9 +43,20 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.Holder> 
 
     @Override
     public void onBindViewHolder(@NonNull ContestAdapter.Holder holder, final int position) {
-        holder.period.setText(list.get(position).period);
-        holder.contest_name.setText(list.get(position).contest_name);
+        holder.contest_name.setText(list.get(position).title);
         Glide.with(context).load(list.get(position).imageUrl).into(holder.image_view);
+
+        holder.content = list.get(position).content;
+        holder.contestID = String.valueOf(list.get(position).contestID);
+        holder.date = list.get(position).start + " - " + list.get(position).end;
+        holder.prize = String.valueOf(list.get(position).firstPrize);
+        holder.sponsor = String.valueOf(list.get(position).sponsor);
+        holder.imageUrl = list.get(position).imageUrl;
+        holder.firstPrize = list.get(position).firstPrize;
+        holder.homePage = list.get(position).homePage;
+        holder.start = list.get(position).start;
+        holder.end = list.get(position).end;
+        holder.area = list.get(position).area;
 
         holder.itemView.setTag(position);
     }
@@ -59,13 +67,24 @@ public class ContestAdapter extends RecyclerView.Adapter<ContestAdapter.Holder> 
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        protected TextView period;
         protected TextView contest_name;
         protected ImageView image_view;
 
+        protected String contestID;
+        protected String content;
+        protected String date;
+        protected String prize;
+        protected String sponsor;
+
+        protected String firstPrize;
+        protected String homePage;
+        protected String imageUrl;
+        protected String start;
+        protected String end;
+        protected String area;
+
         public Holder(View view) {
             super(view);
-            this.period = (TextView) view.findViewById(R.id.period);
             this.contest_name = (TextView) view.findViewById(R.id.contest_name);
             this.image_view = (ImageView) view.findViewById(R.id.contest_image);
 

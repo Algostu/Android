@@ -1,7 +1,9 @@
 package com.dum.dodam.Univ;
 
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -76,6 +78,7 @@ public class Univ extends Fragment {
                     //Check if the view is collapsed
                     if (scrollRange + verticalOffset == 0) {
                         tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.classic_blue));
+                        tab_layout.setTabTextColors(ColorStateList.valueOf(getResources().getColor(R.color.white)));
                     } else {
                         tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
                     }
@@ -88,6 +91,8 @@ public class Univ extends Fragment {
 //      Temp Color
         if (univ.univName.equals("아주대학교")) {
             iv_univ_bg.setImageResource(R.drawable.ajou_univ);
+            Drawable alpha = iv_univ_bg.getDrawable();
+            alpha.setAlpha(150);
         } else {
             iv_univ_bg.setImageResource(R.color.classic_blue);
             tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.classic_blue));

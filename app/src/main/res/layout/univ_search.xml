@@ -22,35 +22,39 @@
 
     <!--  title background  -->
     <TextView
-        android:id="@+id/title_bg"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/classic_blue"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
         android:id="@+id/tv_collage_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/font_hello_title"
         android:text="대학 검색하기"
-        android:textColor="#FFFFFF"
-        android:textSize="25dp"
+        android:textSize="23sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/gd_left"
         app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginVertical="3dp"
+        android:background="@color/faded_gray"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintRight_toRightOf="@id/gd_right"
+        app:layout_constraintTop_toBottomOf="@id/tv_collage_name"
         tools:ignore="MissingConstraints" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_search"
         android:layout_width="0dp"
         android:layout_height="300dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="9dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="5dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/title_bg"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_line"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -80,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="대학명을 검색하세요"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <RelativeLayout
@@ -120,13 +124,14 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:text="라이브 쇼"
-                android:textSize="15dp"
+                android:textAlignment="center"
+                android:textSize="23sp"
                 android:textStyle="bold" />
 
             <View
@@ -143,11 +148,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="지금 바로 라이브쇼에 참여해 보세요!"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
