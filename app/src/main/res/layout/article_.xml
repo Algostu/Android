@@ -173,7 +173,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 app:layout_collapseMode="pin"
-                app:menu="@menu/option_menu"></androidx.appcompat.widget.Toolbar>
+                app:menu="@menu/option_menu_article"></androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
