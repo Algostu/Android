@@ -9,6 +9,7 @@
         <item name="android:colorBackground">@color/white_gray</item>
         <item name="android:statusBarColor">@color/classic_blue</item>
         <item name="colorControlHighlight">#fd4381</item>
+        <item name="android:textColor">#373a3c</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

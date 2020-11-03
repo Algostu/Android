@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="51dp"
@@ -222,14 +223,11 @@
                         android:layout_below="@id/title_hot_community"
                         android:overScrollMode="never"
                         android:scrollbarFadeDuration="0"
-                        android:scrollbarSize="5dp"
+                        android:scrollbarSize="1dp"
                         android:scrollbarThumbVertical="@android:color/darker_gray"
                         android:scrollbars="vertical"
                         tools:ignore="MissingConstraints" />
-
                 </androidx.core.widget.NestedScrollView>
-                <!--Recycler View for hot article-->
-
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
@@ -256,10 +254,10 @@
                     android:id="@+id/title_contest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="8dp"
                     android:text="공모전 모아보기"
                     android:textColor="@color/classic_blue"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_goneMarginBottom="10dp" />
@@ -268,19 +266,23 @@
                     android:id="@+id/more_contest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="26dp"
+                    android:layout_above="@id/rv_contest"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
                     android:text="더 보기"
                     android:textColor="@color/classic_blue"
-                    android:textSize="10dp"
-                    android:textStyle="bold" />
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:ignore="NotSibling" />
 
                 <TextView
                     android:id="@+id/pleaseTab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_toEndOf="@id/title_contest"
                     android:gravity="center"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
@@ -294,10 +296,6 @@
                         android:layout_below="@id/title_contest"
                         android:orientation="horizontal"
                         android:overScrollMode="never"
-                        android:scrollbarFadeDuration="0"
-                        android:scrollbarSize="5dp"
-                        android:scrollbarThumbVertical="@android:color/darker_gray"
-                        android:scrollbars="horizontal"
                         tools:ignore="MissingConstraints" />
                 </androidx.core.widget.NestedScrollView>
             </RelativeLayout>

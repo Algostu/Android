@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
 import com.dum.dodam.Contest.Contest;
+import com.dum.dodam.Contest.ContestInfo;
 import com.dum.dodam.Home.dataframe.ContestFrame;
 import com.dum.dodam.Home.dataframe.HotArticleFrame;
 import com.dum.dodam.Home.dataframe.HotArticleResponse;
@@ -160,7 +161,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         mySetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).replaceFragmentFull(new Mypage());
+                ((MainActivity) getActivity()).replaceFragmentFull(new Mypage());
             }
         });
 
@@ -251,9 +252,19 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 contestList.clear();
                 for (int i = 0; i < 10; i++) {
                     ContestFrame frame = new ContestFrame();
-                    frame.contest_name = result.get(i).title;
+                    frame.title = result.get(i).title;
                     frame.imageUrl = result.get(i).imageUrl;
-                    frame.period = result.get(i).start + " - " + result.get(i).end;
+                    frame.title = result.get(i).title;
+                    frame.content = result.get(i).content;
+                    frame.area = result.get(i).area;
+                    frame.sponsor = result.get(i).sponsor;
+                    frame.prize = result.get(i).prize;
+                    frame.firstPrize = result.get(i).firstPrize;
+                    frame.homePage = result.get(i).homePage;
+                    frame.imageUrl = result.get(i).imageUrl;
+                    frame.start = result.get(i).start;
+                    frame.end = result.get(i).end;
+
                     contestList.add(frame);
                 }
                 contest_adapter.notifyDataSetChanged();
@@ -365,6 +376,19 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
     @Override
     public void onContestItemSelected(View v, int position) {
-        ((MainActivity) getActivity()).replaceFragmentFull(new Contest());
+        ContestAdapter.Holder holder = (ContestAdapter.Holder) contest_recyclerView.findViewHolderForAdapterPosition(position);
+        com.dum.dodam.Contest.dataframe.ContestFrame frame = new com.dum.dodam.Contest.dataframe.ContestFrame();
+        frame.title = holder.contest_name.getText().toString();
+        frame.content = holder.content;
+        frame.area = holder.area;
+        frame.sponsor = holder.sponsor;
+        frame.prize = holder.prize;
+        frame.firstPrize = holder.firstPrize;
+        frame.homePage = holder.homePage;
+        frame.imageUrl = holder.imageUrl;
+        frame.start = holder.start;
+        frame.end = holder.end;
+
+        ((MainActivity) getActivity()).replaceFragmentFull(new ContestInfo(frame));
     }
 }
