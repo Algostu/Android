@@ -21,6 +21,20 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="15dp" />
 
+    <!--  title background  -->
+    <View
+        android:id="@+id/title_background"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/shadow2"
+        app:layout_constraintTop_toBottomOf="@id/title_background" />
+
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
@@ -34,75 +48,53 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <View
-        android:id="@+id/horizontal_line"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginVertical="3dp"
-        android:background="@color/faded_gray"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
-        tools:ignore="MissingConstraints" />
-
     <!-- School Community -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_school_community"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginVertical="8dp"
         android:orientation="vertical"
         app:cardCornerRadius="10dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_line"
+        app:layout_constraintTop_toBottomOf="@id/title_background"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="15dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:text="교내 게시판"
-                android:textAlignment="center"
-                android:textColor="@color/classic_blue"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/school_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
                     android:text="질문 게시판"
-                    android:textSize="20dp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/faded_gray" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/school_free"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginVertical="4dp"
                     android:text="자유 게시판"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -112,8 +104,7 @@
         android:id="@+id/cv_region_community"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginVertical="8dp"
         android:orientation="vertical"
         app:cardCornerRadius="10dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
@@ -124,62 +115,45 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="15dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:text="동네 게시판"
-                android:textAlignment="center"
-                android:textColor="@color/classic_blue"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/region_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
                     android:text="질문 게시판"
-                    android:textSize="20sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/faded_gray" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/region_recruit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
                     android:text="모집 게시판"
-                    android:textSize="20sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/faded_gray" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/region_free"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginVertical="4dp"
                     android:text="자유 게시판"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -189,8 +163,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginVertical="8dp"
         android:orientation="vertical"
         app:cardCornerRadius="10dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
@@ -201,65 +174,46 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="15dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:text="입시 게시판"
-                android:textAlignment="center"
-                android:textColor="@color/classic_blue"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/country_academy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
                     android:text="학원&amp;인강 게시판"
-                    android:textSize="20sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/faded_gray" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/country_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
                     android:text="질문 게시판"
-                    android:textSize="20sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/faded_gray" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/country_free"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginVertical="4dp"
                     android:text="자유 게시판"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

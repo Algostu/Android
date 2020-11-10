@@ -65,6 +65,7 @@ public class Univ extends Fragment {
 
         Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.title);
         toolBarLayout.setCollapsedTitleTypeface(typeface);
+        toolBarLayout.setContentScrimColor(ContextCompat.getColor(getContext(), R.color.white));
         toolBarLayout.setExpandedTitleTypeface(typeface);
 
 //        appBarLayout = (AppBarLayout) view.findViewById(R.id.app_bar);
@@ -109,7 +110,7 @@ public class Univ extends Fragment {
         pager.setAdapter(viewPageAdapter);
 
         tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);
-        tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
+        tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         tab_layout.setupWithViewPager(pager);
 //        tab_layout.getTabAt(0).setIcon(R.drawable.ic_add_photo);
 

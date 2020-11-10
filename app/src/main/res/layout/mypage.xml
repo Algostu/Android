@@ -41,7 +41,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/ic_unicorn_17"
+        android:src="@drawable/ic_chick"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintTop_toBottomOf="@id/mypage_title"
         tools:ignore="MissingConstraints" />

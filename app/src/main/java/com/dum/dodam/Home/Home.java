@@ -143,7 +143,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         // Recyclerview Community
         myCommunity_adapter = new MyCommunityAdapter(getContext(), myCommunityList, this, user);
         myCommunity_recyclerView = (RecyclerView) view.findViewById(R.id.rv_my_community);
-        myCommunity_recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
+//        myCommunity_recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         myCommunity_recyclerView.setHasFixedSize(true);
         myCommunity_layoutManager = new LinearLayoutManager(getActivity());
         myCommunity_recyclerView.setLayoutManager(myCommunity_layoutManager);
@@ -152,7 +152,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         // Recyclerview HotArticle
         hotArticle_adapter = new HotArticleAdapter(getContext(), hotArticleList, this, user);
         hotArticle_recyclerView = (RecyclerView) view.findViewById(R.id.rv_hot_article);
-        hotArticle_recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
+//        hotArticle_recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         hotArticle_recyclerView.setHasFixedSize(true);
         hotArticle_layoutManager = new LinearLayoutManager(getActivity());
         hotArticle_recyclerView.setLayoutManager(hotArticle_layoutManager);
@@ -175,7 +175,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             }
         });
 
-        if (firstTime){
+        if (firstTime) {
             setHotArticle();
             setMyCommunity();
             firstTime = false;
@@ -312,11 +312,13 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
     }
 
-    public void setContestView(){
+    public void setContestView() {
         String filename = "contest";
         if (getContext() == null) return;
         File file = new File(getContext().getFilesDir() + "/" + filename);
-        if (!file.exists()) { return; }
+        if (!file.exists()) {
+            return;
+        }
         try {
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -361,6 +363,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             e.printStackTrace();
         }
     }
+
     @Override
     public void onCommunityItemSelected(View v, int position) {
         MyCommunityAdapter.Holder holder = (MyCommunityAdapter.Holder) myCommunity_recyclerView.findViewHolderForAdapterPosition(position);

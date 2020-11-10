@@ -21,6 +21,19 @@
         app:layout_constraintGuide_end="15dp" />
 
     <!--  title background  -->
+    <View
+        android:id="@+id/title_background"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/shadow2"
+        app:layout_constraintTop_toBottomOf="@id/title_background" />
+
     <TextView
         android:id="@+id/tv_collage_name"
         android:layout_width="wrap_content"
@@ -34,41 +47,28 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <View
-        android:id="@+id/horizontal_line"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginVertical="3dp"
-        android:background="@color/faded_gray"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/tv_collage_name"
-        tools:ignore="MissingConstraints" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_search"
         android:layout_width="0dp"
         android:layout_height="300dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginVertical="8dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="5dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_line"
+        app:layout_constraintTop_toBottomOf="@id/title_background"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="5dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -90,7 +90,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
                 tools:ignore="MissingConstraints">
 
                 <ListView
@@ -108,8 +107,7 @@
         android:id="@+id/cv_liveshow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginVertical="8dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
@@ -120,43 +118,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="15dp">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:text="라이브 쇼"
-                android:textAlignment="center"
-                android:textColor="@color/classic_blue"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
-                android:background="#CBC6C6"
-                tools:ignore="MissingConstraints" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="12dp"
                 android:text="지금 바로 라이브쇼에 참여해 보세요!"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

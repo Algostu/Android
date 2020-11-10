@@ -42,7 +42,7 @@
     <!-- Tab layout custom -->
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/saffron</item>
-        <item name="background">@color/white_gray</item>
+        <item name="background">@color/white</item>
         <item name="tabPaddingStart">6dp</item>
         <item name="tabPaddingEnd">6dp</item>
         <item name="tabRippleColor">#42ffaf12</item>

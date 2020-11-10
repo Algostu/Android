@@ -10,7 +10,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white_gray"
+        android:background="@color/white"
         android:clipChildren="false"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -20,6 +20,7 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:background="@color/white"
             android:clipChildren="false"
             android:fitsSystemWindows="true"
             app:collapsedTitleTextAppearance="@style/CollapsingTitleStyle"
@@ -52,7 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:elevation="1dp"
-            app:tabBackground="@color/white_gray"
             app:tabGravity="center"
             app:tabMode="fixed" />
     </com.google.android.material.appbar.AppBarLayout>
