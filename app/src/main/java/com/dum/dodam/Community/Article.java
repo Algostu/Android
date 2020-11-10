@@ -159,9 +159,9 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             }
         });
 
-        upload_comment.setOnClickListener(new View.OnClickListener() {
+        upload_comment.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onSingleClick(View view) {
                 if (comment.getText().toString().matches("")) {
                     Toast.makeText(getContext(), "내용을 입력하세요", Toast.LENGTH_SHORT).show();
                 } else {
