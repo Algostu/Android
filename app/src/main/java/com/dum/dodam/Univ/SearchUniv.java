@@ -59,6 +59,8 @@ public class SearchUniv extends Fragment {
                 InputMethodManager imm = (InputMethodManager) ((MainActivity) getActivity()).getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(et_input.getWindowToken(), 0);
                 ((MainActivity) getActivity()).replaceFragmentFull(new Univ(collage));
+                list.clear();
+                et_input.clearFocus();
             }
         });
         et_input.addTextChangedListener(new TextWatcher() {
