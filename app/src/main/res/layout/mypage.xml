@@ -89,14 +89,34 @@
         app:layout_constraintTop_toBottomOf="@id/mail_address" />
 
     <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="닉네임: "
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintTop_toTopOf="@id/line" />
+
+    <TextView
         android:id="@+id/nick_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="Nickname"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toRightOf="@id/tv1"
+        app:layout_constraintTop_toTopOf="@id/line" />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="학교: "
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintTop_toTopOf="@id/line" />
+        app:layout_constraintTop_toBottomOf="@id/nick_name" />
 
     <TextView
         android:id="@+id/school_name"
@@ -105,40 +125,49 @@
         android:layout_marginTop="5dp"
         android:text="School Name"
         android:textSize="20dp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
+        app:layout_constraintLeft_toRightOf="@id/tv2"
         app:layout_constraintTop_toBottomOf="@id/nick_name" />
 
     <TextView
-        android:id="@+id/grade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:text="Grade"
-        android:textSize="20dp"
-        app:layout_constraintLeft_toRightOf="@id/school_name"
-        app:layout_constraintTop_toBottomOf="@id/nick_name" />
-
-    <TextView
-        android:id="@+id/preage"
+        android:id="@+id/tv3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="낭랑 19세"
+        android:text="학년: "
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintTop_toBottomOf="@id/school_name" />
 
     <TextView
-        android:id="@+id/gender"
+        android:id="@+id/grade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:text="Male"
+        android:text="Grade"
         android:textSize="20dp"
-        app:layout_constraintLeft_toRightOf="@id/preage"
-        app:layout_constraintTop_toBottomOf="@id/grade" />
+        app:layout_constraintLeft_toRightOf="@id/tv3"
+        app:layout_constraintTop_toBottomOf="@id/school_name" />
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/preage"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="5dp"-->
+    <!--        android:text="낭랑 19세"-->
+    <!--        android:textSize="20dp"-->
+    <!--        app:layout_constraintLeft_toLeftOf="@id/gd_left"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/school_name" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/gender"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginLeft="10dp"-->
+    <!--        android:layout_marginTop="5dp"-->
+    <!--        android:text="Male"-->
+    <!--        android:textSize="20dp"-->
+    <!--        app:layout_constraintLeft_toRightOf="@id/preage"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/grade" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -188,15 +217,5 @@
             android:text="문의하기"
             android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/ask_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:autoLink="email"
-            android:linksClickable="true"
-            android:text="dum.dodamdodam@gmail.com"
-            android:textColor="@color/faded_denim"
-            android:textSize="20dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.dum.dodam.Mypage;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,11 +37,11 @@ public class Mypage extends Fragment {
     private ImageView isChecked;
     private TextView schoolName;
     private TextView grade;
-    private TextView age;
-    private TextView gender;
+    //    private TextView age;
+//    private TextView gender;
     private TextView withDraw;
     private TextView logout;
-    private TextView ask_center;
+    //    private TextView ask_center;
     UserJson user;
 
     @Nullable
@@ -56,16 +57,16 @@ public class Mypage extends Fragment {
         emailAddress = view.findViewById(R.id.mail_address);
         schoolName = view.findViewById(R.id.school_name);
         grade = view.findViewById(R.id.grade);
-        age = view.findViewById(R.id.preage);
-        gender = view.findViewById(R.id.gender);
+//        age = view.findViewById(R.id.preage);
+//        gender = view.findViewById(R.id.gender);
         isChecked = view.findViewById(R.id.confirm);
-        ask_center = view.findViewById(R.id.ask_center);
+//        ask_center = view.findViewById(R.id.ask_center);
 
         userName.setText(user.userName);
         nickName.setText(user.nickName);
         emailAddress.setText(user.email);
         schoolName.setText(user.schoolName);
-        age.setText("낭랑 " + String.valueOf(user.age) + "세");
+//        age.setText("낭랑 " + String.valueOf(user.age) + "세");
 
         isChecked.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,12 +120,11 @@ public class Mypage extends Fragment {
             grade.setText("중학생");
         }
 
-
-        if (user.gender == 1) {
-            gender.setText("남학생");
-        } else {
-            gender.setText("여학생");
-        }
+//        if (user.gender == 1) {
+//            gender.setText("남학생");
+//        } else {
+//            gender.setText("여학생");
+//        }
 
         if (user.authorized.equals("1")) {
             isChecked.setImageResource(R.drawable.ic_confirm);
@@ -185,31 +185,49 @@ public class Mypage extends Fragment {
             }
         });
 
-        TextView mypage_title = (TextView) view.findViewById(R.id.mypage_title);
-        mypage_title.setOnClickListener(new View.OnClickListener() {
+//        TextView mypage_title = (TextView) view.findViewById(R.id.mypage_title);
+//        mypage_title.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n확인을 누르면 사라집니다.", Snackbar.LENGTH_INDEFINITE);
+//                snackbar.setAction("확인", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        snackbar.dismiss();
+//                    }
+//                });
+//                snackbar.show();
+//            }
+//        });
+//
+//        userName.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n잠시 후 사라집니다.", Snackbar.LENGTH_SHORT);
+//                View view = snackbar.getView();
+//                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+//                params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+//
+//                view.setLayoutParams(params);
+//                snackbar.show();
+//            }
+//        });
+
+        TextView ask_sentence = view.findViewById(R.id.ask_sentence);
+        ask_sentence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n확인을 누르면 사라집니다.", Snackbar.LENGTH_INDEFINITE);
-                snackbar.setAction("확인", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackbar.dismiss();
-                    }
-                });
-                snackbar.show();
-            }
-        });
 
-        userName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n잠시 후 사라집니다.", Snackbar.LENGTH_SHORT);
-                View view = snackbar.getView();
-                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-                params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+                String uriText =
+                        "mailto: dum.dodamdodam@gmail.com" +
+                                "?subject=" + Uri.encode("") +
+                                "&body=" + Uri.encode("User info" + "\nName: " + user.userName + "\nSchool: " + user.schoolName + "\nGrade: " + user.grade + "\n위의 내용을 지우기 말고 문의해주세요.\n\n");
 
-                view.setLayoutParams(params);
-                snackbar.show();
+                Uri uri = Uri.parse(uriText);
+
+                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                sendIntent.setData(uri);
+                startActivity(Intent.createChooser(sendIntent, "Send email"));
             }
         });
 
