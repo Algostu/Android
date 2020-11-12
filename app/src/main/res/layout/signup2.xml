@@ -161,10 +161,30 @@
             android:spinnerMode="dialog" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/class_num_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/grade_text"
+            android:layout_marginTop="15dp"
+            android:text="반"
+            android:textColor="#3C4041"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/et_class_num"
+            android:layout_width="190dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/grade_text"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/class_num_text"
+            android:hint="숫자만 입력하세요." />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/class_num_text"
             android:layout_marginTop="15dp"
             android:text="학교"
             android:textColor="#3C4041"
@@ -174,7 +194,7 @@
             android:id="@+id/selected_school"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/grade_text"
+            android:layout_below="@id/class_num_text"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="16dp"
             android:layout_toRightOf="@id/textView3"

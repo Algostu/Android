@@ -1,5 +1,7 @@
 package com.dum.dodam.Scheduler;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,6 +16,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.Login.Data.UserJson;
+import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.Scheduler.dataframe.SchoolTimeTable;
 import com.google.gson.Gson;
@@ -103,9 +107,11 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
             SEM = "2";
         }
 
+        UserJson user = ((MainActivity) getActivity()).getUser();
+
         String ATPT_OFCDC_SC_CODE = "J10";
         String SD_SCHUL_CODE = "7530612";
-        String GRADE = "2";
+        String GRADE = String.valueOf(user.grade-10);
         String CLASS_NM = "4";
 
         Gson gson = new GsonBuilder()
@@ -127,7 +133,20 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
             @Override
             public void onResponse(Call<SchoolTimeTable> call, Response<SchoolTimeTable> response) {
                 if (response.isSuccessful()) {
-                    result = response.body().hisTimetable.get(1).row;
+                    try {
+                        result = response.body().hisTimetable.get(1).row;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("잘못된 정보입니다.");
+                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                        builder.show();
+                        return;
+                    }
                     try {
                         makeTimeTable();
                     } catch (ParseException e) {
