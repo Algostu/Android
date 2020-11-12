@@ -1,6 +1,7 @@
 package com.dum.dodam.Cafeteria;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,21 @@ public class Cafeteria extends Fragment {
         lunch_thursday.setText(frame.lunch_thursday.replace(",", "\n"));
         lunch_friday.setText(frame.lunch_friday.replace(",", "\n"));
 
+        if (frame.lunch_monday.equals(" ") || frame.lunch_monday.equals("") || frame.lunch_monday == null) {
+            lunch_monday.setText("제공되는 식단 정보가 없습니다.");
+        }
+        if (frame.lunch_tuesday.equals(" ") || frame.lunch_tuesday.equals("") || frame.lunch_tuesday == null) {
+            lunch_tuesday.setText("제공되는 식단 정보가 없습니다.");
+        }
+        if (frame.lunch_wednesday.equals(" ") || frame.lunch_wednesday.equals("") || frame.lunch_wednesday == null) {
+            lunch_wednesday.setText("제공되는 식단 정보가 없습니다.");
+        }
+        if (frame.lunch_thursday.equals(" ") || frame.lunch_thursday.equals("") || frame.lunch_thursday == null) {
+            lunch_thursday.setText("제공되는 식단 정보가 없습니다.");
+        }
+        if (frame.lunch_friday.equals(" ") || frame.lunch_friday.equals("") || frame.lunch_friday == null) {
+            lunch_friday.setText("제공되는 식단 정보가 없습니다.");
+        }
 
 
         return view;
