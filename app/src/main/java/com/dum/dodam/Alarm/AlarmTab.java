@@ -19,12 +19,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dum.dodam.Alarm.Adapter.PageAdapter;
+import com.dum.dodam.Alarm.Fragment.SubPage1;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.google.android.material.tabs.TabLayout;
 
 public class AlarmTab extends Fragment {
-    TabLayout tabs;
+//    TabLayout tabs;
     PageAdapter pageAdapter;
     ViewPager viewPage;
     private androidx.appcompat.widget.Toolbar toolbar;
@@ -37,15 +38,16 @@ public class AlarmTab extends Fragment {
         setHasOptionsMenu(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+
         pageAdapter = new PageAdapter(getChildFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         viewPage = (ViewPager) view.findViewById(R.id.container);
         viewPage.setAdapter(pageAdapter);
 
-        tabs = (TabLayout) view.findViewById(R.id.tabs);
-        tabs.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
-        tabs.setupWithViewPager(viewPage);
+//        tabs = (TabLayout) view.findViewById(R.id.tabs);
+//        tabs.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
+//        tabs.setupWithViewPager(viewPage);
 
         toolbar = view.findViewById(R.id.toolbar2);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -98,7 +100,6 @@ public class AlarmTab extends Fragment {
 //        refresh();
 //        pageAdapter.notifyDataSetChanged();
         super.onResume();
-
     }
 
 }
