@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,8 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.R;
 import com.dum.dodam.Scheduler.dataframe.SchoolTimeTable;
+import com.dum.dodam.Scheduler.dataframe.Todo;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,11 +47,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListItemSelectedInterface {
+public class SchedulerPager extends Fragment implements
+        TimeTableAdapter.OnListItemSelectedInterface,
+        TodoListAdapter.OnListItemSelectedInterface{
     private static final String TAG = "RHC";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    public BottomAppBar bottomAppbar;
+    private RecyclerView todoRecyclerView;
+    private RecyclerView.Adapter todoAdapter;
+    private RecyclerView.LayoutManager todoLayoutManager;
+    SlidingUpPanelLayout slidingPaneLayout;
+    public Button btn;
+
+    public ArrayList<Todo> todoArrayList;
+
+    public ImageView ic_write;
+    public ImageView ic_calender;
+    public ImageView ic_trashcan;
+
+
     private ArrayList<String> list = new ArrayList<>();
 
     private ArrayList<SchoolTimeTable.TimeTable> result;
@@ -72,6 +94,47 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
         View view = inflater.inflate(R.layout.scheduler_pager, container, false);
         view.setClickable(true);
 
+        slidingPaneLayout = view.findViewById(R.id.slidingWindow);
+        slidingPaneLayout.setPanelHeight(0);
+        btn = view.findViewById(R.id.black_btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                slidingPaneLayout.setPanelHeight(0);
+            }
+        });
+
+        ic_write = view.findViewById(R.id.ic_write);
+        ic_calender = view.findViewById(R.id.ic_calender);
+        ic_trashcan = view.findViewById(R.id.ic_trashcan);
+
+
+        ic_write.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                slidingPaneLayout.setPanelHeight(700);
+            }
+        });
+
+        ic_trashcan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (Todo todo : todoArrayList){
+                    todo.visible ^= true;
+                }
+                todoAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+        todoArrayList = new ArrayList<>();
+        todoArrayList.add(new Todo("잠자기", false));
+        todoArrayList.add(new Todo("진짜 잠자기", false));
+        todoArrayList.add(new Todo("ㄹㅇ로 자고 싶다", false));
+        todoArrayList.add(new Todo("진짜 자고 싶다고", false));
+        todoArrayList.add(new Todo("꿀잠 예약", false));
+
+        todoAdapter = new TodoListAdapter(getContext(), todoArrayList, this);
         adapter = new TimeTableAdapter(getContext(), list, this);
 
         String filename = "TimeTable";
@@ -81,6 +144,13 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
         } else {
             getTimeTable();
         }
+
+        todoRecyclerView = (RecyclerView) view.findViewById(R.id.rv_todo_list);
+        todoRecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.HORIZONTAL));
+        todoRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        todoRecyclerView.setLayoutManager(layoutManager);
+        todoRecyclerView.setAdapter(todoAdapter);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_time_table);
         recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.HORIZONTAL));
