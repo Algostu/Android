@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,8 +30,8 @@ import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.R;
-import com.dum.dodam.School.School;
-import com.dum.dodam.School.dataframe.CafeteriaFrame;
+import com.dum.dodam.Cafeteria.Cafeteria;
+import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
@@ -110,8 +109,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         today_lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).replaceFragment(new School());
-                ((MainActivity) getActivity()).setNavigationMenu();
+                ((MainActivity) getActivity()).replaceFragment(new Cafeteria());
             }
         });
 

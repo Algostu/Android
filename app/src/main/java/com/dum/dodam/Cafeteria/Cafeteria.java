@@ -1,4 +1,4 @@
-package com.dum.dodam.School;
+package com.dum.dodam.Cafeteria;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,9 +17,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
-import com.dum.dodam.School.dataframe.CafeteriaFrame;
-import com.dum.dodam.School.dataframe.LunchFrame;
-import com.dum.dodam.School.dataframe.LunchResponse;
+import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
+import com.dum.dodam.Cafeteria.dataframe.LunchFrame;
+import com.dum.dodam.Cafeteria.dataframe.LunchResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
@@ -43,7 +43,7 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class School extends Fragment {
+public class Cafeteria extends Fragment {
     static String TAG = "RHC";
     private static ArrayList<CafeteriaFrame> menu = new ArrayList<CafeteriaFrame>();
     private static ArrayList<CafeteriaFrame> tmpmenu = new ArrayList<CafeteriaFrame>();
@@ -60,7 +60,7 @@ public class School extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.school, container, false);
+        View view = inflater.inflate(R.layout.cafeteria_, container, false);
         List<Integer> weekNToday = getWeekNDate();
         int this_week = weekNToday.get(1) - 1;
         int today = weekNToday.get(0);

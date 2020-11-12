@@ -28,7 +28,8 @@ import com.dum.dodam.Community.CommunityList;
 import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
-import com.dum.dodam.School.School;
+import com.dum.dodam.Cafeteria.Cafeteria;
+import com.dum.dodam.Scheduler.Scheduler;
 import com.dum.dodam.Univ.SearchUniv;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.item_home:
                     replaceFragment(home);
                     return true;
-                case R.id.item_school:
-                    replaceFragment(new School());
+                case R.id.item_scheduler:
+                    replaceFragment(new Scheduler());
                     return true;
                 case R.id.item_community:
                     replaceFragment(comm);
@@ -192,10 +193,6 @@ public class MainActivity extends AppCompatActivity {
 
     public UserJson getUser() {
         return user;
-    }
-
-    public void setNavigationMenu() {
-        navigation.setSelectedItemId(R.id.item_school);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {

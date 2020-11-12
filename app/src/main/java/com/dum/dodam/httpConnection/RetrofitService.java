@@ -8,7 +8,7 @@ import com.dum.dodam.Home.dataframe.HotArticleResponse;
 import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.SearchResponse;
-import com.dum.dodam.School.dataframe.LunchResponse;
+import com.dum.dodam.Cafeteria.dataframe.LunchResponse;
 import com.dum.dodam.Univ.dataframe.LiveShowResponse;
 import com.dum.dodam.Univ.dataframe.UnivLogoResponse;
 import com.dum.dodam.Univ.dataframe.UnivArticleResponse;

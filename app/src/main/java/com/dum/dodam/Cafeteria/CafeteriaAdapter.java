@@ -1,4 +1,4 @@
-package com.dum.dodam.School;
+package com.dum.dodam.Cafeteria;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.R;
-import com.dum.dodam.School.dataframe.CafeteriaFrame;
+import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public class CafeteriaAdapter extends RecyclerView.Adapter<CafeteriaAdapter.Hold
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.school_cafeteria_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cafeteria_card, parent, false);
         CafeteriaAdapter.Holder holder = new CafeteriaAdapter.Holder(view);
         return holder;
     }

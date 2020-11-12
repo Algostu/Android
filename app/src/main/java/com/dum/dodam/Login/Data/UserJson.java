@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class UserJson extends BaseResponse implements Serializable {
-    // school information
+    // cafeteria_ information
     public String regionName;
     public String townName;
     public String schoolName;

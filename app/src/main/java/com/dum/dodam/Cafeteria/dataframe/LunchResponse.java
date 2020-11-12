@@ -1,8 +1,6 @@
-package com.dum.dodam.School.dataframe;
+package com.dum.dodam.Cafeteria.dataframe;
 
 import com.dum.dodam.httpConnection.BaseResponse;
-
-import java.util.ArrayList;
 
 public class LunchResponse extends BaseResponse {
     public CafeteriaPerMonth body;
