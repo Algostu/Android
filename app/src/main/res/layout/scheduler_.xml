@@ -18,8 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:subtitleTextAppearance="@style/AppTheme.Appbar.SubTitleTextApp"
-            app:titleTextAppearance="@style/AppTheme.Appbar.TitleTextApp">
-        </androidx.appcompat.widget.Toolbar>
+            app:titleTextAppearance="@style/AppTheme.Appbar.TitleTextApp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
@@ -38,6 +37,19 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/saffron"
+        android:scaleType="center"
+        android:src="@drawable/ic_calendar"
+        android:translationY="-50dp"
+        app:backgroundTint="@color/saffron"
+        app:fabSize="mini" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
