@@ -31,7 +31,7 @@
     <View
         android:id="@+id/title_background"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="52dp"
         android:background="@color/white"
         tools:ignore="MissingConstraints" />
 
@@ -45,12 +45,13 @@
         android:id="@+id/school_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:fontFamily="@font/title"
         android:text="아주 고등학교"
         android:textSize="23sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintTop_toTopOf="@id/gd_top" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- 내 게시판 -->
     <androidx.cardview.widget.CardView

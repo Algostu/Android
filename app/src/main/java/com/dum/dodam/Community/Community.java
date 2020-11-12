@@ -26,6 +26,7 @@ import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -83,12 +84,11 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
 
         TextView title = (TextView) view.findViewById(R.id.tv_title);
         title.setText(community_name + " 게시판");
-        ImageButton btn_write_article = (ImageButton) view.findViewById(R.id.btn_write_article);
 
-        btn_write_article.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.btn_write_article);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (user.authorized.equals("0")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("게시 권한이 없습니다.");

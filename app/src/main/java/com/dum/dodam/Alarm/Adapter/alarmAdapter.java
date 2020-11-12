@@ -61,7 +61,7 @@ public class alarmAdapter extends RecyclerView.Adapter<alarmAdapter.Holder> {
         return (null != list ? list.size() : 0);
     }
 
-    public class Holder extends RecyclerView.ViewHolder{
+    public class Holder extends RecyclerView.ViewHolder {
         protected TextView title;
         protected TextView content;
         protected TextView time;
@@ -82,9 +82,9 @@ public class alarmAdapter extends RecyclerView.Adapter<alarmAdapter.Holder> {
                 }
             });
 
-            view.setOnLongClickListener(new View.OnLongClickListener(){
+            view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View v){
+                public boolean onLongClick(View v) {
                     Log.d("hello", "long clicked");
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("삭제알림");
@@ -93,7 +93,7 @@ public class alarmAdapter extends RecyclerView.Adapter<alarmAdapter.Holder> {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     int position = getAdapterPosition();
-                                    ((MainActivity)context).deleteAlarm(list, position);
+                                    ((MainActivity) context).deleteAlarm(list, position);
                                     notifyItemRemoved(position);
                                 }
                             });
@@ -136,8 +136,8 @@ public class alarmAdapter extends RecyclerView.Adapter<alarmAdapter.Holder> {
         holder.itemView.setTag(position);
 
 //        배경색
-        if(list.get(position).read == 0){
-            holder.bg.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        if (list.get(position).read == 0) {
+            holder.bg.setBackgroundColor(Color.parseColor("#FBFBFB"));
         } else {
             holder.bg.setBackgroundColor(Color.parseColor("#FCEDD4"));
         }

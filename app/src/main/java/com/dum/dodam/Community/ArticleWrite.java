@@ -67,9 +67,9 @@ public class ArticleWrite extends Fragment {
         imm.showSoftInput(et_title, 0);
         btn_upload_article = view.findViewById(R.id.btn_upload_article);
 
-        btn_upload_article.setOnClickListener(new View.OnClickListener() {
+        btn_upload_article.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onSingleClick(View view) {
 
                 if (TextUtils.isEmpty(et_title.getText().toString()) || TextUtils.isEmpty(et_content.getText().toString())) {
                     et_title.setError("제목 혹은 내용을 입력해주세요.");

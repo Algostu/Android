@@ -134,7 +134,6 @@ public class School extends Fragment {
                         list.get(i).lunch_friday = tmpmenu.get(i).lunch_friday;
                     }
                 }
-
                 menu.clear();
                 menu.addAll(list);
             } catch (FileNotFoundException e) {
@@ -313,7 +312,7 @@ public class School extends Fragment {
         Calendar cal = Calendar.getInstance(); //캘린더 인스턴스 얻기
 
         cal.set(Calendar.DATE, 1); //현재 달을 1일로 설정.
-        int sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1) .MONDAY(2) , TUESDAY(3),.....
+        int sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1), MONDAY(2) , TUESDAY(3),.....
         int endDate = cal.getActualMaximum(Calendar.DATE); //달의 마지막일 얻기
 
         for (int i = 1; i < endDate + 1; i++) {
@@ -345,7 +344,6 @@ public class School extends Fragment {
                 frame = new CafeteriaFrame();
             }
             sDayNum++;
-            if (sDayNum > 7) sDayNum = 1;
         }
     }
 
