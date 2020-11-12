@@ -311,7 +311,7 @@ public class SIgnUP2 extends Fragment {
 //                                        loadingView.setVisibility(View.VISIBLE);
 //                                        String info = "";
 //                                        info = info + "Name: " + userName.toString() + "\n";
-//                                        info = info + "School: " + school.schoolName + "\n";
+//                                        info = info + "School: " + cafeteria_.schoolName + "\n";
 //
 //                                        GMailSender gMailSender = new GMailSender("dum.dodamdodam@gmail.com", "ehekaeheka16#");
 //

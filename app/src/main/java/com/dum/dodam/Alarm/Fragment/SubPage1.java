@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -28,8 +29,10 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
     private RecyclerView.Adapter adapter;
     private ArrayList<AlarmData> list;
     private RecyclerView.LayoutManager layoutManager;
-    private androidx.appcompat.widget.Toolbar toolbar;
-    private ActionBar actionbar;
+//    private androidx.appcompat.widget.Toolbar toolbar;
+//    private ActionBar actionbar;
+
+    TextView no_alarm;
 
     public SubPage1() {
     }
@@ -48,11 +51,12 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
         View view = inflater.inflate(R.layout.alarm_tab_sub, container, false);
 
         view.setClickable(true);
+        no_alarm = (TextView) view.findViewById(R.id.no_alarm);
 
         user = ((MainActivity) getActivity()).getUser();
 
         list = ((MainActivity) getActivity()).getAlarmList();
-        Log.d("subPage debug", "list size : " + list.size());
+
         adapter = new alarmAdapter(getContext(), list, this, user);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_alarm);
@@ -72,7 +76,6 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
         });
 
 
-
         return view;
     }
 
@@ -82,6 +85,9 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
         Log.d("subPage debug", "list size : " + list.size());
         list = ((MainActivity) getActivity()).getAlarmList();
         adapter.notifyDataSetChanged();
+        if (list.size() < 1) {
+            no_alarm.setVisibility(View.VISIBLE);
+        }
         Log.d("subPage debug", "list size changed : " + list.size());
         super.onResume();
     }
@@ -89,8 +95,6 @@ public class SubPage1 extends Fragment implements alarmAdapter.OnListItemSelecte
     @Override
     public void onItemSelected(View v, int position) {
         list.get(position).read = 0;
-        ((MainActivity)getActivity()).checkAlarm(list, position);
+        ((MainActivity) getActivity()).checkAlarm(list, position);
     }
-
-
 }

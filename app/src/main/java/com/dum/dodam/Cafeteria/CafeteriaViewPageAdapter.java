@@ -1,4 +1,4 @@
-package com.dum.dodam.Univ;
+package com.dum.dodam.Cafeteria;
 
 import android.util.Log;
 
@@ -8,20 +8,28 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
+import com.dum.dodam.Univ.UnivCommunity;
+import com.dum.dodam.Univ.UnivNews;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class UnivViewPageAdapter extends FragmentStatePagerAdapter {
+public class CafeteriaViewPageAdapter extends FragmentStatePagerAdapter {
 
     ArrayList<Fragment> fragments = new ArrayList<>();
-    ArrayList<String> pageTitles = new ArrayList<>(Arrays.asList("공지글", "대학게시판"));
+    ArrayList<String> pageTitles = new ArrayList<>();
 
-    public UnivViewPageAdapter(@NonNull FragmentManager fm, UnivFrame univ) {
+    public CafeteriaViewPageAdapter(@NonNull FragmentManager fm, ArrayList<CafeteriaFrame> menu) {
         super(fm);
-        fragments.add(UnivNews.newInstance(univ.univID));
-        fragments.add(UnivCommunity.newInstance(univ.univID));
+
+        int size = menu.size();
+
+        for (int i = 0; i < size; i++) {
+            pageTitles.add(String.format("%d주차", i + 1));
+            fragments.add(new Cafeteria(menu.get(i)));
+        }
     }
 
     @Nullable

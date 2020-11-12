@@ -28,7 +28,8 @@ import com.dum.dodam.Community.CommunityList;
 import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
-import com.dum.dodam.School.School;
+import com.dum.dodam.Cafeteria.Cafeteria;
+import com.dum.dodam.Scheduler.Scheduler;
 import com.dum.dodam.Univ.SearchUniv;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
@@ -61,15 +62,15 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.item_home:
                     replaceFragment(home);
                     return true;
-                case R.id.item_school:
-                    replaceFragment(new School());
+                case R.id.item_scheduler:
+                    replaceFragment(new Scheduler());
                     return true;
                 case R.id.item_community:
                     replaceFragment(comm);
                     return true;
-                case R.id.item_simulation:
-                    replaceFragment(sear);
-                    return true;
+//                case R.id.item_simulation:
+//                    replaceFragment(sear);
+//                    return true;
                 case R.id.item_mypage:
                     replaceFragment(new AlarmTab());
                     return true;
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 getWindow().setStatusBarColor(Color.parseColor("#FFFFFF"));
             }
-        }else if (Build.VERSION.SDK_INT >= 21) {
+        } else if (Build.VERSION.SDK_INT >= 21) {
             // 21 버전 이상일 때
             getWindow().setStatusBarColor(Color.BLACK);
         }
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
         // fcm token 변경 유무 확인
         String token = sharedPref.getString("fcmToken", "");
-        if (token.equals("") == false){
+        if (token.equals("") == false) {
             RetrofitService service = RetrofitAdapter.getInstance(this);
             Call<BaseResponse> call = service.registerFCM(token);
             call.enqueue(new retrofit2.Callback<BaseResponse>() {
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         // notification으로 이곳으로 넘어 온 경우 alarm 페이지로 전환
         Log.d("debug", "notification" + intent.getStringExtra("notification"));
-        if(intent.getStringExtra("notification")!=null){
+        if (intent.getStringExtra("notification") != null) {
             navigation.setSelectedItemId(R.id.item_mypage);
             // Notification 제거
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -194,27 +195,24 @@ public class MainActivity extends AppCompatActivity {
         return user;
     }
 
-    public void setNavigationMenu() {
-        navigation.setSelectedItemId(R.id.item_school);
-    }
-
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
-    public ArrayList<AlarmData> getAlarmList(){
+    public ArrayList<AlarmData> getAlarmList() {
         // 저장되어있는 알람 중 오래된것들 삭제
         SharedPreferences sharedPref = getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         ArrayList<AlarmData> alarmDataArr;
         String json = sharedPref.getString("alarm", "");
-        if (json.equals("")==true){
+        if (json.equals("") == true) {
             alarmDataArr = new ArrayList<AlarmData>();
             Log.d("alarm debug", "no data stored");
         } else {
             Log.d("alarm debug", "data are stored");
-            Type listType = new TypeToken<ArrayList<AlarmData>>(){}.getType();
+            Type listType = new TypeToken<ArrayList<AlarmData>>() {
+            }.getType();
             alarmDataArr = gson.fromJson(json, listType);
         }
         Iterator<AlarmData> i = alarmDataArr.iterator();
@@ -224,8 +222,8 @@ public class MainActivity extends AppCompatActivity {
             // Do something
             try {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                long diffTime = (curTime - format.parse(alarm.time).getTime()) / (60 * 60 * 24 * 1000) ;
-                if( diffTime >= 15)
+                long diffTime = (curTime - format.parse(alarm.time).getTime()) / (60 * 60 * 24 * 1000);
+                if (diffTime >= 15)
                     i.remove();
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -238,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
         return alarmDataArr;
     }
 
-    public ArrayList<AlarmData> checkAlarm(ArrayList<AlarmData> alarmDataArr, int index){
+    public ArrayList<AlarmData> checkAlarm(ArrayList<AlarmData> alarmDataArr, int index) {
         // 저장되어있는 알람 중 오래된것들 삭제
         SharedPreferences sharedPref = getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
@@ -246,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmData alarmData;
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        if (alarmDataArr.size() > index){
+        if (alarmDataArr.size() > index) {
             alarmData = alarmDataArr.get(index);
             replaceFragmentFull(Article.newInstance(alarmData.articleID, alarmData.communityType, alarmData.communityID));
             alarmDataArr.get(index).read = 0;
@@ -257,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
         return alarmDataArr;
     }
 
-    public ArrayList<AlarmData> deleteAlarm(ArrayList<AlarmData> alarmDataArr, int index){
+    public ArrayList<AlarmData> deleteAlarm(ArrayList<AlarmData> alarmDataArr, int index) {
         // 저장되어있는 알람 중 오래된것들 삭제
         SharedPreferences sharedPref = getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
@@ -265,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmData alarmData;
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        if (alarmDataArr.size() > index){
+        if (alarmDataArr.size() > index) {
             alarmDataArr.remove(index);
             editor.putString("alarm", gson.toJson(alarmDataArr));
             editor.commit();
@@ -274,20 +272,21 @@ public class MainActivity extends AppCompatActivity {
         return alarmDataArr;
     }
 
-    public ArrayList<AlarmData> deleteAlarm(boolean readOnly){
+    public ArrayList<AlarmData> deleteAlarm(boolean readOnly) {
         // 저장되어있는 알람 중 오래된것들 삭제
         SharedPreferences sharedPref = getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         ArrayList<AlarmData> alarmDataArr;
-        if (readOnly){
+        if (readOnly) {
             String json = sharedPref.getString("alarm", "");
-            if (json.equals("")==true){
+            if (json.equals("") == true) {
                 alarmDataArr = new ArrayList<AlarmData>();
                 Log.d("alarm debug", "no data stored");
             } else {
                 Log.d("alarm debug", "data are stored");
-                Type listType = new TypeToken<ArrayList<AlarmData>>(){}.getType();
+                Type listType = new TypeToken<ArrayList<AlarmData>>() {
+                }.getType();
                 alarmDataArr = gson.fromJson(json, listType);
             }
             Iterator<AlarmData> i = alarmDataArr.iterator();

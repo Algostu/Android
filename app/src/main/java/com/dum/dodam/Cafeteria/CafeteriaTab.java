@@ -1,4 +1,4 @@
-package com.dum.dodam.School;
+package com.dum.dodam.Cafeteria;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,18 +10,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager.widget.ViewPager;
 
+import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
+import com.dum.dodam.Cafeteria.dataframe.LunchFrame;
+import com.dum.dodam.Cafeteria.dataframe.LunchResponse;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
-import com.dum.dodam.School.dataframe.CafeteriaFrame;
-import com.dum.dodam.School.dataframe.LunchFrame;
-import com.dum.dodam.School.dataframe.LunchResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -43,108 +47,55 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class School extends Fragment {
-    static String TAG = "RHC";
+import static com.dum.dodam.Cafeteria.Cafeteria.TAG;
+
+public class CafeteriaTab extends Fragment {
+
     private static ArrayList<CafeteriaFrame> menu = new ArrayList<CafeteriaFrame>();
     private static ArrayList<CafeteriaFrame> tmpmenu = new ArrayList<CafeteriaFrame>();
-    //    private static ArrayList<CafeteriaFrame> nextMonthMenu = new ArrayList<CafeteriaFrame>();
+
+    private UserJson user;
     private int cnt_cafeteria = 0;
-    private String filename;
-    private RecyclerView.Adapter adapter;
-
-    private TextView school_name;
-
-    UserJson user;
-    ViewPager2 ViewPager_cafeteria;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.school, container, false);
+        View view = inflater.inflate(R.layout.cafeteria_, container, false);
+        view.setClickable(true);
+
         List<Integer> weekNToday = getWeekNDate();
         int this_week = weekNToday.get(1) - 1;
         int today = weekNToday.get(0);
-
-        user = ((MainActivity) getActivity()).getUser();
-
-        school_name = view.findViewById(R.id.school_name);
-        school_name.setText(user.schoolName);
-
-        getCafeteriaMenu();
-
-        adapter = new CafeteriaAdapter(menu);
-        ViewPager_cafeteria = view.findViewById(R.id.vp_cafeteria);
-        ViewPager_cafeteria.setAdapter(adapter);
-        ViewPager_cafeteria.setCurrentItem(this_week);
 
         if (today == 1) {
             downloadCafeteriaList(1);
         } else if (today % 5 == 0) {
             downloadCafeteriaList(0);
         }
+
+        getCafeteriaMenu();
+
+        user = ((MainActivity) getActivity()).getUser();
+
+        TextView month = view.findViewById(R.id.month);
+        month.setText(String.format("%d 월", getWeekNDate().get(2) + 1));
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        actionBar.setTitle(user.schoolName);
+
+        ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
+        CafeteriaViewPageAdapter viewPageAdapter = new CafeteriaViewPageAdapter(getChildFragmentManager(), menu);
+        pager.setAdapter(viewPageAdapter);
+
+        TabLayout tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);
+        tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+        tab_layout.setupWithViewPager(pager);
+
+        tab_layout.getTabAt(this_week).select();
+
         return view;
-    }
-
-    public void getCafeteriaMenu() {
-        Log.d(TAG, "GET MENU");
-
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
-        filename = "curCafeteria";
-        File file = new File(getContext().getFilesDir() + "/" + filename);
-        if (file.exists()) {
-            try {
-                FileReader fileReader = new FileReader(file);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                String line = bufferedReader.readLine();
-                while (line != null) {
-                    stringBuilder.append(line).append("\n");
-                    line = bufferedReader.readLine();
-                }
-                bufferedReader.close();
-                String response = stringBuilder.toString();
-
-                ArrayList<CafeteriaFrame> list = gson.fromJson(response, new TypeToken<ArrayList<CafeteriaFrame>>() {
-                }.getType());
-
-                makeMenu();
-
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).date_monday.equals(" ")) {
-                        list.get(i).date_monday = tmpmenu.get(i).date_monday;
-                        list.get(i).lunch_monday = tmpmenu.get(i).lunch_monday;
-                    }
-                    if (list.get(i).date_tuesday.equals(" ")) {
-                        list.get(i).date_tuesday = tmpmenu.get(i).date_tuesday;
-                        list.get(i).lunch_tuesday = tmpmenu.get(i).lunch_tuesday;
-                    }
-                    if (list.get(i).date_wednesday.equals(" ")) {
-                        list.get(i).date_wednesday = tmpmenu.get(i).date_wednesday;
-                        list.get(i).lunch_wednesday = tmpmenu.get(i).lunch_wednesday;
-                    }
-                    if (list.get(i).date_thursday.equals(" ")) {
-                        list.get(i).date_thursday = tmpmenu.get(i).date_thursday;
-                        list.get(i).lunch_thursday = tmpmenu.get(i).lunch_thursday;
-                    }
-                    if (list.get(i).date_friday.equals(" ")) {
-                        list.get(i).date_friday = tmpmenu.get(i).date_friday;
-                        list.get(i).lunch_friday = tmpmenu.get(i).lunch_friday;
-                    }
-                }
-
-                menu.clear();
-                menu.addAll(list);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            downloadCafeteriaList(0);
-        }
     }
 
     public void downloadCafeteriaList(int isFirst) {
@@ -159,7 +110,7 @@ public class School extends Fragment {
             version = bReader.readLine();
             bReader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
         RetrofitService service = RetrofitAdapter.getInstance(getContext());
@@ -181,9 +132,9 @@ public class School extends Fragment {
                     int before_index = 0;
                     try {
                         for (LunchFrame item : curMonth) {
-                            Log.d("dodam", "date" + item.date);
-                            Log.d("dodam", "week" + item.week);
-                            Log.d("dodam", "week_day" + item.week_day);
+//                            Log.d("dodam", "date" + item.date);
+//                            Log.d("dodam", "week" + item.week);
+//                            Log.d("dodam", "week_day" + item.week_day);
                             index = Math.round(Float.parseFloat(item.week)) - 1;
                             if (before_index != index) {
                                 current.put(jsonObject);
@@ -211,7 +162,7 @@ public class School extends Fragment {
                         e.printStackTrace();
                     }
                     current.put(jsonObject);
-                    Log.d("dodam", "cur Length" + current.length());
+//                    Log.d("dodam", "cur Length" + current.length());
                     // Define the File Path and its Name
                     if (getContext() == null) return;
                     File file = new File(getContext().getFilesDir(), "curCafeteria");
@@ -225,8 +176,6 @@ public class School extends Fragment {
                         e.printStackTrace();
                     }
                     jsonObject = new JSONObject();
-                    getCafeteriaMenu();
-                    adapter.notifyDataSetChanged();
                     before_index = 0;
                     // NEXT MONTH
                     try {
@@ -280,6 +229,8 @@ public class School extends Fragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+                    getCafeteriaMenu();
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
                 }
@@ -294,17 +245,65 @@ public class School extends Fragment {
         });
     }
 
-    public static ArrayList<Integer> getWeekNDate() {
-        ArrayList<Integer> result = new ArrayList<>();
+    public void getCafeteriaMenu() {
+        Log.d(TAG, "GET MENU");
 
-        Calendar c = Calendar.getInstance();
-        int this_week = c.get(Calendar.WEEK_OF_MONTH);
-        int today = c.get(Calendar.DATE); //오늘 일자 저장
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
 
-        result.add(today);
-        result.add(this_week);
+        String filename = "curCafeteria";
+        File file = new File(requireContext().getFilesDir() + "/" + filename);
+        if (file.exists()) {
+            try {
+                FileReader fileReader = new FileReader(file);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                String line = bufferedReader.readLine();
+                while (line != null) {
+                    stringBuilder.append(line).append("\n");
+                    line = bufferedReader.readLine();
+                }
+                bufferedReader.close();
+                String response = stringBuilder.toString();
 
-        return result;
+                ArrayList<CafeteriaFrame> list = gson.fromJson(response, new TypeToken<ArrayList<CafeteriaFrame>>() {
+                }.getType());
+
+                makeMenu();
+
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).date_monday.equals(" ")) {
+                        list.get(i).date_monday = tmpmenu.get(i).date_monday;
+                        list.get(i).lunch_monday = tmpmenu.get(i).lunch_monday;
+                    }
+                    if (list.get(i).date_tuesday.equals(" ")) {
+                        list.get(i).date_tuesday = tmpmenu.get(i).date_tuesday;
+                        list.get(i).lunch_tuesday = tmpmenu.get(i).lunch_tuesday;
+                    }
+                    if (list.get(i).date_wednesday.equals(" ")) {
+                        list.get(i).date_wednesday = tmpmenu.get(i).date_wednesday;
+                        list.get(i).lunch_wednesday = tmpmenu.get(i).lunch_wednesday;
+                    }
+                    if (list.get(i).date_thursday.equals(" ")) {
+                        list.get(i).date_thursday = tmpmenu.get(i).date_thursday;
+                        list.get(i).lunch_thursday = tmpmenu.get(i).lunch_thursday;
+                    }
+                    if (list.get(i).date_friday.equals(" ")) {
+                        list.get(i).date_friday = tmpmenu.get(i).date_friday;
+                        list.get(i).lunch_friday = tmpmenu.get(i).lunch_friday;
+                    }
+                }
+                menu.clear();
+                menu.addAll(list);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            downloadCafeteriaList(0);
+        }
     }
 
     public static void makeMenu() {
@@ -313,7 +312,7 @@ public class School extends Fragment {
         Calendar cal = Calendar.getInstance(); //캘린더 인스턴스 얻기
 
         cal.set(Calendar.DATE, 1); //현재 달을 1일로 설정.
-        int sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1) .MONDAY(2) , TUESDAY(3),.....
+        int sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1), MONDAY(2) , TUESDAY(3),.....
         int endDate = cal.getActualMaximum(Calendar.DATE); //달의 마지막일 얻기
 
         for (int i = 1; i < endDate + 1; i++) {
@@ -325,75 +324,41 @@ public class School extends Fragment {
             if (sDayNum == 2) {
                 frame.lunch_monday = "-";
                 frame.date_monday = String.valueOf(i);
-            }
-            if (sDayNum == 3) {
+            } else if (sDayNum == 3) {
                 frame.lunch_tuesday = "-";
                 frame.date_tuesday = String.valueOf(i);
-            }
-            if (sDayNum == 4) {
+            } else if (sDayNum == 4) {
                 frame.lunch_wednesday = "-";
                 frame.date_wednesday = String.valueOf(i);
-            }
-            if (sDayNum == 5) {
+            } else if (sDayNum == 5) {
                 frame.lunch_thursday = "-";
                 frame.date_thursday = String.valueOf(i);
-            }
-            if (sDayNum == 6) {
+            } else if (sDayNum == 6) {
                 frame.lunch_friday = "-";
                 frame.date_friday = String.valueOf(i);
                 tmpmenu.add(frame);
                 frame = new CafeteriaFrame();
             }
+            if (i == endDate) {
+                tmpmenu.add(frame);
+            }
             sDayNum++;
-            if (sDayNum > 7) sDayNum = 1;
         }
     }
 
-//    public static void makeNextMonthMenu() {
-//        CafeteriaFrame frame = new CafeteriaFrame();
-//
-//        Calendar cal = Calendar.getInstance(); //캘린더 인스턴스 얻기
-//
-//        cal.set(Calendar.DATE, 1); //현재 달을 1일로 설정.
-//        if (cal.get(Calendar.MONTH) == 12) {
-//            cal.set(Calendar.MONTH, 1);
-//        } else {
-//            cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 1);
-//        }
-//
-//        int sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1) .MONDAY(2) , TUESDAY(3),.....
-//        int endDate = cal.getActualMaximum(Calendar.DATE); //달의 마지막일 얻기
-//
-//        for (int i = 1; i < endDate + 1; i++) {
-//            if (sDayNum == 1 || sDayNum == 7) {
-//                sDayNum++;
-//                if (sDayNum > 7) sDayNum = 1;
-//                continue;
-//            }
-//            if (sDayNum == 2) {
-//                frame.lunch_monday = "-";
-//                frame.date_monday = String.valueOf(i);
-//            }
-//            if (sDayNum == 3) {
-//                frame.lunch_tuesday = "-";
-//                frame.date_tuesday = String.valueOf(i);
-//            }
-//            if (sDayNum == 4) {
-//                frame.lunch_wednesday = "-";
-//                frame.date_wednesday = String.valueOf(i);
-//            }
-//            if (sDayNum == 5) {
-//                frame.lunch_thursday = "-";
-//                frame.date_thursday = String.valueOf(i);
-//            }
-//            if (sDayNum == 6) {
-//                frame.lunch_friday = "-";
-//                frame.date_friday = String.valueOf(i);
-//                nextMonthMenu.add(frame);
-//                frame = new CafeteriaFrame();
-//            }
-//            sDayNum++;
-//            if (sDayNum > 7) sDayNum = 1;
-//        }
-//    }
+    public static ArrayList<Integer> getWeekNDate() {
+        ArrayList<Integer> result = new ArrayList<>();
+
+        Calendar c = Calendar.getInstance();
+        int this_week = c.get(Calendar.WEEK_OF_MONTH);
+        int today = c.get(Calendar.DATE); //오늘 일자 저장
+
+        int month = c.get(Calendar.MONTH);
+
+        result.add(today);
+        result.add(this_week);
+        result.add(month);
+
+        return result;
+    }
 }

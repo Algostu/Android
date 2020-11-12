@@ -1,4 +1,4 @@
-package com.dum.dodam.Univ;
+package com.dum.dodam.Scheduler;
 
 import android.util.Log;
 
@@ -8,20 +8,24 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.dum.dodam.Univ.dataframe.UnivFrame;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class UnivViewPageAdapter extends FragmentStatePagerAdapter {
+public class SchedulerPagerAdapter extends FragmentStatePagerAdapter {
 
+    private static final String TAG = "RHC";
     ArrayList<Fragment> fragments = new ArrayList<>();
-    ArrayList<String> pageTitles = new ArrayList<>(Arrays.asList("공지글", "대학게시판"));
+    ArrayList<String> pageTitles = new ArrayList<>();
 
-    public UnivViewPageAdapter(@NonNull FragmentManager fm, UnivFrame univ) {
+    public SchedulerPagerAdapter(@NonNull FragmentManager fm, int sDay_num, int end_date) {
         super(fm);
-        fragments.add(UnivNews.newInstance(univ.univID));
-        fragments.add(UnivCommunity.newInstance(univ.univID));
+
+        Log.d(TAG, "IN!");
+
+        for (int i = 1; i < end_date + 1; i++) {
+            pageTitles.add(String.format("%d일", i));
+            fragments.add(new SchedulerPager(i + 1, sDay_num % 7));
+            sDay_num++;
+        }
     }
 
     @Nullable

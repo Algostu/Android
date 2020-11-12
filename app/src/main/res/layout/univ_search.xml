@@ -24,7 +24,7 @@
     <View
         android:id="@+id/title_background"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="52dp"
         android:background="@color/white"
         tools:ignore="MissingConstraints" />
 
@@ -38,7 +38,7 @@
         android:id="@+id/tv_collage_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:fontFamily="@font/title"
         android:text="대학 검색하기"
         android:textSize="23sp"

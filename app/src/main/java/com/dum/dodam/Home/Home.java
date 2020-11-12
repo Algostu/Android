@@ -13,10 +13,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.Cafeteria.CafeteriaTab;
 import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
 import com.dum.dodam.Contest.Contest;
@@ -31,8 +31,7 @@ import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.R;
-import com.dum.dodam.School.School;
-import com.dum.dodam.School.dataframe.CafeteriaFrame;
+import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
@@ -110,8 +109,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         today_lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).replaceFragment(new School());
-                ((MainActivity) getActivity()).setNavigationMenu();
+                ((MainActivity) getActivity()).replaceFragmentFull(new CafeteriaTab());
             }
         });
 
@@ -408,15 +406,15 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
                 String lunch = " ";
 
-                if (getWeekNDate().get(0) == 1) {
+                if (getWeekNDate().get(0) == 2) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_monday;
-                } else if (getWeekNDate().get(0) == 2) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_tuesday;
                 } else if (getWeekNDate().get(0) == 3) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_wednesday;
+                    lunch = list.get(getWeekNDate().get(1)).lunch_tuesday;
                 } else if (getWeekNDate().get(0) == 4) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_thursday;
+                    lunch = list.get(getWeekNDate().get(1)).lunch_wednesday;
                 } else if (getWeekNDate().get(0) == 5) {
+                    lunch = list.get(getWeekNDate().get(1)).lunch_thursday;
+                } else if (getWeekNDate().get(0) == 6) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_friday;
                 }
                 if (lunch.equals(" ")) cafeteria.setText("제공되는 식단이 없습니다.");
@@ -447,8 +445,12 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         Calendar c = Calendar.getInstance();
         int this_week = c.get(Calendar.WEEK_OF_MONTH);
         int sDayNum = c.get(Calendar.DAY_OF_WEEK);
-        result.add(this_week);
+
         result.add(sDayNum);
+        result.add(this_week - 1);
+
+        Log.d(TAG, "thisWeek " + this_week);
+        Log.d(TAG, "sdaynum " + sDayNum);
 
         return result;
     }

@@ -1,4 +1,4 @@
-package com.dum.dodam.School.dataframe;
+package com.dum.dodam.Cafeteria.dataframe;
 
 public class CafeteriaFrame {
     public String date_monday = " ";
