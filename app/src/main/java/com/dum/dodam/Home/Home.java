@@ -406,15 +406,15 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
                 String lunch = " ";
 
-                if (getWeekNDate().get(0) == 1) {
+                if (getWeekNDate().get(0) == 2) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_monday;
-                } else if (getWeekNDate().get(0) == 2) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_tuesday;
                 } else if (getWeekNDate().get(0) == 3) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_wednesday;
+                    lunch = list.get(getWeekNDate().get(1)).lunch_tuesday;
                 } else if (getWeekNDate().get(0) == 4) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_thursday;
+                    lunch = list.get(getWeekNDate().get(1)).lunch_wednesday;
                 } else if (getWeekNDate().get(0) == 5) {
+                    lunch = list.get(getWeekNDate().get(1)).lunch_thursday;
+                } else if (getWeekNDate().get(0) == 6) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_friday;
                 }
                 if (lunch.equals(" ")) cafeteria.setText("제공되는 식단이 없습니다.");
@@ -445,8 +445,12 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         Calendar c = Calendar.getInstance();
         int this_week = c.get(Calendar.WEEK_OF_MONTH);
         int sDayNum = c.get(Calendar.DAY_OF_WEEK);
-        result.add(this_week);
-        result.add(sDayNum - 2);
+
+        result.add(sDayNum);
+        result.add(this_week - 1);
+
+        Log.d(TAG, "thisWeek " + this_week);
+        Log.d(TAG, "sdaynum " + sDayNum);
 
         return result;
     }

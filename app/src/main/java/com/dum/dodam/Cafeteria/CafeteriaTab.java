@@ -25,7 +25,6 @@ import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,9 +43,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import retrofit2.Call;
 
@@ -95,6 +92,8 @@ public class CafeteriaTab extends Fragment {
         TabLayout tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);
         tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         tab_layout.setupWithViewPager(pager);
+
+        tab_layout.getTabAt(this_week).select();
 
         return view;
     }
