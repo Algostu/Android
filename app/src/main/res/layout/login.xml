@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F6F8"
+    android:background="#F0ECE3"
     android:gravity="bottom"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -21,7 +21,7 @@
             android:id="@+id/imageView8"
             android:layout_width="321dp"
             android:layout_height="156dp"
-            android:src="@drawable/main"
+            android:src="@drawable/ic_app_name"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +33,7 @@
             android:layout_height="96.7dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="60dp"
-            android:src="@drawable/ic_chiken_1"
+            android:src="@drawable/ic_icon_1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView8" />
 
@@ -43,7 +43,7 @@
             android:layout_height="96.7dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/ic_chiken_2"
+            android:src="@drawable/ic_icon_4"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
@@ -52,7 +52,7 @@
             android:layout_width="132.6dp"
             android:layout_height="96.7dp"
             android:layout_marginTop="60dp"
-            android:src="@drawable/ic_chiken_3"
+            android:src="@drawable/ic_icon_2"
             app:layout_constraintEnd_toStartOf="@+id/imageView5"
             app:layout_constraintStart_toEndOf="@+id/imageView7"
             app:layout_constraintTop_toBottomOf="@+id/imageView8" />
@@ -62,7 +62,7 @@
             android:layout_width="132.6dp"
             android:layout_height="96.7dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/ic_chiken_4"
+            android:src="@drawable/ic_icon_5"
             app:layout_constraintEnd_toStartOf="@+id/imageView6"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -74,7 +74,7 @@
             android:layout_height="96.7dp"
             android:layout_marginTop="60dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/ic_chiken_5"
+            android:src="@drawable/ic_icon_3"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView8" />
 
@@ -84,7 +84,7 @@
             android:layout_height="96.7dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/ic_chiken_6"
+            android:src="@drawable/ic_icon_6"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:background="@drawable/login_button"
+            android:background="@drawable/ic_ctu_button"
             app:layout_constraintTop_toBottomOf="@+id/imageView4"
             tools:layout_editor_absoluteX="16dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -103,7 +103,7 @@
         android:layout_width="34dp"
         android:layout_height="21dp"
         android:layout_marginBottom="20dp"
-        android:src="@drawable/team"
+        android:src="@drawable/ic_com_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
