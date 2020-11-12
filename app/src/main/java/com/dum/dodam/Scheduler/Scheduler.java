@@ -1,5 +1,7 @@
 package com.dum.dodam.Scheduler;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
@@ -48,6 +51,14 @@ public class Scheduler extends Fragment {
         tab_layout.setupWithViewPager(pager);
 
         tab_layout.getTabAt(today - 1).select();
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getActivity()).replaceFragmentFull(new CustomCalendar());
+            }
+        });
         return view;
     }
 }

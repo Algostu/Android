@@ -78,6 +78,7 @@ public class SIgnUP2 extends Fragment {
     private ImageView studentCard;
     private ImageView loadingView;
     private EditText userName;
+    private EditText class_num;
 
     private int isGender;
     private int isAge;
@@ -88,9 +89,6 @@ public class SIgnUP2 extends Fragment {
         View view = inflater.inflate(R.layout.signup2, container, false);
 
         userName = view.findViewById(R.id.name);
-
-
-//
 
 
         nickName = view.findViewById(R.id.nickName);
@@ -143,7 +141,7 @@ public class SIgnUP2 extends Fragment {
 
         isGender = 0;
         genderSpinner = view.findViewById(R.id.gender);
-        if (((startUpActivity) getActivity()).user.gender.equals("")==false) {
+        if (((startUpActivity) getActivity()).user.gender.equals("") == false) {
             genderSpinner.setEnabled(false);
             isGender = 1;
         } else {
@@ -151,9 +149,9 @@ public class SIgnUP2 extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     isGender = 1;
-                    if (i == 1){
+                    if (i == 1) {
                         ((startUpActivity) getActivity()).user.gender = "male";
-                    } else if(i==2) {
+                    } else if (i == 2) {
                         ((startUpActivity) getActivity()).user.gender = "female";
                     } else {
                         ((startUpActivity) getActivity()).user.gender = "";
@@ -171,7 +169,7 @@ public class SIgnUP2 extends Fragment {
 
         isAge = 0;
         ageSpinner = view.findViewById(R.id.age);
-        if (((startUpActivity) getActivity()).user.ageRange.equals("")==false) {
+        if (((startUpActivity) getActivity()).user.ageRange.equals("") == false) {
             ageSpinner.setEnabled(false);
             isAge = 1;
         } else {
@@ -179,9 +177,9 @@ public class SIgnUP2 extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     isAge = 1;
-                    if (i == 1){
+                    if (i == 1) {
                         ((startUpActivity) getActivity()).user.ageRange = "14~19";
-                    } else if(i==2) {
+                    } else if (i == 2) {
                         ((startUpActivity) getActivity()).user.ageRange = "20~29";
                     } else {
                         ((startUpActivity) getActivity()).user.ageRange = "";
@@ -244,6 +242,8 @@ public class SIgnUP2 extends Fragment {
 //        });
 //        loadingView = view.findViewById(R.id.loadingView);
 
+        class_num = view.findViewById(R.id.et_class_num);
+
         submit = view.findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -267,7 +267,7 @@ public class SIgnUP2 extends Fragment {
                     Toast.makeText(getActivity(), "학교를 선택해 주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (user.gender == null || user.ageRange == null){
+                if (user.gender == null || user.ageRange == null) {
                     Toast.makeText(getActivity(), "성별과 나이 정보가 입력되지 않았습니다.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -276,6 +276,11 @@ public class SIgnUP2 extends Fragment {
                     return;
                 }
 
+                String regExp = "^[0-9]+$";
+                if (!class_num.getText().toString().matches(regExp)) {
+                    class_num.setError("숫자만 입력하세요.");
+                    return;
+                }
 
                 final JsonObject paramObject = new JsonObject();
                 paramObject.addProperty("schoolID", school.schoolID);
@@ -287,6 +292,7 @@ public class SIgnUP2 extends Fragment {
                 paramObject.addProperty("email", user.email);
                 paramObject.addProperty("gender", user.gender);
                 paramObject.addProperty("ageRange", user.ageRange);
+                paramObject.addProperty("class", class_num.getText().toString());
 
                 Log.d(TAG, "JSON " + paramObject.toString());
 

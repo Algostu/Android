@@ -64,6 +64,9 @@ dependencies {
 
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
 
+    implementation 'com.myhome.siviewpager:siviewpager:1.0.1'
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 
     implementation group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 }

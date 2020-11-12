@@ -100,8 +100,6 @@ public class ArticleWrite extends Fragment {
                             BaseResponse response1 = response.body();
                             if (response1.checkError(getContext()) != 0) return;
 
-                            Toast.makeText(getContext(), "게시 성공!", Toast.LENGTH_SHORT).show();
-
                             imm.hideSoftInputFromWindow(et_content.getWindowToken(), 0);
                             imm.hideSoftInputFromWindow(et_title.getWindowToken(), 0);
 
