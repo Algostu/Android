@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.Cafeteria.CafeteriaTab;
 import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
 import com.dum.dodam.Contest.Contest;
@@ -30,7 +31,6 @@ import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.R;
-import com.dum.dodam.Cafeteria.Cafeteria;
 import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
@@ -109,7 +109,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         today_lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).replaceFragment(new Cafeteria());
+                ((MainActivity) getActivity()).replaceFragmentFull(new CafeteriaTab());
             }
         });
 
@@ -446,7 +446,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         int this_week = c.get(Calendar.WEEK_OF_MONTH);
         int sDayNum = c.get(Calendar.DAY_OF_WEEK);
         result.add(this_week);
-        result.add(sDayNum);
+        result.add(sDayNum - 2);
 
         return result;
     }
