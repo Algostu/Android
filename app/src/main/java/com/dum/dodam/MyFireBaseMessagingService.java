@@ -107,7 +107,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
             Notification notification = new Notification.Builder(MyFireBaseMessagingService.this)
                     .setContentTitle(URLDecoder.decode(messageTitle, "UTF-8"))
                     .setContentText(URLDecoder.decode(alarmData.content, "UTF-8"))
-                    .setSmallIcon(R.drawable.ic_logo)
+                    .setSmallIcon(R.drawable.ic_logo_white)
                     .setChannelId(CHANNEL_ID)
                     .setContentIntent(pendingIntent)
                     .build();
