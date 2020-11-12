@@ -3,6 +3,7 @@ package com.dum.dodam.httpConnection;
 import com.dum.dodam.Community.dataframe.ArticleCommentResponse;
 import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
+import com.dum.dodam.Community.dataframe.FeedResult;
 import com.dum.dodam.Contest.dataframe.ContestListResponse;
 import com.dum.dodam.Home.dataframe.HotArticleResponse;
 import com.dum.dodam.Home.dataframe.MyCommunityResponse;
@@ -10,8 +11,8 @@ import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.School.dataframe.LunchResponse;
 import com.dum.dodam.Univ.dataframe.LiveShowResponse;
-import com.dum.dodam.Univ.dataframe.UnivLogoResponse;
 import com.dum.dodam.Univ.dataframe.UnivArticleResponse;
+import com.dum.dodam.Univ.dataframe.UnivLogoResponse;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.google.gson.JsonObject;
 
@@ -19,6 +20,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RetrofitService {
@@ -93,5 +95,11 @@ public interface RetrofitService {
 
     @GET("/univ/liveShowList")
     Call<LiveShowResponse> readLiveShowList(@Query("writtenAfter") String writtenAfter);
+
+    @GET("/17841442985795349/media")
+    Call<FeedResult> getFeeds(@Query("fields") String fields, @Query("access_token") String access_token);
+
+    @GET("/{id}/children")
+    Call<FeedResult> getFeedDetails(@Path("id") String id, @Query("fields") String fields, @Query("access_token") String access_token);
 
 }
