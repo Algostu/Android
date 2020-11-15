@@ -1,7 +1,5 @@
 package com.dum.dodam.Scheduler;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;

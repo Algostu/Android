@@ -28,7 +28,6 @@ import com.dum.dodam.Community.CommunityList;
 import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
-import com.dum.dodam.Cafeteria.Cafeteria;
 import com.dum.dodam.Scheduler.Scheduler;
 import com.dum.dodam.Univ.SearchUniv;
 import com.dum.dodam.httpConnection.BaseResponse;
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 //                case R.id.item_simulation:
 //                    replaceFragment(sear);
 //                    return true;
-                case R.id.item_mypage:
+                case R.id.item_alarm:
                     replaceFragment(new AlarmTab());
                     return true;
             }
@@ -154,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         // notification으로 이곳으로 넘어 온 경우 alarm 페이지로 전환
         Log.d("debug", "notification" + intent.getStringExtra("notification"));
         if (intent.getStringExtra("notification") != null) {
-            navigation.setSelectedItemId(R.id.item_mypage);
+            navigation.setSelectedItemId(R.id.item_alarm);
             // Notification 제거
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancelAll();
@@ -187,6 +186,13 @@ public class MainActivity extends AppCompatActivity {
     public void replaceFragmentFull(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void replaceFragmentPopup(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.popup_fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
