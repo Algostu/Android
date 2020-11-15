@@ -53,6 +53,25 @@ public class TIME_MAXIMUM
 
         return msg;
     }
+
+    public int calculateTime(Date start, Date end)
+    {
+
+        long curTime = start.getTime();
+        long regTime = end.getTime();
+        long diffTime = (curTime - regTime) / 1000;
+
+        String msg = null;
+        diffTime /= TIME_MAXIMUM.SEC;
+        diffTime /= TIME_MAXIMUM.MIN;
+        if ((diffTime /= TIME_MAXIMUM.HOUR) < TIME_MAXIMUM.DAY)
+        {
+            // day
+            return (int)diffTime;
+        }
+
+        return (int)diffTime;
+    }
 }
 
 

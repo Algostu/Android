@@ -1,7 +1,9 @@
 package com.dum.dodam.Scheduler;
 
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -9,10 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +30,8 @@ import com.dum.dodam.R;
 import com.dum.dodam.Scheduler.dataframe.SchoolTimeTable;
 import com.dum.dodam.Scheduler.dataframe.Todo;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -54,7 +62,12 @@ import retrofit2.http.Query;
 public class SchedulerPager extends Fragment implements
         TimeTableAdapter.OnListItemSelectedInterface,
         TodoListAdapter.OnListItemSelectedInterface{
-    private static final String TAG = "RHC";
+    private static final String TAG = "SchedulerPager";
+    public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    public Calendar startCalender;
+    public Calendar endCalender;
+
+
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -92,33 +105,171 @@ public class SchedulerPager extends Fragment implements
         this.day_of_week = day_of_week;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data.getExtras().containsKey("startDate")) {
+            String startDateStr = data.getExtras().getString("startDate");
+            try {
+                startCalender.setTime(format.parse(startDateStr));
+                Log.d(TAG, "startTime changed");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            // Use the returned value
+        } else if (data.getExtras().containsKey("endDate")) {
+            String endDateStr = data.getExtras().getString("endDate");
+            try {
+                endCalender.setTime(format.parse(endDateStr));
+                Log.d(TAG, "endTime changed");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            // Use the returned value
+        }
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.scheduler_pager, container, false);
         view.setClickable(true);
-
+        final TextView startTimeTV = view.findViewById(R.id.todo_start_time);
+        final TextView endTimeTV = view.findViewById(R.id.todo_end_time);
+        final TextView dates = view.findViewById(R.id.todo_dates);
+        // sliding window
+        final ImageView arrow = view.findViewById(R.id.arrow);
         slidingPaneLayout = view.findViewById(R.id.slidingWindow);
-        slidingPaneLayout.setPanelHeight(0);
-        btn = view.findViewById(R.id.black_btn);
+        slidingPaneLayout.setAnchorPoint(600);
+        slidingPaneLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                Log.d(TAG, "[onPanelSlide]slideOffset: " + slideOffset);
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                Log.d(TAG, "[onPanelStateChanged]previousState: " + previousState);
+                Log.d(TAG, "[onPanelStateChanged]newState: " + newState);
+                if(newState.equals(SlidingUpPanelLayout.PanelState.COLLAPSED)){
+                    arrow.setImageResource(R.drawable.ic_free_icon_up_arrow_626004);
+                } else if (newState.equals(SlidingUpPanelLayout.PanelState.EXPANDED)){
+                    arrow.setImageResource(R.drawable.ic_free_icon_down_arrow_625946);
+                }
+            }
+        });
+        // 완료 버튼
+        final EditText todo_title = view.findViewById(R.id.todo_title);
+        btn = view.findViewById(R.id.btn_black);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                slidingPaneLayout.setPanelHeight(0);
+                if (TextUtils.isEmpty(todo_title.getText().toString())) {
+                    todo_title.setError("제목을 입력해주세요");
+                    return;
+                }
+                // TODO : db에 항목 추가 하기 및 recycler view 초기화
+                todo_title.setText("");
+                Date date = new Date();
+                startCalender.setTime(date);
+                startCalender.set(Calendar.HOUR, 0);
+                startCalender.set(Calendar.MINUTE, 0);
+                endCalender.setTime(date);
+                endCalender.set(Calendar.HOUR, 23);
+                endCalender.set(Calendar.MINUTE, 59);
+                dates.setText("날짜를 선택해주세요");
+                startTimeTV.setText("시간을 선택해주세요");
+                endTimeTV.setText("시간을 선택해주세요");
+                slidingPaneLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
         });
 
-        ic_write = view.findViewById(R.id.ic_write);
-        ic_calender = view.findViewById(R.id.ic_calender);
-        ic_trashcan = view.findViewById(R.id.ic_trashcan);
+        // default time set
+        Date date = new Date();
+        startCalender = Calendar.getInstance();
+        startCalender.setTime(date);
+        startCalender.set(Calendar.HOUR, 0);
+        startCalender.set(Calendar.MINUTE, 0);
 
+        endCalender = Calendar.getInstance();
+        endCalender.setTime(date);
+        endCalender.set(Calendar.HOUR, 23);
+        endCalender.set(Calendar.MINUTE, 59);
 
-        ic_write.setOnClickListener(new View.OnClickListener() {
+        // calender popup
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        builder.setTitleText("Select A Date");
+        builder.setSelection(new Pair<Long, Long>(startCalender.getTimeInMillis(), endCalender.getTimeInMillis()));
+        final MaterialDatePicker materialDatePicker = builder.build();
+
+        dates.setClickable(true);
+        dates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                slidingPaneLayout.setPanelHeight(700);
+//                CalenderPopUpFragment calenderPopUpFragment = CalenderPopUpFragment.newInstance(format.format(startCalender.getTime()), format.format(endCalender.getTime()));
+//                calenderPopUpFragment.setTargetFragment(((MainActivity)getActivity()).getVisibleFragment(), 0);
+//                calenderPopUpFragment.show(getActivity().getSupportFragmentManager(), CalenderPopUpFragment.TAG);
+                if(materialDatePicker.isAdded()) return;
+                materialDatePicker.show(getActivity().getSupportFragmentManager(), "DATE_PICKER");
             }
         });
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                dates.setText(materialDatePicker.getHeaderText());
+                Pair<Long, Long> times = (Pair<Long, Long>)materialDatePicker.getSelection();
+                Calendar temp = Calendar.getInstance();
+                temp.setTimeInMillis(times.first);
+                startCalender.set(Calendar.DATE, temp.get(Calendar.DATE));
+                startCalender.set(Calendar.MONTH, temp.get(Calendar.MONTH));
+                temp.setTimeInMillis(times.second);
+                endCalender.set(Calendar.DATE, temp.get(Calendar.DATE));
+                endCalender.set(Calendar.MONTH, temp.get(Calendar.MONTH));
+            }
+        });
+
+        // time setting
+        startTimeTV.setClickable(true);
+        endTimeTV.setClickable(true);
+        startTimeTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO Auto-generated method stub
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        startTimeTV.setText( selectedHour + ":" + selectedMinute);
+                        startCalender.set(Calendar.HOUR, selectedHour);
+                        startCalender.set(Calendar.MINUTE, selectedMinute);
+                    }
+                }, startCalender.get(Calendar.HOUR), startCalender.get(Calendar.MINUTE), false);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+        });
+
+        endTimeTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO Auto-generated method stub
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        endTimeTV.setText( selectedHour + ":" + selectedMinute);
+                        endCalender.set(Calendar.HOUR, selectedHour);
+                        endCalender.set(Calendar.MINUTE, selectedMinute);
+                    }
+                }, endCalender.get(Calendar.HOUR), endCalender.get(Calendar.MINUTE), false);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+        });
+
+        ic_trashcan = view.findViewById(R.id.ic_trashcan);
 
         ic_trashcan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +288,11 @@ public class SchedulerPager extends Fragment implements
         todoArrayList.add(new Todo("ㄹㅇ로 자고 싶다", false));
         todoArrayList.add(new Todo("진짜 자고 싶다고", false));
         todoArrayList.add(new Todo("꿀잠 예약", false));
+        todoArrayList.add(new Todo("꿀잠 예약", false));
+        todoArrayList.add(new Todo("꿀잠 예약", false));
+        todoArrayList.add(new Todo("꿀잠 예약", false));
+        todoArrayList.add(new Todo("꿀잠 예약", false));
+
 
         todoAdapter = new TodoListAdapter(getContext(), todoArrayList, this);
         adapter = new TimeTableAdapter(getContext(), list, this);

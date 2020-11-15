@@ -28,7 +28,6 @@ import com.dum.dodam.Community.CommunityList;
 import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
-import com.dum.dodam.Cafeteria.Cafeteria;
 import com.dum.dodam.Scheduler.Scheduler;
 import com.dum.dodam.Univ.SearchUniv;
 import com.dum.dodam.httpConnection.BaseResponse;
@@ -43,6 +42,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import retrofit2.Call;
 
@@ -308,6 +308,18 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
 
         return alarmDataArr;
+    }
+
+    public Fragment getVisibleFragment(){
+        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(fragments != null){
+            for(Fragment fragment : fragments){
+                if(fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+        return null;
     }
 
 

@@ -62,7 +62,7 @@ public class InstagramPost1 extends Fragment {
 
 
 //        int img[] = {
-//                R.drawable.ic_chiken_1,R.drawable.ic_logo_white,R.drawable.ic_chiken_1,R.drawable.ic_chiken_1
+//                R.drawable.ic_chiken_1,R.drawable.ic_logo_white1,R.drawable.ic_chiken_1,R.drawable.ic_chiken_1
 //        };
         imgList = new ArrayList<>();
 
