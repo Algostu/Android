@@ -64,5 +64,4 @@ public class UnivSearchAdapter extends BaseAdapter {
         public TextView collage_name;
         public ImageView collage_logo;
     }
-
 }
