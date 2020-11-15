@@ -10,7 +10,7 @@
     <item
         android:id="@+id/item_scheduler"
         android:enabled="true"
-        android:icon="@drawable/ic_calendar"
+        android:icon="@drawable/ic_scheduler"
         android:title="스케줄러" />
 
     <item
@@ -26,7 +26,7 @@
     <!--        android:title="대학페이지" />-->
 
     <item
-        android:id="@+id/item_mypage"
+        android:id="@+id/item_alarm"
         android:enabled="true"
         android:icon="@drawable/is_baseline_alarm"
         android:title="알림" />

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 //                case R.id.item_simulation:
 //                    replaceFragment(sear);
 //                    return true;
-                case R.id.item_mypage:
+                case R.id.item_alarm:
                     replaceFragment(new AlarmTab());
                     return true;
             }
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         // notification으로 이곳으로 넘어 온 경우 alarm 페이지로 전환
         Log.d("debug", "notification" + intent.getStringExtra("notification"));
         if (intent.getStringExtra("notification") != null) {
-            navigation.setSelectedItemId(R.id.item_mypage);
+            navigation.setSelectedItemId(R.id.item_alarm);
             // Notification 제거
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancelAll();
@@ -187,6 +187,13 @@ public class MainActivity extends AppCompatActivity {
     public void replaceFragmentFull(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void replaceFragmentPopup(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.popup_fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
