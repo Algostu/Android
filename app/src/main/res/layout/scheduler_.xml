@@ -43,11 +43,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="20dp"
-        android:backgroundTint="@color/saffron"
+        android:backgroundTint="@color/white"
         android:scaleType="center"
         android:src="@drawable/ic_calendar"
         android:translationY="-50dp"
-        app:backgroundTint="@color/saffron"
+        app:backgroundTint="@color/white"
         app:fabSize="mini" />
 
 

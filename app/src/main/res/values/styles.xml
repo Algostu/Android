@@ -21,7 +21,7 @@
         <item name="colorSecondaryVariant">#018786</item>
         <item name="colorSurface">@color/white</item>
         <item name="colorOnPrimary">@color/coral_pink</item>
-        <item name="colorOnSecondary">#42ffaf12</item>
+        <item name="colorOnSecondary">@color/saffron</item>
         <item name="colorOnBackground">#373a3c</item>
         <item name="colorOnError">@color/white</item>
         <item name="colorOnSurface">@color/flame_scarlet</item>

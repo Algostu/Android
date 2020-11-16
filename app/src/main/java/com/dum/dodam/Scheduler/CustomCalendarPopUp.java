@@ -1,10 +1,12 @@
 package com.dum.dodam.Scheduler;
 
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,11 +16,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.databinding.SchedulerCalendarPopupBinding;
 import com.kizitonwose.calendarview.model.CalendarDay;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CustomCalendarPopUp extends Fragment implements CustomCalendarAdapter.OnListItemSelectedInterface {
 
@@ -29,6 +36,9 @@ public class CustomCalendarPopUp extends Fragment implements CustomCalendarAdapt
     private String date;
     private String dayOfWeek;
     private ArrayList<TodoData> list;
+
+    public ImageView ic_trashcan;
+    public ImageView ic_go_to;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public CustomCalendarPopUp(CalendarDay day, ArrayList<TodoData> list) {
@@ -44,19 +54,53 @@ public class CustomCalendarPopUp extends Fragment implements CustomCalendarAdapt
 
         adapter = new CustomCalendarAdapter(getContext(), list, this);
 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        final Calendar calendar = Calendar.getInstance();
+        Date dateData;
+        try {
+            dateData = format.parse(date);
+            calendar.setTime(dateData);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         binding.dateText.setText(date);
         binding.weekOfDateText.setText(dayOfWeek);
+
+        ic_trashcan = binding.icRemove;
+
+        ic_trashcan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (TodoData todo : list){
+                    todo.visible ^= true;
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        ic_go_to = binding.icGoTo;
+        final Activity host = (Activity) binding.getRoot().getContext();
+        ic_go_to.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)view.getContext()).onBackPressed();
+                ((MainActivity)view.getContext()).replaceFragmentFull(Scheduler.newInstance(calendar.get(Calendar.DATE)));
+            }
+        });
+
 
         RecyclerView recyclerView = binding.rvTodo;
         recyclerView.setHasFixedSize(true);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
         return binding.getRoot();
     }
 
     @Override
     public void onItemSelected(View v, int position) {
     }
+
 }
