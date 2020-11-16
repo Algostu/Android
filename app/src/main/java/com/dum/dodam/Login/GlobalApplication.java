@@ -10,6 +10,8 @@ import com.kakao.auth.ISessionConfig;
 import com.kakao.auth.KakaoAdapter;
 import com.kakao.auth.KakaoSDK;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 public class GlobalApplication extends Application {
@@ -28,6 +30,12 @@ public class GlobalApplication extends Application {
         super.onCreate();
         instance = this;
 
+        Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .name("TodoList.realm")
+                .build();
+        Realm.setDefaultConfiguration(config);
+
         // Kakao Sdk 초기화
         KakaoSDK.init(new KakaoSDKAdapter());
     }
@@ -45,7 +53,7 @@ public class GlobalApplication extends Application {
             return new ISessionConfig() {
                 @Override
                 public AuthType[] getAuthTypes() {
-                    return new AuthType[] {AuthType.KAKAO_LOGIN_ALL};
+                    return new AuthType[]{AuthType.KAKAO_LOGIN_ALL};
                 }
 
                 @Override

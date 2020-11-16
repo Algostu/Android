@@ -9,38 +9,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.LocalDB.TodoList;
 import com.dum.dodam.R;
 
 import java.util.ArrayList;
-
-class TodoData {
-    String time;
-    String todo;
-
-    public TodoData(String time, String todo) {
-        this.time = time;
-        this.todo = todo;
-    }
-}
-
-class TodoDataList {
-    ArrayList<TodoData> todoList;
-
-    public TodoDataList(ArrayList<TodoData> list) {
-        this.todoList = list;
-    }
-
-    public TodoDataList() {
-
-    }
-}
+import java.util.Calendar;
 
 public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAdapter.Holder> {
-    private ArrayList<TodoData> list = new ArrayList<TodoData>();
+    private ArrayList<TodoList> list = new ArrayList<TodoList>();
     private OnListItemSelectedInterface mListener;
     private Context context;
 
-    public CustomCalendarAdapter(Context context, ArrayList<TodoData> list, OnListItemSelectedInterface listener) {
+    public CustomCalendarAdapter(Context context, ArrayList<TodoList> list, OnListItemSelectedInterface listener) {
         this.context = context;
         this.list = list;
         this.mListener = listener;
@@ -65,12 +45,14 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
-        protected TextView time;
+        protected TextView startTime;
+        protected TextView endTime;
         protected TextView todo_content;
 
         public Holder(View view) {
             super(view);
-            this.time = (TextView) view.findViewById(R.id.time);
+            this.startTime = (TextView) view.findViewById(R.id.startTime);
+            this.endTime = (TextView) view.findViewById(R.id.endTime);
             this.todo_content = (TextView) view.findViewById(R.id.todo_content);
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -83,8 +65,15 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
 
     @Override
     public void onBindViewHolder(@NonNull CustomCalendarAdapter.Holder holder, final int position) {
-        holder.time.setText(list.get(position).time);
-        holder.todo_content.setText(list.get(position).todo);
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTimeInMillis(list.get(position).start);
+        holder.startTime.setText(calendar.toString());
+
+        calendar.setTimeInMillis(list.get(position).end);
+        holder.endTime.setText(calendar.toString());
+
+        holder.todo_content.setText(list.get(position).title);
 
         holder.itemView.setTag(position);
     }

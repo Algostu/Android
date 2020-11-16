@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.LocalDB.TodoData;
+import com.dum.dodam.LocalDB.TodoList;
 import com.dum.dodam.R;
 import com.dum.dodam.databinding.SchedulerCalendarPopupBinding;
 import com.kizitonwose.calendarview.model.CalendarDay;
@@ -28,10 +30,10 @@ public class CustomCalendarPopUp extends Fragment implements CustomCalendarAdapt
 
     private String date;
     private String dayOfWeek;
-    private ArrayList<TodoData> list;
+    private ArrayList<TodoList> list;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public CustomCalendarPopUp(CalendarDay day, ArrayList<TodoData> list) {
+    public CustomCalendarPopUp(CalendarDay day, ArrayList<TodoList> list) {
         this.list = list;
         this.date = day.getDate().toString();
         this.dayOfWeek = day.getDate().getDayOfWeek().toString();

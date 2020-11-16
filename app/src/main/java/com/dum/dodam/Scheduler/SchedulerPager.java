@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.LocalDB.TodoList;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
@@ -51,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +63,7 @@ import retrofit2.http.Query;
 
 public class SchedulerPager extends Fragment implements
         TimeTableAdapter.OnListItemSelectedInterface,
-        TodoListAdapter.OnListItemSelectedInterface{
+        TodoListAdapter.OnListItemSelectedInterface {
     private static final String TAG = "SchedulerPager";
     public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     public Calendar startCalender;
@@ -96,6 +98,8 @@ public class SchedulerPager extends Fragment implements
     private ArrayList<String> thursday = new ArrayList<>();
     private ArrayList<String> friday = new ArrayList<>();
     private ArrayList<String> time_table = new ArrayList<>();
+
+    private Realm realm;
 
     int date;
     int day_of_week;
@@ -140,6 +144,9 @@ public class SchedulerPager extends Fragment implements
         final TextView endTimeTV = view.findViewById(R.id.todo_end_time);
         final TextView dates = view.findViewById(R.id.todo_dates);
         // sliding window
+
+        realm = Realm.getDefaultInstance();
+
         final ImageView arrow = view.findViewById(R.id.arrow);
         slidingPaneLayout = view.findViewById(R.id.slidingWindow);
         slidingPaneLayout.setAnchorPoint(600);
@@ -153,9 +160,9 @@ public class SchedulerPager extends Fragment implements
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
                 Log.d(TAG, "[onPanelStateChanged]previousState: " + previousState);
                 Log.d(TAG, "[onPanelStateChanged]newState: " + newState);
-                if(newState.equals(SlidingUpPanelLayout.PanelState.COLLAPSED)){
+                if (newState.equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
                     arrow.setImageResource(R.drawable.ic_free_icon_up_arrow_626004);
-                } else if (newState.equals(SlidingUpPanelLayout.PanelState.EXPANDED)){
+                } else if (newState.equals(SlidingUpPanelLayout.PanelState.EXPANDED)) {
                     arrow.setImageResource(R.drawable.ic_free_icon_down_arrow_625946);
                 }
             }
@@ -171,6 +178,34 @@ public class SchedulerPager extends Fragment implements
                     return;
                 }
                 // TODO : db에 항목 추가 하기 및 recycler view 초기화
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        int year = startCalender.get(Calendar.YEAR);
+                        int month = startCalender.get(Calendar.MONTH) + 1;
+
+                        TodoList todoList = realm.createObject(TodoList.class);
+                        todoList.ID = String.valueOf(year) + String.valueOf(month);
+                        todoList.end = endCalender.getTimeInMillis();
+                        todoList.start = startCalender.getTimeInMillis();
+                        todoList.title = todo_title.getText().toString();
+
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("RHC", "onSuccess: Realm");
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+                        Log.d("RHC", "onError: Realm");
+                        Log.d("RHC", "onError: " + error.toString());
+                    }
+                });
+                startCalender.getTimeInMillis();
+                endCalender.getTimeInMillis();
+
                 todo_title.setText("");
                 Date date = new Date();
                 startCalender.setTime(date);
@@ -211,7 +246,7 @@ public class SchedulerPager extends Fragment implements
 //                CalenderPopUpFragment calenderPopUpFragment = CalenderPopUpFragment.newInstance(format.format(startCalender.getTime()), format.format(endCalender.getTime()));
 //                calenderPopUpFragment.setTargetFragment(((MainActivity)getActivity()).getVisibleFragment(), 0);
 //                calenderPopUpFragment.show(getActivity().getSupportFragmentManager(), CalenderPopUpFragment.TAG);
-                if(materialDatePicker.isAdded()) return;
+                if (materialDatePicker.isAdded()) return;
                 materialDatePicker.show(getActivity().getSupportFragmentManager(), "DATE_PICKER");
             }
         });
@@ -219,7 +254,7 @@ public class SchedulerPager extends Fragment implements
             @Override
             public void onPositiveButtonClick(Object selection) {
                 dates.setText(materialDatePicker.getHeaderText());
-                Pair<Long, Long> times = (Pair<Long, Long>)materialDatePicker.getSelection();
+                Pair<Long, Long> times = (Pair<Long, Long>) materialDatePicker.getSelection();
                 Calendar temp = Calendar.getInstance();
                 temp.setTimeInMillis(times.first);
                 startCalender.set(Calendar.DATE, temp.get(Calendar.DATE));
@@ -241,7 +276,7 @@ public class SchedulerPager extends Fragment implements
                 mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        startTimeTV.setText( selectedHour + ":" + selectedMinute);
+                        startTimeTV.setText(selectedHour + ":" + selectedMinute);
                         startCalender.set(Calendar.HOUR, selectedHour);
                         startCalender.set(Calendar.MINUTE, selectedMinute);
                     }
@@ -259,7 +294,7 @@ public class SchedulerPager extends Fragment implements
                 mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        endTimeTV.setText( selectedHour + ":" + selectedMinute);
+                        endTimeTV.setText(selectedHour + ":" + selectedMinute);
                         endCalender.set(Calendar.HOUR, selectedHour);
                         endCalender.set(Calendar.MINUTE, selectedMinute);
                     }
@@ -274,7 +309,7 @@ public class SchedulerPager extends Fragment implements
         ic_trashcan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (Todo todo : todoArrayList){
+                for (Todo todo : todoArrayList) {
                     todo.visible ^= true;
                 }
                 todoAdapter.notifyDataSetChanged();
@@ -337,7 +372,7 @@ public class SchedulerPager extends Fragment implements
 
         String ATPT_OFCDC_SC_CODE = "J10";
         String SD_SCHUL_CODE = "7530612";
-        String GRADE = String.valueOf(user.grade-10);
+        String GRADE = String.valueOf(user.grade - 10);
         String CLASS_NM = "4";
 
         Gson gson = new GsonBuilder()

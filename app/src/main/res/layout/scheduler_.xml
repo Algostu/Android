@@ -48,7 +48,7 @@
         android:src="@drawable/ic_calendar"
         android:translationY="-50dp"
         app:backgroundTint="@color/saffron"
-        app:fabSize="mini" />
+        app:fabSize="auto" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

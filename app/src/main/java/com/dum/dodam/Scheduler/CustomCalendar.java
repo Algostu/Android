@@ -14,6 +14,8 @@ import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.dum.dodam.LocalDB.TodoData;
+import com.dum.dodam.LocalDB.TodoList;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.databinding.SchedulerCalendarBinding;
@@ -33,8 +35,12 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import kotlin.Unit;
 import kotlin.collections.ArraysKt;
 import kotlin.jvm.functions.Function1;
@@ -47,21 +53,18 @@ public class CustomCalendar extends Fragment {
 
     private CalendarView calendarView;
 
-    private ArrayList<TodoDataList> todoDataLists = new ArrayList<>();
-    private ArrayList<TodoData> list = new ArrayList<>();
+    private ArrayList<TodoList> list = new ArrayList<>();
     private LocalDate selectedDate;
+
+    private Realm realm;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        list.add(new TodoData("Time", "Todo"));
-
-        for (int i = 0; i < 32; i++) {
-            if (i == 20) todoDataLists.add(new TodoDataList(list));
-            todoDataLists.add(new TodoDataList());
-        }
-
         layout = DataBindingUtil.inflate(inflater, R.layout.scheduler_calendar, container, false);
+        layout.getRoot().setClickable(true);
+
+        realm = Realm.getDefaultInstance();
 
         calendarView = layout.calendarView;
 
@@ -94,6 +97,8 @@ public class CustomCalendar extends Fragment {
                     @Override
                     public void onClick(View v) {
                         if (day.getOwner() == DayOwner.THIS_MONTH) {
+                            String id = String.valueOf(day.getDate().getYear()) + String.valueOf(day.getDate().getMonth().getValue());
+                            final RealmResults<TodoList> results = realm.where(TodoList.class).equalTo("ID", id).findAll();
                             if (selectedDate != day.getDate()) {
                                 LocalDate oldDate = selectedDate;
                                 selectedDate = day.getDate();
@@ -102,8 +107,10 @@ public class CustomCalendar extends Fragment {
                                     calendarView.notifyDateChanged(oldDate);
                                 }
                             }
-                            if (todoDataLists.get(day.getDay()).todoList != null) {
-                                ((MainActivity) getActivity()).replaceFragmentPopup(new CustomCalendarPopUp(day, todoDataLists.get(day.getDay()).todoList));
+                            if (results.size() != 0) {
+                                ArrayList<TodoList> dataArrayList = new ArrayList<TodoList>();
+                                dataArrayList.addAll(realm.copyFromRealm(results));
+                                ((MainActivity) getActivity()).replaceFragmentPopup(new CustomCalendarPopUp(day, dataArrayList));
                             }
                         }
                     }
@@ -132,6 +139,16 @@ public class CustomCalendar extends Fragment {
                 bottomView.setBackgroundResource(R.color.transparent);
                 topView.setBackgroundResource(R.color.transparent);
 
+                String id = String.valueOf(calendarDay.getDate().getYear()) + String.valueOf(calendarDay.getDate().getMonth().getValue());
+                RealmResults<TodoList> results = realm.where(TodoList.class).equalTo("ID", "202011").findAll();
+
+                int isEmpty = 0;
+                RealmList<TodoData> todoData;
+                if (results != null) {
+                    isEmpty = 1;
+                    list.addAll(realm.copyFromRealm(results));
+                }
+
                 if (calendarDay.getOwner() == DayOwner.THIS_MONTH) {
                     calendarDayText.setTextColor(getResources().getColor(R.color.text_black));
                     if (selectedDate == calendarDay.getDate()) {
@@ -142,11 +159,18 @@ public class CustomCalendar extends Fragment {
                     if (calendarDay.getDate().toString().equals(LocalDate.now().toString())) {
                         calendarDayText.setBackgroundResource(R.color.today_bg);
                     }
-                    if (todoDataLists.get(calendarDay.getDay()).todoList != null) {
-                        bottomView.setBackgroundResource(R.color.classic_blue);
-                        topView.setBackgroundResource(R.color.flame_scarlet);
-                        viewContainer.todo1.setText(todoDataLists.get(calendarDay.getDay()).todoList.get(0).todo);
-                        viewContainer.todo1.setBackgroundResource(R.color.faded_saffron);
+                    if (isEmpty != 0) {
+                        Calendar calendar = Calendar.getInstance();
+                        for (TodoList data : list) {
+                            calendar.setTimeInMillis(data.start);
+                            if (calendar.get(Calendar.DATE) == calendarDay.getDay()) {
+                                viewContainer.todo1.setText(data.title);
+                                viewContainer.todo1.setBackgroundResource(R.color.faded_saffron);
+//                                bottomView.setBackgroundResource(R.color.classic_blue);
+//                                topView.setBackgroundResource(R.color.flame_scarlet);
+                            }
+
+                        }
                     }
                     if (calendarDay.getDate().getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
                         calendarDayText.setTextColor(getResources().getColor(R.color.blue));
@@ -159,6 +183,7 @@ public class CustomCalendar extends Fragment {
                     calendarDayText.setTextColor(getResources().getColor(R.color.faded_gray));
                     view.setBackgroundColor(getResources().getColor(R.color.outdate_bg));
                 }
+                list.clear();
             }
         });
 
