@@ -43,12 +43,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="20dp"
-        android:backgroundTint="@color/saffron"
+        android:backgroundTint="@color/white"
         android:scaleType="center"
         android:src="@drawable/ic_calendar"
         android:translationY="-50dp"
+<<<<<<< HEAD
         app:backgroundTint="@color/saffron"
         app:fabSize="auto" />
+=======
+        app:backgroundTint="@color/white"
+        app:fabSize="mini" />
+>>>>>>> 0f1bd6bc9b1a01af422762aa5331c7a7ea06923e
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

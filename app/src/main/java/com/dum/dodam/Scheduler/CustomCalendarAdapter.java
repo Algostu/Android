@@ -1,9 +1,15 @@
 package com.dum.dodam.Scheduler;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,18 +54,23 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
         protected TextView startTime;
         protected TextView endTime;
         protected TextView todo_content;
+        protected ImageView ic_remove;
+        protected CheckBox todo_done;
 
         public Holder(View view) {
             super(view);
             this.startTime = (TextView) view.findViewById(R.id.startTime);
             this.endTime = (TextView) view.findViewById(R.id.endTime);
             this.todo_content = (TextView) view.findViewById(R.id.todo_content);
+            this.ic_remove = (ImageView) view.findViewById(R.id.ic_remove);
+            this.todo_done = (CheckBox) view.findViewById(R.id.todo_done);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                 }
             });
+
         }
     }
 
@@ -76,5 +87,35 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
         holder.todo_content.setText(list.get(position).title);
 
         holder.itemView.setTag(position);
+
+        final CustomCalendarAdapter.Holder orgHolder = holder;
+        holder.todo_done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b==true){
+                    orgHolder.todo_content.setTextColor(Color.GRAY);
+                    orgHolder.todo_content.setTypeface(null, Typeface.ITALIC);
+                    orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+
+                } else {
+                    orgHolder.todo_content.setTextColor(Color.BLACK);
+                    orgHolder.todo_content.setTypeface(null, Typeface.NORMAL);
+                    orgHolder.todo_content.setPaintFlags(0);
+                }
+            }
+        });
+
+        if(list.get(position).visible){
+            holder.ic_remove.setVisibility(View.VISIBLE);
+        } else {
+            holder.ic_remove.setVisibility(View.GONE);
+        }
+        holder.ic_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                list.remove(position);
+                notifyItemRemoved(position);
+            }
+        });
     }
 }

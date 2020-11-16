@@ -55,8 +55,8 @@ public class InstagramPost2 extends DialogFragment implements View.OnClickListen
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_instagram_post_2, container, false);
         view.setClickable(true);
-        setHasOptionsMenu(true);
         setCancelable(false);
+        setHasOptionsMenu(true);
         Bundle bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();

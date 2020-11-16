@@ -20,10 +20,20 @@ import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 
 import java.util.Calendar;
 
 public class Scheduler extends Fragment {
+
+    public static Scheduler newInstance(int date) {
+        Bundle args = new Bundle();
+        Gson gson = new Gson();
+        args.putInt("date", date);
+        Scheduler scheduler = new Scheduler();
+        scheduler.setArguments(args);
+        return scheduler;
+    }
 
     @Nullable
     @Override
@@ -36,6 +46,11 @@ public class Scheduler extends Fragment {
         cal.set(Calendar.DATE, 1); //현재 달을 1일로 설정.
         int sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1), MONDAY(2) , TUESDAY(3),.....
         int endDate = cal.getActualMaximum(Calendar.DATE); //달의 마지막일 얻기
+
+        Bundle bundle = new Bundle();
+        if (bundle.containsKey("date")){
+            today = bundle.getInt("date");
+        }
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
