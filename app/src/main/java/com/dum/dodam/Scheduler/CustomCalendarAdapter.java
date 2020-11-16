@@ -79,10 +79,10 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTimeInMillis(list.get(position).start);
-        holder.startTime.setText(calendar.toString());
+        holder.startTime.setText(String.valueOf(calendar.get(Calendar.DATE)));
 
         calendar.setTimeInMillis(list.get(position).end);
-        holder.endTime.setText(calendar.toString());
+        holder.endTime.setText(String.valueOf(calendar.get(Calendar.DATE)));
 
         holder.todo_content.setText(list.get(position).title);
 
@@ -92,10 +92,10 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
         holder.todo_done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b==true){
+                if (b == true) {
                     orgHolder.todo_content.setTextColor(Color.GRAY);
                     orgHolder.todo_content.setTypeface(null, Typeface.ITALIC);
-                    orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+                    orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
                 } else {
                     orgHolder.todo_content.setTextColor(Color.BLACK);
@@ -105,7 +105,7 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
             }
         });
 
-        if(list.get(position).visible){
+        if (list.get(position).visible) {
             holder.ic_remove.setVisibility(View.VISIBLE);
         } else {
             holder.ic_remove.setVisibility(View.GONE);
