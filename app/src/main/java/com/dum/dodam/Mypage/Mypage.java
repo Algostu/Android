@@ -29,9 +29,7 @@ public class Mypage extends Fragment {
     private ImageView isChecked;
     private TextView schoolName;
     private TextView grade;
-
     private TextView code;
-
     private TextView withDraw;
     private TextView logout;
     private TextView recommend;

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -52,6 +53,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import petrov.kristiyan.colorpicker.ColorPicker;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,6 +72,7 @@ public class SchedulerPager extends Fragment implements
     public int classNum;
     public String I_CODE;
     public String SC_CODE;
+    public TextView tv_colorPicker;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -84,6 +87,8 @@ public class SchedulerPager extends Fragment implements
     public ArrayList<Todo> todoArrayList = new ArrayList<Todo>();
 
     public ImageView ic_trashcan;
+    public View color_box_view;
+    public int new_color;
 
     private ArrayList<String> list = new ArrayList<>();
     final ArrayList<Todo> tmp = new ArrayList<>();
@@ -143,6 +148,8 @@ public class SchedulerPager extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.scheduler_pager, container, false);
         view.setClickable(true);
+
+        new_color = Color.parseColor("#ffab91");
 
         todoArrayList.clear();
 
@@ -246,6 +253,7 @@ public class SchedulerPager extends Fragment implements
                         todo.start = startCalender.getTimeInMillis();
                         todo.title = todo_title.getText().toString();
                         todo.done = false;
+                        todo.color = new_color;
 
                         if (startCalender.get(Calendar.DATE) == this_date && startCalender.get(Calendar.MONTH)+1 == this_month) {
                             tmp.add(realm.copyFromRealm(todo));
@@ -276,6 +284,7 @@ public class SchedulerPager extends Fragment implements
                 dates.setText("날짜를 선택해주세요");
                 startTimeTV.setText("시간을 선택해주세요");
                 endTimeTV.setText("시간을 선택해주세요");
+                new_color = Color.parseColor("#ffab91");
                 slidingPaneLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
         });
@@ -363,6 +372,17 @@ public class SchedulerPager extends Fragment implements
             }
         });
 
+        // color setting
+        color_box_view = view.findViewById(R.id.color_box);
+        tv_colorPicker = view.findViewById(R.id.tv_color_picker);
+        tv_colorPicker.setClickable(true);
+        tv_colorPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openColorPicker();
+            }
+        });
+
         ic_trashcan = view.findViewById(R.id.ic_trashcan);
 
         ic_trashcan.setOnClickListener(new View.OnClickListener() {
@@ -376,6 +396,43 @@ public class SchedulerPager extends Fragment implements
         });
 
         return view;
+    }
+
+    public void openColorPicker() {
+        final ColorPicker colorPicker = new ColorPicker(getActivity());  // ColorPicker 객체 생성
+        ArrayList<String> colors = new ArrayList<>();  // Color 넣어줄 list
+
+        colors.add("#ffab91");
+        colors.add("#F48FB1");
+        colors.add("#ce93d8");
+        colors.add("#b39ddb");
+        colors.add("#9fa8da");
+        colors.add("#90caf9");
+        colors.add("#81d4fa");
+        colors.add("#80deea");
+        colors.add("#80cbc4");
+        colors.add("#c5e1a5");
+        colors.add("#e6ee9c");
+        colors.add("#fff59d");
+        colors.add("#ffe082");
+        colors.add("#ffcc80");
+        colors.add("#bcaaa4");
+
+        colorPicker.setColors(colors)  // 만들어둔 list 적용
+                .setColumns(5)  // 5열로 설정
+                .setRoundColorButton(true)  // 원형 버튼으로 설정
+                .setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                    @Override
+                    public void onChooseColor(int position, int color) {
+                        color_box_view.setBackgroundColor(color);  // OK 버튼 클릭 시 이벤트
+                        new_color = color;
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // Cancel 버튼 클릭 시 이벤트
+                    }
+                }).show();  // dialog 생성
     }
 
     public void getTimeTable() {

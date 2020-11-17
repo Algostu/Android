@@ -239,6 +239,41 @@
                         android:textSize="13dp" />
                 </LinearLayout>
             </LinearLayout>
+
+<!--            색상 선택-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="15dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="3"
+                    android:gravity="left"
+                    android:text="색상 선택"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+                <View
+                    android:id="@+id/color_box"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="13dp"
+                    android:layout_gravity="center"
+                    android:background="@color/saffron"/>
+                <TextView
+                    android:id="@+id/tv_color_picker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:text="색깔을 선택해주세요."
+                    android:textSize="13dp" />
+            </LinearLayout>
+
             <!--        버튼-->
             <Button
                 android:id="@+id/btn_black"

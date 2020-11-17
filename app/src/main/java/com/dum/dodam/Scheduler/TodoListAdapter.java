@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,12 +58,14 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
         final protected TextView todo_content;
         final protected ImageView ic_remove;
         final protected CheckBox todo_done;
+        final protected ImageView iv_color_ball;
 
         public Holder(View view) {
             super(view);
             this.todo_content = (TextView) view.findViewById(R.id.todo_content);
             this.ic_remove = (ImageView) view.findViewById(R.id.ic_remove);
             this.todo_done = (CheckBox) view.findViewById(R.id.todo_done);
+            this.iv_color_ball = view.findViewById(R.id.iv_color_ball);
 
             ic_remove.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,10 +97,15 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
     public void onBindViewHolder(@NonNull TodoListAdapter.Holder holder, final int position) {
         holder.todo_content.setText(list.get(position).title);
         holder.todo_done.setChecked(list.get(position).done);
+        GradientDrawable bgShape = (GradientDrawable) holder.iv_color_ball.getBackground();
+        bgShape.setColor(list.get(position).color);
+
         if (list.get(position).visible) {
             holder.ic_remove.setVisibility(View.VISIBLE);
+            holder.iv_color_ball.setVisibility(View.GONE);
         } else {
             holder.ic_remove.setVisibility(View.GONE);
+            holder.iv_color_ball.setVisibility(View.VISIBLE);
         }
         final TodoListAdapter.Holder orgHolder = holder;
         holder.todo_done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

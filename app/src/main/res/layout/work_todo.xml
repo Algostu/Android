@@ -13,6 +13,14 @@
         android:visibility="gone"
         android:src="@drawable/ic_remove"/>
 
+    <ImageView
+        android:id="@+id/iv_color_ball"
+        android:layout_gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_weight="0.8"
+        android:background="@drawable/circle"/>
+
     <TextView
         android:id="@+id/todo_content"
         android:layout_width="0dp"
