@@ -14,12 +14,12 @@ public class SchedulerPagerAdapter extends FragmentStatePagerAdapter {
     ArrayList<Fragment> fragments = new ArrayList<>();
     ArrayList<String> pageTitles = new ArrayList<>();
 
-    public SchedulerPagerAdapter(@NonNull FragmentManager fm, int sDay_num, int end_date) {
+    public SchedulerPagerAdapter(@NonNull FragmentManager fm, int sDay_num, int end_date, int this_month, int this_year) {
         super(fm);
 
         for (int i = 1; i < end_date + 1; i++) {
             pageTitles.add(String.format("%d일", i));
-            fragments.add(new SchedulerPager(i + 1, sDay_num % 7));
+            fragments.add(new SchedulerPager(i + 1, sDay_num % 7, this_month, this_year));
             sDay_num++;
         }
     }

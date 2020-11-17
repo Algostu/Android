@@ -22,8 +22,8 @@ import androidx.core.util.Pair;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.dum.dodam.LocalDB.Todo;
 import com.dum.dodam.LocalDB.TodoData;
-import com.dum.dodam.LocalDB.TodoList;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.databinding.SchedulerCalendarBinding;
@@ -73,7 +73,7 @@ public class CustomCalendar extends Fragment {
 
     private CalendarView calendarView;
 
-    private ArrayList<TodoList> list = new ArrayList<>();
+    private ArrayList<Todo> list = new ArrayList<>();
     private LocalDate selectedDate;
 
     private Realm realm;
@@ -252,7 +252,7 @@ public class CustomCalendar extends Fragment {
                     public void onClick(View v) {
                         if (day.getOwner() == DayOwner.THIS_MONTH) {
                             String id = String.valueOf(day.getDate().getYear()) + String.valueOf(day.getDate().getMonth().getValue());
-                            final RealmResults<TodoList> results = realm.where(TodoList.class).equalTo("ID", id).findAll();
+                            final RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", id).findAll();
                             if (selectedDate != day.getDate()) {
                                 LocalDate oldDate = selectedDate;
                                 selectedDate = day.getDate();
@@ -262,7 +262,7 @@ public class CustomCalendar extends Fragment {
                                 }
                             }
                             if (results.size() != 0) {
-                                ArrayList<TodoList> dataArrayList = new ArrayList<TodoList>();
+                                ArrayList<Todo> dataArrayList = new ArrayList<Todo>();
                                 dataArrayList.addAll(realm.copyFromRealm(results));
                                 ((MainActivity) getActivity()).replaceFragmentPopup(new CustomCalendarPopUp(day, dataArrayList));
                             }
@@ -303,7 +303,7 @@ public class CustomCalendar extends Fragment {
                 topView.setBackgroundResource(R.color.transparent);
 
                 String id = String.valueOf(calendarDay.getDate().getYear()) + String.valueOf(calendarDay.getDate().getMonth().getValue());
-                RealmResults<TodoList> results = realm.where(TodoList.class).equalTo("ID", "202011").findAll();
+                RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", "202011").findAll();
 
                 int isEmpty = 0;
                 RealmList<TodoData> todoData;
@@ -324,7 +324,7 @@ public class CustomCalendar extends Fragment {
                     }
                     if (isEmpty != 0) {
                         Calendar calendar = Calendar.getInstance();
-                        for (TodoList data : list) {
+                        for (Todo data : list) {
                             calendar.setTimeInMillis(data.start);
                             if (calendar.get(Calendar.DATE) == calendarDay.getDay()) {
                                 viewContainer.todo1.setText(data.title);

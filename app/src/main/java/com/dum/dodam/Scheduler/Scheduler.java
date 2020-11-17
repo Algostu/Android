@@ -43,6 +43,8 @@ public class Scheduler extends Fragment {
 
         Calendar cal = Calendar.getInstance(); //캘린더 인스턴스 얻기
         int today = cal.get(Calendar.DATE);
+        int this_month = cal.get(Calendar.MONTH);
+        int this_year = cal.get(Calendar.YEAR);
         cal.set(Calendar.DATE, 1); //현재 달을 1일로 설정.
         int sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1), MONDAY(2) , TUESDAY(3),.....
         int endDate = cal.getActualMaximum(Calendar.DATE); //달의 마지막일 얻기
@@ -58,7 +60,7 @@ public class Scheduler extends Fragment {
         actionBar.setTitle("스케줄러");
 
         ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
-        SchedulerPagerAdapter viewPageAdapter = new SchedulerPagerAdapter(getChildFragmentManager(), sDayNum, endDate);
+        SchedulerPagerAdapter viewPageAdapter = new SchedulerPagerAdapter(getChildFragmentManager(), sDayNum, endDate, this_month, this_year);
         pager.setAdapter(viewPageAdapter);
 
         TabLayout tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);

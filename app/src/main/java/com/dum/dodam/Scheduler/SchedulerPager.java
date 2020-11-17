@@ -24,12 +24,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dum.dodam.LocalDB.TodoList;
+import com.dum.dodam.LocalDB.Todo;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.Scheduler.dataframe.SchoolTimeTable;
-import com.dum.dodam.Scheduler.dataframe.Todo;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -53,6 +52,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -82,8 +82,6 @@ public class SchedulerPager extends Fragment implements
 
     public ArrayList<Todo> todoArrayList;
 
-    public ImageView ic_write;
-    public ImageView ic_calender;
     public ImageView ic_trashcan;
 
 
@@ -100,11 +98,13 @@ public class SchedulerPager extends Fragment implements
 
     private Realm realm;
 
-    int date;
-    int day_of_week;
+    private int day_of_week;
+    private int this_month;
+    private int this_year;
 
-    public SchedulerPager(int date, int day_of_week) {
-        this.date = date;
+    public SchedulerPager(int date, int day_of_week, int this_month, int this_year) {
+        this.this_month = this_month;
+        this.this_year = this_year;
         this.day_of_week = day_of_week;
     }
 
@@ -183,23 +183,21 @@ public class SchedulerPager extends Fragment implements
                         int year = startCalender.get(Calendar.YEAR);
                         int month = startCalender.get(Calendar.MONTH) + 1;
 
-                        TodoList todoList = realm.createObject(TodoList.class);
-                        todoList.ID = String.valueOf(year) + String.valueOf(month);
-                        todoList.end = endCalender.getTimeInMillis();
-                        todoList.start = startCalender.getTimeInMillis();
-                        todoList.title = todo_title.getText().toString();
+                        Todo todo = realm.createObject(Todo.class);
+                        todo.ID = String.valueOf(year) + String.valueOf(month);
+                        todo.end = endCalender.getTimeInMillis();
+                        todo.start = startCalender.getTimeInMillis();
+                        todo.title = todo_title.getText().toString();
+                        todo.done = false;
 
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        Log.d("RHC", "onSuccess: Realm");
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override
                     public void onError(Throwable error) {
-                        Log.d("RHC", "onError: Realm");
-                        Log.d("RHC", "onError: " + error.toString());
                     }
                 });
                 startCalender.getTimeInMillis();
@@ -316,17 +314,11 @@ public class SchedulerPager extends Fragment implements
         });
 
 
-        todoArrayList = new ArrayList<>();
-        todoArrayList.add(new Todo("잠자기", false));
-        todoArrayList.add(new Todo("진짜 잠자기", false));
-        todoArrayList.add(new Todo("ㄹㅇ로 자고 싶다", false));
-        todoArrayList.add(new Todo("진짜 자고 싶다고", false));
-        todoArrayList.add(new Todo("꿀잠 예약", false));
-        todoArrayList.add(new Todo("꿀잠 예약", false));
-        todoArrayList.add(new Todo("꿀잠 예약", false));
-        todoArrayList.add(new Todo("꿀잠 예약", false));
-        todoArrayList.add(new Todo("꿀잠 예약", false));
+        String id = String.valueOf(this_month + this_year);
+        final RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", id).findAll();
 
+        todoArrayList = new ArrayList<Todo>();
+        todoArrayList.addAll(realm.copyFromRealm(results));
 
         todoAdapter = new TodoListAdapter(getContext(), todoArrayList, this);
         adapter = new TimeTableAdapter(getContext(), list, this);

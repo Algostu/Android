@@ -15,8 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.LocalDB.Todo;
 import com.dum.dodam.R;
-import com.dum.dodam.Scheduler.dataframe.Todo;
 
 import java.util.ArrayList;
 
@@ -65,9 +65,9 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
 
     @Override
     public void onBindViewHolder(@NonNull TodoListAdapter.Holder holder, final int position) {
-        holder.todo_content.setText(list.get(position).content);
+        holder.todo_content.setText(list.get(position).title);
         holder.todo_done.setChecked(list.get(position).done);
-        if(list.get(position).visible){
+        if (list.get(position).visible) {
             holder.ic_remove.setVisibility(View.VISIBLE);
         } else {
             holder.ic_remove.setVisibility(View.GONE);
@@ -76,10 +76,10 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
         holder.todo_done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b==true){
+                if (b == true) {
                     orgHolder.todo_content.setTextColor(Color.GRAY);
                     orgHolder.todo_content.setTypeface(null, Typeface.ITALIC);
-                    orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+                    orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
                 } else {
                     orgHolder.todo_content.setTextColor(Color.BLACK);

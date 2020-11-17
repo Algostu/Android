@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dum.dodam.LocalDB.TodoList;
+import com.dum.dodam.LocalDB.Todo;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.databinding.SchedulerCalendarPopupBinding;
@@ -36,13 +36,13 @@ public class CustomCalendarPopUp extends Fragment implements CustomCalendarAdapt
 
     private String date;
     private String dayOfWeek;
-    private ArrayList<TodoList> list;
+    private ArrayList<Todo> list;
 
     public ImageView ic_trashcan;
     public ImageView ic_go_to;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public CustomCalendarPopUp(CalendarDay day, ArrayList<TodoList> list) {
+    public CustomCalendarPopUp(CalendarDay day, ArrayList<Todo> list) {
         this.list = list;
         this.date = day.getDate().toString();
         this.dayOfWeek = day.getDate().getDayOfWeek().toString();
@@ -74,7 +74,7 @@ public class CustomCalendarPopUp extends Fragment implements CustomCalendarAdapt
         ic_trashcan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (TodoList todo : list) {
+                for (Todo todo : list) {
                     todo.visible ^= true;
                 }
                 adapter.notifyDataSetChanged();

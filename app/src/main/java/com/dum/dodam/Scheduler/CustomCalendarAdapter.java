@@ -15,18 +15,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dum.dodam.LocalDB.TodoList;
+import com.dum.dodam.LocalDB.Todo;
 import com.dum.dodam.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAdapter.Holder> {
-    private ArrayList<TodoList> list = new ArrayList<TodoList>();
+    private ArrayList<Todo> list = new ArrayList<Todo>();
     private OnListItemSelectedInterface mListener;
     private Context context;
 
-    public CustomCalendarAdapter(Context context, ArrayList<TodoList> list, OnListItemSelectedInterface listener) {
+    public CustomCalendarAdapter(Context context, ArrayList<Todo> list, OnListItemSelectedInterface listener) {
         this.context = context;
         this.list = list;
         this.mListener = listener;
