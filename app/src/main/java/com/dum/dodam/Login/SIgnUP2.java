@@ -78,7 +78,9 @@ public class SIgnUP2 extends Fragment {
     private ImageView studentCard;
     private ImageView loadingView;
     private EditText userName;
-    private EditText class_num;
+    private EditText friend;
+    private Spinner class_num;
+    private int classNum;
 
     private int isGender;
     private int isAge;
@@ -242,7 +244,22 @@ public class SIgnUP2 extends Fragment {
 //        });
 //        loadingView = view.findViewById(R.id.loadingView);
 
+        classNum = 0;
         class_num = view.findViewById(R.id.et_class_num);
+        class_num.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("SIGNUP2", "classNum" + i);
+                classNum = i+1;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        friend = view.findViewById(R.id.et_friend);
 
         submit = view.findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -277,8 +294,8 @@ public class SIgnUP2 extends Fragment {
                 }
 
                 String regExp = "^[0-9]+$";
-                if (!class_num.getText().toString().matches(regExp)) {
-                    class_num.setError("숫자만 입력하세요.");
+                if (classNum == 0) {
+                    Toast.makeText(getActivity(), "반을 선택해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -292,7 +309,8 @@ public class SIgnUP2 extends Fragment {
                 paramObject.addProperty("email", user.email);
                 paramObject.addProperty("gender", user.gender);
                 paramObject.addProperty("ageRange", user.ageRange);
-                paramObject.addProperty("class", class_num.getText().toString());
+                paramObject.addProperty("classNum", classNum);
+                paramObject.addProperty("friend", friend.getText().toString());
 
                 Log.d(TAG, "JSON " + paramObject.toString());
 

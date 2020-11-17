@@ -5,29 +5,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.Login.startUpActivity;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
-import com.google.android.material.snackbar.Snackbar;
-
-import org.w3c.dom.Text;
 
 public class Mypage extends Fragment {
 
@@ -37,6 +29,7 @@ public class Mypage extends Fragment {
     private ImageView isChecked;
     private TextView schoolName;
     private TextView grade;
+    private TextView code;
     //    private TextView age;
 //    private TextView gender;
     private TextView withDraw;
@@ -61,6 +54,8 @@ public class Mypage extends Fragment {
 //        gender = view.findViewById(R.id.gender);
         isChecked = view.findViewById(R.id.confirm);
 //        ask_center = view.findViewById(R.id.ask_center);
+        code = view.findViewById(R.id.tv_recommend);
+        code.setText(user.recommendCode);
 
         userName.setText(user.userName);
         nickName.setText(user.nickName);

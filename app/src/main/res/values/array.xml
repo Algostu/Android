@@ -20,4 +20,31 @@
         <item>성인</item>
     </string-array>
 
+    <string-array name="class_num">
+        <item>1반</item>
+        <item>2반</item>
+        <item>3반</item>
+        <item>4반</item>
+        <item>5반</item>
+        <item>6반</item>
+        <item>7반</item>
+        <item>8반</item>
+        <item>9반</item>
+        <item>10반</item>
+        <item>11반</item>
+        <item>12반</item>
+        <item>13반</item>
+        <item>15반</item>
+        <item>16반</item>
+        <item>17반</item>
+        <item>18반</item>
+        <item>19반</item>
+        <item>20반</item>
+        <item>21반</item>
+        <item>22반</item>
+        <item>23반</item>
+        <item>24반</item>
+        <item>25반</item>
+    </string-array>
+
 </resources>
