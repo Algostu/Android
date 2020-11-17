@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,19 +56,19 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        protected TextView startTime;
-        protected TextView endTime;
+        protected TextView time;
         protected TextView todo_content;
         protected ImageView ic_remove;
         protected CheckBox todo_done;
+        protected ImageView iv_color_ball;
 
         public Holder(View view) {
             super(view);
-            this.startTime = (TextView) view.findViewById(R.id.startTime);
-            this.endTime = (TextView) view.findViewById(R.id.endTime);
+            this.time = (TextView) view.findViewById(R.id.time);
             this.todo_content = (TextView) view.findViewById(R.id.todo_content);
             this.ic_remove = (ImageView) view.findViewById(R.id.ic_remove);
             this.todo_done = (CheckBox) view.findViewById(R.id.todo_done);
+            this.iv_color_ball = (ImageView) view.findViewById(R.id.iv_color_ball);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -104,26 +105,54 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
     @Override
     public void onBindViewHolder(@NonNull CustomCalendarAdapter.Holder holder, final int position) {
         Calendar calendar = Calendar.getInstance();
+        String startEndTime = "";
 
         calendar.setTimeInMillis(list.get(position).start);
-        holder.startTime.setText(String.valueOf(calendar.get(Calendar.DATE)));
+        startEndTime = startEndTime + String.valueOf(calendar.get(Calendar.MONTH) + 1) + String.valueOf(calendar.get(Calendar.DATE));
 
         calendar.setTimeInMillis(list.get(position).end);
-        holder.endTime.setText(String.valueOf(calendar.get(Calendar.DATE)));
+        startEndTime = startEndTime + String.valueOf(calendar.get(Calendar.MONTH) + 1) + String.valueOf(calendar.get(Calendar.DATE));
+
+        holder.time.setText(startEndTime);
+
+        GradientDrawable bgShape = (GradientDrawable) holder.iv_color_ball.getBackground();
+        bgShape.setColor(list.get(position).color);
 
         holder.todo_content.setText(list.get(position).title);
 
         holder.itemView.setTag(position);
 
+        holder.todo_done.setChecked(list.get(position).done);
+        if (list.get(position).done == true) {
+            holder.todo_content.setTextColor(Color.GRAY);
+            holder.todo_content.setTypeface(null, Typeface.ITALIC);
+            holder.todo_content.setPaintFlags(holder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.todo_content.setTextColor(Color.BLACK);
+            holder.todo_content.setTypeface(null, Typeface.NORMAL);
+            holder.todo_content.setPaintFlags(0);
+        }
+
         final CustomCalendarAdapter.Holder orgHolder = holder;
         holder.todo_done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Todo todo = realm.where(Todo.class).equalTo("ID", list.get(position).ID).equalTo("title", list.get(position).title).findFirst();
+                        if (b == true) {
+                            todo.done = true;
+                        } else {
+                            todo.done = false;
+                        }
+                    }
+                });
+
                 if (b == true) {
                     orgHolder.todo_content.setTextColor(Color.GRAY);
                     orgHolder.todo_content.setTypeface(null, Typeface.ITALIC);
                     orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
                 } else {
                     orgHolder.todo_content.setTextColor(Color.BLACK);
                     orgHolder.todo_content.setTypeface(null, Typeface.NORMAL);
@@ -131,11 +160,5 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
                 }
             }
         });
-
-        if (list.get(position).visible) {
-            holder.ic_remove.setVisibility(View.VISIBLE);
-        } else {
-            holder.ic_remove.setVisibility(View.GONE);
-        }
     }
 }

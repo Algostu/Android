@@ -2,12 +2,14 @@ package com.dum.dodam.Scheduler;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.R;
@@ -62,13 +64,15 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull TimeTableAdapter.Holder holder, final int position) {
         int hour = Integer.parseInt(getCurrentTime());
+        hour = 10;
         if (position == hour - 9) {
-            holder.period.setTextColor(R.color.flame_scarlet);
-            holder.subject.setTextColor(R.color.flame_scarlet);
+            holder.period.setTextAppearance(R.style.textAppearanceInTime);
+            holder.subject.setTextAppearance(R.style.textAppearanceInTime);
         }
         holder.period.setText(String.format("%d교시", position + 1));
         holder.subject.setText(list.get(position));

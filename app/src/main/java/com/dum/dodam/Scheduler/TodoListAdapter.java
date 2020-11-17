@@ -100,6 +100,16 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
         GradientDrawable bgShape = (GradientDrawable) holder.iv_color_ball.getBackground();
         bgShape.setColor(list.get(position).color);
 
+        if (list.get(position).done == true) {
+            holder.todo_content.setTextColor(Color.GRAY);
+            holder.todo_content.setTypeface(null, Typeface.ITALIC);
+            holder.todo_content.setPaintFlags(holder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.todo_content.setTextColor(Color.BLACK);
+            holder.todo_content.setTypeface(null, Typeface.NORMAL);
+            holder.todo_content.setPaintFlags(0);
+        }
+
         if (list.get(position).visible) {
             holder.ic_remove.setVisibility(View.VISIBLE);
             holder.iv_color_ball.setVisibility(View.GONE);
@@ -110,12 +120,23 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
         final TodoListAdapter.Holder orgHolder = holder;
         holder.todo_done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Todo todo = realm.where(Todo.class).equalTo("ID", list.get(position).ID).equalTo("title", list.get(position).title).findFirst();
+                        if (b == true) {
+                            todo.done = true;
+                        } else {
+                            todo.done = false;
+                        }
+                    }
+                });
+
                 if (b == true) {
                     orgHolder.todo_content.setTextColor(Color.GRAY);
                     orgHolder.todo_content.setTypeface(null, Typeface.ITALIC);
                     orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
                 } else {
                     orgHolder.todo_content.setTextColor(Color.BLACK);
                     orgHolder.todo_content.setTypeface(null, Typeface.NORMAL);
