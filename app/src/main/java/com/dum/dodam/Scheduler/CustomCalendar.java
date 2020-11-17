@@ -262,8 +262,16 @@ public class CustomCalendar extends Fragment {
                                 }
                             }
                             if (results.size() != 0) {
+                                list.addAll(realm.copyFromRealm(results));
                                 ArrayList<Todo> dataArrayList = new ArrayList<Todo>();
-                                dataArrayList.addAll(realm.copyFromRealm(results));
+                                Calendar calendar = Calendar.getInstance();
+
+                                for (Todo data : list) {
+                                    calendar.setTimeInMillis(data.start);
+                                    if (calendar.get(Calendar.DATE) == day.getDay()) {
+                                        dataArrayList.add(data);
+                                    }
+                                }
                                 ((MainActivity) getActivity()).replaceFragmentPopup(new CustomCalendarPopUp(day, dataArrayList));
                             }
                         }
@@ -303,7 +311,7 @@ public class CustomCalendar extends Fragment {
                 topView.setBackgroundResource(R.color.transparent);
 
                 String id = String.valueOf(calendarDay.getDate().getYear()) + String.valueOf(calendarDay.getDate().getMonth().getValue());
-                RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", "202011").findAll();
+                RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", id).findAll();
 
                 int isEmpty = 0;
                 RealmList<TodoData> todoData;
@@ -410,4 +418,6 @@ public class CustomCalendar extends Fragment {
 
         return daysOfWeek;
     }
+
+
 }

@@ -11,7 +11,9 @@ public class LocalDB extends Application {
         super.onCreate();
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder()
+                .allowWritesOnUiThread(true)
                 .name("TodoList.realm")
+                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(config);
     }

@@ -30,8 +30,6 @@ public class Mypage extends Fragment {
     private TextView schoolName;
     private TextView grade;
     private TextView code;
-    //    private TextView age;
-//    private TextView gender;
     private TextView withDraw;
     private TextView logout;
     private TextView recommend;

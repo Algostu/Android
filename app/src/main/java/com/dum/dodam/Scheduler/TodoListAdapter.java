@@ -20,19 +20,23 @@ import com.dum.dodam.R;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder> {
     private ArrayList<Todo> list = new ArrayList<>();
     private TodoListAdapter.OnListItemSelectedInterface mListener;
     private Context context;
+    private Realm realm;
 
     public TodoListAdapter(Context context, ArrayList<Todo> list, TodoListAdapter.OnListItemSelectedInterface listener) {
         this.context = context;
         this.list = list;
         this.mListener = listener;
+        this.realm = Realm.getDefaultInstance();
     }
 
     public interface OnListItemSelectedInterface {
-        void onItemSelected(View v, int position);
+        void onItemSelected(ArrayList<Todo> list, int position);
     }
 
     @NonNull
@@ -60,6 +64,29 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
             this.ic_remove = (ImageView) view.findViewById(R.id.ic_remove);
             this.todo_done = (CheckBox) view.findViewById(R.id.todo_done);
 
+            ic_remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                int poisition = getAbsoluteAdapterPosition();
+                                Todo deleteTodo = realm.where(Todo.class).equalTo("ID", list.get(poisition).ID).equalTo("title", list.get(poisition).title).findFirst();
+                                if (deleteTodo != null) {
+                                    list.remove(poisition);
+                                    notifyItemRemoved(poisition);
+                                    deleteTodo.deleteFromRealm();
+                                }
+                            }
+                        });
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
         }
     }
 
@@ -86,14 +113,6 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
                     orgHolder.todo_content.setTypeface(null, Typeface.NORMAL);
                     orgHolder.todo_content.setPaintFlags(0);
                 }
-            }
-        });
-
-        holder.ic_remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                list.remove(position);
-                notifyItemRemoved(position);
             }
         });
     }
