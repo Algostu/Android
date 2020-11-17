@@ -29,13 +29,9 @@ public class Mypage extends Fragment {
     private ImageView isChecked;
     private TextView schoolName;
     private TextView grade;
-<<<<<<< HEAD
-
-=======
     private TextView code;
     //    private TextView age;
 //    private TextView gender;
->>>>>>> ea161960039445ebc23781c905b5cc7b13f4a9bc
     private TextView withDraw;
     private TextView logout;
     private TextView recommend;
