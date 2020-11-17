@@ -90,13 +90,12 @@
                     android:text="Prize"
                     android:textSize="15dp" />
 
-                <TextView
-                    android:id="@+id/content"
-                    android:layout_width="wrap_content"
+                <WebView
+                    android:id="@+id/content_webview"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Content"
-                    android:textSize="15dp" />
+                    tools:ignore="WebViewLayout" />
 
                 <TextView
                     android:id="@+id/sponsor"
@@ -124,6 +123,8 @@
                     android:linksClickable="true"
                     android:text=" "
                     android:textSize="20dp" />
+
+
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

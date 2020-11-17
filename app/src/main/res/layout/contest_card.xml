@@ -17,7 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:elevation="1dp"
         app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -44,9 +46,6 @@
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:singleLine="true"
                     android:text="Title"
                     android:textColor="@android:color/black"
                     android:textSize="15dp"
@@ -65,19 +64,8 @@
                     android:id="@+id/prize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="1000 만원"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:id="@+id/content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="Content"
+                    android:text="1000 만원"
                     android:textColor="@android:color/black"
                     android:textSize="15dp" />
 

@@ -1,10 +1,10 @@
 package com.dum.dodam.Contest;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,13 +22,11 @@ public class ContestInfo extends Fragment {
     private TextView area;
     private TextView period;
     private TextView prize;
-    private TextView content;
     private TextView sponsor;
     private TextView homepage;
 
     private ContestFrame frame;
 
-    private String contents;
 
     public ContestInfo(ContestFrame frame) {
         this.frame = frame;
@@ -45,7 +43,7 @@ public class ContestInfo extends Fragment {
         area = view.findViewById(R.id.area);
         period = view.findViewById(R.id.period);
         prize = view.findViewById(R.id.prize);
-        content = view.findViewById(R.id.content);
+
         sponsor = view.findViewById(R.id.sponsor);
         homepage = view.findViewById(R.id.homepage);
 
@@ -57,10 +55,11 @@ public class ContestInfo extends Fragment {
         sponsor.setText(frame.sponsor);
         homepage.setText(frame.homePage);
 
-        Log.d("RHC", "CONTENT : " + frame.content);
-        contents = frame.content.replace("■", "\n\n■");
+        String pish = "<html><head><style type=\"text/css\">@font-face {font-family: MyFont;src: url(\"file:///android_asset/font/BMitra.ttf\")}body {font-family: MyFont;font-size: medium;text-align: justify;}</style></head><body>";
+        String pas = "</body></html>";
+        WebView webView = view.findViewById(R.id.content_webview);
+        webView.loadDataWithBaseURL(null, pish + frame.content + pas, "text/html", "utf-8", null);
 
-        content.setText(contents);
         return view;
     }
 }

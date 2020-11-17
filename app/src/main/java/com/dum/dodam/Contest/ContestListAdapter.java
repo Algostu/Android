@@ -48,12 +48,12 @@ public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.
     public class Holder extends RecyclerView.ViewHolder {
         protected TextView contestID;
         protected TextView title;
-        protected TextView content;
         protected ImageView imageView;
         protected TextView date;
         protected TextView prize;
         protected TextView sponsor;
 
+        protected String content;
         protected String firstPrize;
         protected String homePage;
         protected String imageUrl;
@@ -66,7 +66,6 @@ public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.
             super(view);
             this.contestID = (TextView) view.findViewById(R.id.contestID);
             this.title = (TextView) view.findViewById(R.id.title);
-            this.content = (TextView) view.findViewById(R.id.content);
             this.date = (TextView) view.findViewById(R.id.date);
             this.prize = (TextView) view.findViewById(R.id.prize);
             this.sponsor = (TextView) view.findViewById(R.id.host);
@@ -84,7 +83,6 @@ public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ContestListAdapter.Holder holder, final int position) {
         holder.title.setText(list.get(position).title);
-        holder.content.setText(list.get(position).content);
         holder.contestID.setText(String.valueOf(list.get(position).contestID));
         holder.date.setText(list.get(position).start + " - " + list.get(position).end);
         holder.prize.setText(String.valueOf(list.get(position).firstPrize));
@@ -96,6 +94,7 @@ public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.
         holder.start = list.get(position).start;
         holder.end = list.get(position).end;
         holder.area = list.get(position).area;
+        holder.content = list.get(position).content;
 
         holder.itemView.setTag(position);
     }

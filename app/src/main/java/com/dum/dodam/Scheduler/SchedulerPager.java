@@ -69,7 +69,6 @@ public class SchedulerPager extends Fragment implements
     public Calendar startCalender;
     public Calendar endCalender;
 
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;

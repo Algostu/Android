@@ -1,6 +1,7 @@
 package com.dum.dodam.Contest;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,15 +11,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dum.dodam.MainActivity;
-import com.dum.dodam.R;
 import com.dum.dodam.Contest.dataframe.ContestFrame;
 import com.dum.dodam.Contest.dataframe.ContestListResponse;
+import com.dum.dodam.MainActivity;
+import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -52,6 +53,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
     ArrayList<ContestFrame> list = new ArrayList<>();
     ArrayList<ContestFrame> result = new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -96,6 +98,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
                             JSONObject sObject = new JSONObject();//배열 내에 들어갈 json
                             sObject.put("contestID", result.get(i).contestID);
                             sObject.put("title", result.get(i).title);
+                            Log.d(TAG, "onResponse: + " + result.get(i).content);
                             sObject.put("content", result.get(i).content);
                             sObject.put("area", result.get(i).area);
                             sObject.put("sponsor", result.get(i).sponsor);
@@ -109,6 +112,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Log.d(TAG, "exception : " + e.toString());
                     }
 
                     try {
@@ -183,7 +187,6 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
         ContestListAdapter.Holder holder = (ContestListAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
         ContestFrame frame = new ContestFrame();
         frame.title = holder.title.getText().toString();
-        frame.content = holder.content.getText().toString();
         frame.area = holder.area;
         frame.sponsor = holder.sponsor.getText().toString();
         frame.prize = holder.prize.getText().toString();
@@ -192,6 +195,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
         frame.imageUrl = holder.imageUrl;
         frame.start = holder.start;
         frame.end = holder.end;
+        frame.content = holder.content;
 
         ((MainActivity) getActivity()).replaceFragmentFull(new ContestInfo(frame));
     }
