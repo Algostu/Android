@@ -52,6 +52,7 @@ public class CustomCalendarPopUp extends Fragment implements CustomCalendarAdapt
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.scheduler_calendar_popup, container, false);
+        binding.getRoot().setClickable(true);
 
         adapter = new CustomCalendarAdapter(getContext(), list, this);
 
@@ -87,7 +88,9 @@ public class CustomCalendarPopUp extends Fragment implements CustomCalendarAdapt
             @Override
             public void onClick(View view) {
                 ((MainActivity) view.getContext()).onBackPressed();
-                ((MainActivity) view.getContext()).replaceFragmentFull(Scheduler.newInstance(calendar.get(Calendar.DATE)));
+//                ((MainActivity) view.getContext()).replaceFragmentFull(Scheduler.newInstance(calendar.get(Calendar.DATE)));
+                ((MainActivity) view.getContext()).replaceFragmentFull(new Scheduler(calendar.get(Calendar.DATE)));
+
             }
         });
 

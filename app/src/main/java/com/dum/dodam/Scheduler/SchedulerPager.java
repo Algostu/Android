@@ -247,7 +247,9 @@ public class SchedulerPager extends Fragment implements
                         todo.title = todo_title.getText().toString();
                         todo.done = false;
 
-                        tmp.add(realm.copyFromRealm(todo));
+                        if (startCalender.get(Calendar.DATE) == this_date && startCalender.get(Calendar.MONTH)+1 == this_month) {
+                            tmp.add(realm.copyFromRealm(todo));
+                        }
 
                     }
                 }, new Realm.Transaction.OnSuccess() {
@@ -608,5 +610,6 @@ public class SchedulerPager extends Fragment implements
             }
         }
         todoAdapter.notifyDataSetChanged();
+
     }
 }
