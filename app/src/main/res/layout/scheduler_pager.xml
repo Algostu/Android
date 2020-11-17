@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/slidingWindow"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_gray"
     android:gravity="bottom"
-    android:background="@color/white"
-    app:umanoShadowHeight="0dp"
-    app:umanoPanelHeight="120dp">
+    app:umanoPanelHeight="120dp"
+    app:umanoShadowHeight="0dp">
 
     <LinearLayout
-        android:paddingHorizontal="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -23,12 +22,13 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="1dp"
             app:cardUseCompatPadding="true">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingVertical="15dp"
-                android:paddingHorizontal="10dp">
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="15dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -55,20 +55,23 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="1dp"
             app:cardUseCompatPadding="true">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingVertical="15dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:layout_weight="5"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
+                        android:layout_weight="5"
                         android:text="Todo List"
                         android:textSize="20sp" />
 
@@ -78,7 +81,7 @@
                         android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_trash"/>
+                        android:src="@drawable/ic_trash" />
 
                 </LinearLayout>
 
@@ -96,79 +99,85 @@
     </LinearLayout>
 
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/transparent"
         app:cardCornerRadius="15dp"
-        app:cardElevation="50dp"
-        >
+        app:cardElevation="50dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:paddingTop="5dp"
             android:background="@color/transparent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:paddingTop="5dp">
+
             <ImageView
                 android:id="@+id/arrow"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_free_icon_up_arrow_626004"/>
+                android:src="@drawable/ic_free_icon_up_arrow_626004" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textStyle="bold"
                 android:text="할일 추가"
-                android:textSize="15dp"/>
+                android:textSize="15dp"
+                android:textStyle="bold" />
             <!--        제목 설정-->
             <LinearLayout
-                android:layout_marginVertical="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="15dp"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_weight="3"
                     android:gravity="left"
-                    android:layout_marginLeft="10dp"
-                    android:textStyle="bold"
                     android:text="제목"
-                    android:textSize="13dp"/>
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+
                 <EditText
                     android:id="@+id/todo_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="할일을 입력해주세요."
-                    android:textSize="13dp"
                     android:layout_weight="7"
+                    android:hint="할일을 입력해주세요."
+                    android:inputType="text"
                     android:maxLines="1"
-                    android:inputType="text"/>
+                    android:textSize="13dp" />
             </LinearLayout>
             <!--        날짜 및 시간-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <LinearLayout
-                    android:layout_marginVertical="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="15dp"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="3"
                         android:gravity="left"
-                        android:layout_marginLeft="10dp"
-                        android:textStyle="bold"
                         android:text="날짜 설정"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/todo_dates"
                         android:layout_width="0dp"
@@ -176,22 +185,25 @@
                         android:layout_weight="7"
                         android:gravity="left"
                         android:text="날짜를 선택해주세요"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp" />
                 </LinearLayout>
+
                 <LinearLayout
-                    android:layout_marginVertical="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="15dp"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="3"
                         android:gravity="left"
-                        android:layout_marginLeft="10dp"
-                        android:textStyle="bold"
                         android:text="시작 시간"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/todo_start_time"
                         android:layout_width="0dp"
@@ -199,22 +211,25 @@
                         android:layout_weight="7"
                         android:gravity="left"
                         android:text="시작 시간을 선택해주세요"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp" />
                 </LinearLayout>
+
                 <LinearLayout
-                    android:layout_marginVertical="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="15dp"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="3"
                         android:gravity="left"
-                        android:layout_marginLeft="10dp"
-                        android:textStyle="bold"
                         android:text="끝나는 시간"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/todo_end_time"
                         android:layout_width="0dp"
@@ -222,28 +237,27 @@
                         android:layout_weight="7"
                         android:gravity="left"
                         android:text="끝나는 시간을 선택해주세요"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp" />
                 </LinearLayout>
             </LinearLayout>
             <!--        버튼-->
             <Button
-                android:layout_marginVertical="15dp"
-                android:layout_gravity="bottom"
                 android:id="@+id/btn_black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="20dp"
-                android:textColor="@color/white"
+                android:layout_gravity="bottom"
+                android:layout_marginVertical="15dp"
                 android:background="@drawable/button_background"
-                android:text="할일 추가"/>
+                android:padding="10dp"
+                android:text="할일 추가"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="42dp"></View>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-
 
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

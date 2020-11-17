@@ -56,6 +56,7 @@ public class ArticleWrite extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+
         View view = inflater.inflate(R.layout.article_write, container, false);
         view.setClickable(true);
 

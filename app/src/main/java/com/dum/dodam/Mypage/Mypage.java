@@ -5,29 +5,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.Login.startUpActivity;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
-import com.google.android.material.snackbar.Snackbar;
-
-import org.w3c.dom.Text;
 
 public class Mypage extends Fragment {
 
@@ -37,11 +29,11 @@ public class Mypage extends Fragment {
     private ImageView isChecked;
     private TextView schoolName;
     private TextView grade;
-    //    private TextView age;
-//    private TextView gender;
+
     private TextView withDraw;
     private TextView logout;
-    //    private TextView ask_center;
+    private TextView recommend;
+
     UserJson user;
 
     @Nullable
@@ -119,12 +111,6 @@ public class Mypage extends Fragment {
         } else {
             grade.setText("중학생");
         }
-
-//        if (user.gender == 1) {
-//            gender.setText("남학생");
-//        } else {
-//            gender.setText("여학생");
-//        }
 
         if (user.authorized.equals("1")) {
             isChecked.setImageResource(R.drawable.ic_confirm);
@@ -228,6 +214,15 @@ public class Mypage extends Fragment {
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
                 sendIntent.setData(uri);
                 startActivity(Intent.createChooser(sendIntent, "Send email"));
+            }
+        });
+
+        recommend = view.findViewById(R.id.recommend);
+        recommend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecommendDialog dialog = new RecommendDialog(getContext());
+                dialog.callDialog();
             }
         });
 

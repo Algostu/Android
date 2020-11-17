@@ -22,7 +22,8 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_logo_white1" />
 
         <activity android:name=".Login.startUpActivity">
@@ -34,14 +35,15 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".Login.startUpActivity">
+            android:parentActivityName=".Login.startUpActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login.startUpActivity"/>
+                android:value=".Login.startUpActivity" />
 
         </activity>
+
         <service android:name=".MyFireBaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"></action>

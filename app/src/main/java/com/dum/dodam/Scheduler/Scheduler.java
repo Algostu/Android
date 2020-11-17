@@ -48,7 +48,7 @@ public class Scheduler extends Fragment {
         int endDate = cal.getActualMaximum(Calendar.DATE); //달의 마지막일 얻기
 
         Bundle bundle = new Bundle();
-        if (bundle.containsKey("date")){
+        if (bundle.containsKey("date")) {
             today = bundle.getInt("date");
         }
 
