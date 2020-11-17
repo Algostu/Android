@@ -29,7 +29,13 @@ public class Mypage extends Fragment {
     private ImageView isChecked;
     private TextView schoolName;
     private TextView grade;
+<<<<<<< HEAD
 
+=======
+    private TextView code;
+    //    private TextView age;
+//    private TextView gender;
+>>>>>>> ea161960039445ebc23781c905b5cc7b13f4a9bc
     private TextView withDraw;
     private TextView logout;
     private TextView recommend;
@@ -53,6 +59,8 @@ public class Mypage extends Fragment {
 //        gender = view.findViewById(R.id.gender);
         isChecked = view.findViewById(R.id.confirm);
 //        ask_center = view.findViewById(R.id.ask_center);
+        code = view.findViewById(R.id.tv_recommend);
+        code.setText(user.recommendCode);
 
         userName.setText(user.userName);
         nickName.setText(user.nickName);

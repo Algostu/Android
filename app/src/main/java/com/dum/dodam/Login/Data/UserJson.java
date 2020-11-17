@@ -24,6 +24,10 @@ public class UserJson extends BaseResponse implements Serializable {
     public int grade;
     public String nickName;
     public String userName;
+    public int classNum;
+    public String I_CODE;
+    public String SC_CODE;
+    public String recommendCode;
     public String signupDate;
     // community List
     public ArrayList<MyCommunityFrame2> comAll;

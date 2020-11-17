@@ -68,6 +68,9 @@ public class SchedulerPager extends Fragment implements
     public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     public Calendar startCalender;
     public Calendar endCalender;
+    public int classNum;
+    public String I_CODE;
+    public String SC_CODE;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -139,6 +142,11 @@ public class SchedulerPager extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.scheduler_pager, container, false);
         view.setClickable(true);
+
+        classNum = ((MainActivity)getActivity()).user.classNum;
+        SC_CODE = ((MainActivity)getActivity()).user.SC_CODE;
+        I_CODE = ((MainActivity)getActivity()).user.I_CODE;
+
         final TextView startTimeTV = view.findViewById(R.id.todo_start_time);
         final TextView endTimeTV = view.findViewById(R.id.todo_end_time);
         final TextView dates = view.findViewById(R.id.todo_dates);
@@ -360,11 +368,13 @@ public class SchedulerPager extends Fragment implements
         }
 
         UserJson user = ((MainActivity) getActivity()).getUser();
-
-        String ATPT_OFCDC_SC_CODE = "J10";
-        String SD_SCHUL_CODE = "7530612";
+        Log.d(TAG, "sc_code" + SC_CODE);
+        Log.d(TAG, "I_CODE" + I_CODE);
+        String ATPT_OFCDC_SC_CODE = I_CODE;
+        String SD_SCHUL_CODE = SC_CODE;
         String GRADE = String.valueOf(user.grade - 10);
-        String CLASS_NM = "4";
+        if (classNum == 0) classNum = 1;
+        String CLASS_NM = String.valueOf(classNum);
 
         Gson gson = new GsonBuilder()
                 .setLenient()
