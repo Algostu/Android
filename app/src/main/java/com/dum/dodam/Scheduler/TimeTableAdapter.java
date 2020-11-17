@@ -2,7 +2,6 @@ package com.dum.dodam.Scheduler;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,10 +65,7 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull TimeTableAdapter.Holder holder, final int position) {
-        Log.d("RHC", "integer " + getCurrentTime());
         int hour = Integer.parseInt(getCurrentTime());
-        Log.d("RHC", "time: " + hour);
-        hour = 10;
         if (position == hour - 9) {
             holder.period.setTextColor(R.color.flame_scarlet);
             holder.subject.setTextColor(R.color.flame_scarlet);

@@ -2,6 +2,7 @@ package com.dum.dodam.Scheduler;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dum.dodam.MainActivity;
@@ -25,6 +27,8 @@ import com.google.gson.Gson;
 import java.util.Calendar;
 
 public class Scheduler extends Fragment {
+
+    private ViewPager pager;
 
     public static Scheduler newInstance(int date) {
         Bundle args = new Bundle();
@@ -43,7 +47,7 @@ public class Scheduler extends Fragment {
 
         Calendar cal = Calendar.getInstance(); //캘린더 인스턴스 얻기
         int today = cal.get(Calendar.DATE);
-        int this_month = cal.get(Calendar.MONTH);
+        int this_month = cal.get(Calendar.MONTH) + 1;
         int this_year = cal.get(Calendar.YEAR);
         cal.set(Calendar.DATE, 1); //현재 달을 1일로 설정.
         int sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1), MONDAY(2) , TUESDAY(3),.....
@@ -59,7 +63,7 @@ public class Scheduler extends Fragment {
         ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         actionBar.setTitle("스케줄러");
 
-        ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
+        pager = (ViewPager) view.findViewById(R.id.pager);
         SchedulerPagerAdapter viewPageAdapter = new SchedulerPagerAdapter(getChildFragmentManager(), sDayNum, endDate, this_month, this_year);
         pager.setAdapter(viewPageAdapter);
 
@@ -78,5 +82,16 @@ public class Scheduler extends Fragment {
             }
         });
         return view;
+    }
+
+    public void refresh() {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.detach(this).attach(this).commit();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("RHC", "onStart: ");
     }
 }

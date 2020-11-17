@@ -29,7 +29,6 @@ import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.Scheduler.dataframe.SchoolTimeTable;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
@@ -76,19 +75,18 @@ public class SchedulerPager extends Fragment implements
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    public BottomAppBar bottomAppbar;
     private RecyclerView todoRecyclerView;
     private RecyclerView.Adapter todoAdapter;
     private RecyclerView.LayoutManager todoLayoutManager;
     SlidingUpPanelLayout slidingPaneLayout;
     public Button btn;
 
-    public ArrayList<Todo> todoArrayList;
+    public ArrayList<Todo> todoArrayList = new ArrayList<Todo>();
 
     public ImageView ic_trashcan;
 
-
     private ArrayList<String> list = new ArrayList<>();
+    final ArrayList<Todo> tmp = new ArrayList<>();
 
     private ArrayList<SchoolTimeTable.TimeTable> result;
 
@@ -101,11 +99,14 @@ public class SchedulerPager extends Fragment implements
 
     private Realm realm;
 
+    private String ID;
     private int day_of_week;
     private int this_month;
     private int this_year;
+    private int this_date;
 
-    public SchedulerPager(int date, int day_of_week, int this_month, int this_year) {
+    public SchedulerPager(int day_of_week, int this_date, int this_month, int this_year) {
+        this.this_date = this_date;
         this.this_month = this_month;
         this.this_year = this_year;
         this.day_of_week = day_of_week;
@@ -143,16 +144,54 @@ public class SchedulerPager extends Fragment implements
         View view = inflater.inflate(R.layout.scheduler_pager, container, false);
         view.setClickable(true);
 
-        classNum = ((MainActivity)getActivity()).user.classNum;
-        SC_CODE = ((MainActivity)getActivity()).user.SC_CODE;
-        I_CODE = ((MainActivity)getActivity()).user.I_CODE;
+        todoArrayList.clear();
+
+        realm = Realm.getDefaultInstance();
+
+        ID = String.valueOf(this_year) + String.valueOf(this_month);
+        RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", ID).findAll();
+
+        Calendar calendar = Calendar.getInstance();
+        for (Todo todo : realm.copyFromRealm(results)) {
+            calendar.setTimeInMillis(todo.start);
+            if (calendar.get(Calendar.DATE) == this_date) {
+                todoArrayList.add(todo);
+            }
+        }
+
+        todoAdapter = new TodoListAdapter(getContext(), todoArrayList, this);
+        adapter = new TimeTableAdapter(getContext(), list, this);
+
+        String filename = "TimeTable";
+        File file = new File(requireContext().getFilesDir() + "/" + filename);
+        if (file.exists()) {
+            readTimeTable();
+        } else {
+            getTimeTable();
+        }
+
+        todoRecyclerView = (RecyclerView) view.findViewById(R.id.rv_todo_list);
+        todoRecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.HORIZONTAL));
+        todoRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        todoRecyclerView.setLayoutManager(layoutManager);
+        todoRecyclerView.setAdapter(todoAdapter);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.rv_time_table);
+        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.HORIZONTAL));
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager2);
+        recyclerView.setAdapter(adapter);
+
+        classNum = ((MainActivity) getActivity()).user.classNum;
+        SC_CODE = ((MainActivity) getActivity()).user.SC_CODE;
+        I_CODE = ((MainActivity) getActivity()).user.I_CODE;
 
         final TextView startTimeTV = view.findViewById(R.id.todo_start_time);
         final TextView endTimeTV = view.findViewById(R.id.todo_end_time);
         final TextView dates = view.findViewById(R.id.todo_dates);
         // sliding window
-
-        realm = Realm.getDefaultInstance();
 
         final ImageView arrow = view.findViewById(R.id.arrow);
         slidingPaneLayout = view.findViewById(R.id.slidingWindow);
@@ -165,9 +204,16 @@ public class SchedulerPager extends Fragment implements
 
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                Log.d(TAG, "[onPanelStateChanged]previousState: " + previousState);
-                Log.d(TAG, "[onPanelStateChanged]newState: " + newState);
+//                Log.d(TAG, "[onPanelStateChanged]previousState: " + previousState);
+//                Log.d(TAG, "[onPanelStateChanged]newState: " + newState);
                 if (newState.equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
+                    if (!tmp.isEmpty()) {
+                        todoArrayList.clear();
+                        todoArrayList.addAll(tmp);
+                        todoAdapter.notifyDataSetChanged();
+                        tmp.clear();
+                    }
+
                     arrow.setImageResource(R.drawable.ic_free_icon_up_arrow_626004);
                 } else if (newState.equals(SlidingUpPanelLayout.PanelState.EXPANDED)) {
                     arrow.setImageResource(R.drawable.ic_free_icon_down_arrow_625946);
@@ -184,6 +230,9 @@ public class SchedulerPager extends Fragment implements
                     todo_title.setError("제목을 입력해주세요");
                     return;
                 }
+                tmp.clear();
+                tmp.addAll(todoArrayList);
+
                 // TODO : db에 항목 추가 하기 및 recycler view 초기화
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
@@ -198,6 +247,8 @@ public class SchedulerPager extends Fragment implements
                         todo.title = todo_title.getText().toString();
                         todo.done = false;
 
+                        tmp.add(realm.copyFromRealm(todo));
+
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
@@ -208,6 +259,7 @@ public class SchedulerPager extends Fragment implements
                     public void onError(Throwable error) {
                     }
                 });
+
                 startCalender.getTimeInMillis();
                 endCalender.getTimeInMillis();
 
@@ -320,38 +372,6 @@ public class SchedulerPager extends Fragment implements
                 todoAdapter.notifyDataSetChanged();
             }
         });
-
-
-        String id = String.valueOf(this_month + this_year);
-        final RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", id).findAll();
-
-        todoArrayList = new ArrayList<Todo>();
-        todoArrayList.addAll(realm.copyFromRealm(results));
-
-        todoAdapter = new TodoListAdapter(getContext(), todoArrayList, this);
-        adapter = new TimeTableAdapter(getContext(), list, this);
-
-        String filename = "TimeTable";
-        File file = new File(requireContext().getFilesDir() + "/" + filename);
-        if (file.exists()) {
-            readTimeTable();
-        } else {
-            getTimeTable();
-        }
-
-        todoRecyclerView = (RecyclerView) view.findViewById(R.id.rv_todo_list);
-        todoRecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.HORIZONTAL));
-        todoRecyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        todoRecyclerView.setLayoutManager(layoutManager);
-        todoRecyclerView.setAdapter(todoAdapter);
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv_time_table);
-        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.HORIZONTAL));
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
 
         return view;
     }
@@ -565,5 +585,28 @@ public class SchedulerPager extends Fragment implements
     @Override
     public void onItemSelected(View v, int position) {
 
+    }
+
+    @Override
+    public void onItemSelected(ArrayList<Todo> list, final int position) {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        todoArrayList.clear();
+
+        RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", ID).findAll();
+
+        Calendar calendar = Calendar.getInstance();
+        for (Todo todo : realm.copyFromRealm(results)) {
+            calendar.setTimeInMillis(todo.start);
+            if (calendar.get(Calendar.DATE) == this_date) {
+                todoArrayList.add(todo);
+            }
+        }
+        todoAdapter.notifyDataSetChanged();
     }
 }

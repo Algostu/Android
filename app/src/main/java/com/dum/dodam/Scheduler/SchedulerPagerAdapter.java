@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class SchedulerPagerAdapter extends FragmentStatePagerAdapter {
 
-    private static final String TAG = "RHC";
     ArrayList<Fragment> fragments = new ArrayList<>();
     ArrayList<String> pageTitles = new ArrayList<>();
 
@@ -19,7 +18,7 @@ public class SchedulerPagerAdapter extends FragmentStatePagerAdapter {
 
         for (int i = 1; i < end_date + 1; i++) {
             pageTitles.add(String.format("%d일", i));
-            fragments.add(new SchedulerPager(i + 1, sDay_num % 7, this_month, this_year));
+            fragments.add(new SchedulerPager(sDay_num % 7, i, this_month, this_year));
             sDay_num++;
         }
     }

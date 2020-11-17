@@ -21,15 +21,19 @@ import com.dum.dodam.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import io.realm.Realm;
+
 public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAdapter.Holder> {
     private ArrayList<Todo> list = new ArrayList<Todo>();
     private OnListItemSelectedInterface mListener;
     private Context context;
+    private Realm realm;
 
     public CustomCalendarAdapter(Context context, ArrayList<Todo> list, OnListItemSelectedInterface listener) {
         this.context = context;
         this.list = list;
         this.mListener = listener;
+        this.realm = Realm.getDefaultInstance();
     }
 
     public interface OnListItemSelectedInterface {
@@ -50,7 +54,7 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
         return (null != list ? list.size() : 0);
     }
 
-    public static class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends RecyclerView.ViewHolder {
         protected TextView startTime;
         protected TextView endTime;
         protected TextView todo_content;
@@ -68,6 +72,29 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                }
+            });
+
+            ic_remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                int poisition = getAbsoluteAdapterPosition();
+                                Todo deleteTodo = realm.where(Todo.class).equalTo("ID", list.get(poisition).ID).equalTo("title", list.get(poisition).title).findFirst();
+                                if (deleteTodo != null) {
+                                    list.remove(poisition);
+                                    notifyItemRemoved(poisition);
+                                    deleteTodo.deleteFromRealm();
+                                }
+                            }
+                        });
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             });
 
@@ -110,12 +137,5 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
         } else {
             holder.ic_remove.setVisibility(View.GONE);
         }
-        holder.ic_remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                list.remove(position);
-                notifyItemRemoved(position);
-            }
-        });
     }
 }

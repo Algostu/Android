@@ -88,10 +88,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_todo_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
-                    android:overScrollMode="never"
                     tools:ignore="MissingConstraints" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -255,7 +254,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="42dp"></View>
+                android:layout_height="42dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

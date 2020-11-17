@@ -13,16 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dum.dodam.Alarm.Adapter.PageAdapter;
-import com.dum.dodam.Alarm.Fragment.SubPage1;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
-import com.google.android.material.tabs.TabLayout;
 
 public class AlarmTab extends Fragment {
 //    TabLayout tabs;
