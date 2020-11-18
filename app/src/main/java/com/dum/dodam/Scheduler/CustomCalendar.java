@@ -1,6 +1,7 @@
 package com.dum.dodam.Scheduler;
 
 import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,6 +23,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.dum.dodam.LocalDB.Todo;
 import com.dum.dodam.LocalDB.TodoData;
@@ -59,6 +62,9 @@ import kotlin.collections.ArraysKt;
 import kotlin.jvm.functions.Function1;
 import kotlin.ranges.IntRange;
 import kotlin.ranges.RangesKt;
+import petrov.kristiyan.colorpicker.ColorPicker;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class CustomCalendar extends Fragment {
@@ -68,13 +74,16 @@ public class CustomCalendar extends Fragment {
     public Calendar endCalender;
     SlidingUpPanelLayout slidingPaneLayout;
     public Button btn;
-
+    public View color_box_view;
+    public int new_color;
+    public TextView tv_colorPicker;
     private SchedulerCalendarBinding layout;
 
     private CalendarView calendarView;
 
     private ArrayList<Todo> list = new ArrayList<>();
     private LocalDate selectedDate;
+    private EditText todo_title;
 
     private Realm realm;
 
@@ -85,6 +94,8 @@ public class CustomCalendar extends Fragment {
         layout.getRoot().setClickable(true);
 
         realm = Realm.getDefaultInstance();
+
+        new_color = Color.parseColor("#ffab91");
 
         final TextView startTimeTV = layout.todoStartTime;
         final TextView endTimeTV = layout.todoEndTime;
@@ -106,22 +117,51 @@ public class CustomCalendar extends Fragment {
                 Log.d(TAG, "[onPanelStateChanged]newState: " + newState);
                 if (newState.equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
                     arrow.setImageResource(R.drawable.ic_free_icon_up_arrow_626004);
+                    refresh();
                 } else if (newState.equals(SlidingUpPanelLayout.PanelState.EXPANDED)) {
                     arrow.setImageResource(R.drawable.ic_free_icon_down_arrow_625946);
                 }
             }
         });
+        slidingPaneLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         // 완료 버튼
-        final EditText todo_title = layout.todoTitle;
+        todo_title = layout.todoTitle;
         btn = layout.btnBlack;
         btn.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 if (TextUtils.isEmpty(todo_title.getText().toString())) {
                     todo_title.setError("제목을 입력해주세요");
                     return;
                 }
+
                 // TODO : db에 항목 추가 하기 및 recycler view 초기화
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        int year = startCalender.get(Calendar.YEAR);
+                        int month = startCalender.get(Calendar.MONTH);
+
+                        Todo todo = realm.createObject(Todo.class);
+                        todo.ID = String.valueOf(year) + String.valueOf(month);
+                        todo.end = endCalender.getTimeInMillis();
+                        todo.start = startCalender.getTimeInMillis();
+                        todo.title = todo_title.getText().toString();
+                        todo.done = false;
+                        todo.color = new_color;
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+                    }
+                });
+
+                startCalender.getTimeInMillis();
+                endCalender.getTimeInMillis();
+
                 todo_title.setText("");
                 Date date = new Date();
                 startCalender.setTime(date);
@@ -133,7 +173,9 @@ public class CustomCalendar extends Fragment {
                 dates.setText("날짜를 선택해주세요");
                 startTimeTV.setText("시간을 선택해주세요");
                 endTimeTV.setText("시간을 선택해주세요");
+                new_color = Color.parseColor("#ffab91");
                 slidingPaneLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
             }
         });
 
@@ -220,6 +262,18 @@ public class CustomCalendar extends Fragment {
             }
         });
 
+        // color setting
+        color_box_view = layout.colorBox;
+        tv_colorPicker = layout.tvColorPicker;
+        tv_colorPicker.setClickable(true);
+        tv_colorPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openColorPicker();
+            }
+        });
+
+
         calendarView = layout.calendarView;
 
         final YearMonth currentMonth = YearMonth.now();
@@ -282,6 +336,21 @@ public class CustomCalendar extends Fragment {
                     @Override
                     public boolean onLongClick(View view) {
                         slidingPaneLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                        startCalender.set(Calendar.MONTH, day.getDate().getMonth().getValue());
+                        startCalender.set(Calendar.DATE, day.getDay());
+                        endCalender.set(Calendar.MONTH, day.getDate().getDayOfMonth());
+                        endCalender.set(Calendar.DATE, day.getDay());
+
+                        Log.d(TAG, "onLongClick: " + day.getDate().getMonth().getValue());
+
+                        startCalender.set(Calendar.HOUR, 0);
+                        startCalender.set(Calendar.MINUTE, 0);
+                        endCalender.set(Calendar.HOUR, 23);
+                        endCalender.set(Calendar.MINUTE, 59);
+                        dates.setText("날짜를 선택해주세요");
+                        startTimeTV.setText("시간을 선택해주세요");
+                        endTimeTV.setText("시간을 선택해주세요");
+                        new_color = Color.parseColor("#ffab91");
                         LocalDate date = day.getDate();
                         return true;
                     }
@@ -407,6 +476,43 @@ public class CustomCalendar extends Fragment {
         return layout.getRoot();
     }
 
+    public void openColorPicker() {
+        final ColorPicker colorPicker = new ColorPicker(getActivity());  // ColorPicker 객체 생성
+        ArrayList<String> colors = new ArrayList<>();  // Color 넣어줄 list
+
+        colors.add("#ffab91");
+        colors.add("#F48FB1");
+        colors.add("#ce93d8");
+        colors.add("#b39ddb");
+        colors.add("#9fa8da");
+        colors.add("#90caf9");
+        colors.add("#81d4fa");
+        colors.add("#80deea");
+        colors.add("#80cbc4");
+        colors.add("#c5e1a5");
+        colors.add("#e6ee9c");
+        colors.add("#fff59d");
+        colors.add("#ffe082");
+        colors.add("#ffcc80");
+        colors.add("#bcaaa4");
+
+        colorPicker.setColors(colors)  // 만들어둔 list 적용
+                .setColumns(5)  // 5열로 설정
+                .setRoundColorButton(true)  // 원형 버튼으로 설정
+                .setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                    @Override
+                    public void onChooseColor(int position, int color) {
+                        color_box_view.setBackgroundColor(color);  // OK 버튼 클릭 시 이벤트
+                        new_color = color;
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // Cancel 버튼 클릭 시 이벤트
+                    }
+                }).show();  // dialog 생성
+    }
+
     public DayOfWeek[] daysOfWeekFromLocale() {
         DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
         DayOfWeek[] daysOfWeek = DayOfWeek.values();
@@ -419,5 +525,12 @@ public class CustomCalendar extends Fragment {
         return daysOfWeek;
     }
 
+    public void refresh() {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.detach(this).attach(this).commit();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(todo_title.getWindowToken(), 0);
+
+    }
 
 }
