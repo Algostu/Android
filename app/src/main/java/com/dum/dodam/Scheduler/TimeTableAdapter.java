@@ -69,7 +69,6 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
     @Override
     public void onBindViewHolder(@NonNull TimeTableAdapter.Holder holder, final int position) {
         int hour = Integer.parseInt(getCurrentTime());
-        hour = 10;
         if (position == hour - 9) {
             holder.period.setTextAppearance(R.style.textAppearanceInTime);
             holder.subject.setTextAppearance(R.style.textAppearanceInTime);

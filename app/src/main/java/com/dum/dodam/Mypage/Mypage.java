@@ -103,11 +103,11 @@ public class Mypage extends Fragment {
         if (user.grade == 13) {
             grade.setText("졸업생");
         } else if (user.grade == 12) {
-            grade.setText("3학년");
+            grade.setText("3학년 " + user.classNum + "반");
         } else if (user.grade == 11) {
-            grade.setText("2학년");
+            grade.setText("2학년 " + user.classNum + "반");
         } else if (user.grade == 10) {
-            grade.setText("1학년");
+            grade.setText("1학년 " + user.classNum + "반");
         } else if (user.grade == 9) {
             grade.setText("예비고등");
         } else {

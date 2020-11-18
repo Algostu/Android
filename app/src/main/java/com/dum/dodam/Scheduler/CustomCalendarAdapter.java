@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dum.dodam.LocalDB.Todo;
 import com.dum.dodam.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import io.realm.Realm;
 
@@ -106,12 +108,15 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
     public void onBindViewHolder(@NonNull CustomCalendarAdapter.Holder holder, final int position) {
         Calendar calendar = Calendar.getInstance();
         String startEndTime = "";
+        SimpleDateFormat format = new SimpleDateFormat("HH:MM");
 
         calendar.setTimeInMillis(list.get(position).start);
-        startEndTime = startEndTime + String.valueOf(calendar.get(Calendar.MONTH) + 1) + String.valueOf(calendar.get(Calendar.DATE));
+        Date date = calendar.getTime();
+
+        startEndTime = startEndTime + String.format("%d월 %d일 %s", calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE), format.format(date));
 
         calendar.setTimeInMillis(list.get(position).end);
-        startEndTime = startEndTime + String.valueOf(calendar.get(Calendar.MONTH) + 1) + String.valueOf(calendar.get(Calendar.DATE));
+        startEndTime = startEndTime + " ~ " + String.format("%d월 %d일 %s", calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE), format.format(date));
 
         holder.time.setText(startEndTime);
 
