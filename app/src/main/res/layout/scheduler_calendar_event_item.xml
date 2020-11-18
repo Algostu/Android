@@ -1,88 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#42ffaf12"
-    android:orientation="horizontal">
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/ic_remove"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginHorizontal="10dp"
-        android:gravity="center"
-        android:src="@drawable/ic_remove"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/ll_"
-        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/dark_gray"
+        android:textSize="12sp" />
 
     <LinearLayout
-        android:id="@+id/ll_"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginLeft="10dp"
-        android:background="#99eaac9d"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="H,1:1"
-        app:layout_constraintLeft_toRightOf="@+id/ic_remove"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.143"
-        tools:ignore="Orientation">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/startTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="12sp" />
+        <ImageView
+            android:id="@+id/ic_remove"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/ic_remove"
+            android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/endTime"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/iv_color_ball"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textAlignment="center"
-            android:textSize="12sp" />
-
-    </LinearLayout>
-
-    <!--Colored view dividers-->
-    <LinearLayout
-        android:id="@+id/todoContentLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/ll_"
-        app:layout_constraintRight_toLeftOf="@id/todo_done"
-        app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginVertical="3.5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="3dp"
+            android:background="@drawable/circle"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/todo_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center"
-            android:textColor="@color/dark_gray"
-            android:textSize="16sp"
-            tools:text="Todo" />
-    </LinearLayout>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp"
+            android:text="잘때 이 닦고 자기" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/todo_done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingHorizontal="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></androidx.appcompat.widget.AppCompatCheckBox>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/todo_done"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:paddingVertical="10dp" />
+
+    </LinearLayout>
+</LinearLayout>
+

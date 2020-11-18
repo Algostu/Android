@@ -255,7 +255,7 @@ public class SchedulerPager extends Fragment implements
                         todo.done = false;
                         todo.color = new_color;
 
-                        if (startCalender.get(Calendar.DATE) == this_date && startCalender.get(Calendar.MONTH)+1 == this_month) {
+                        if (startCalender.get(Calendar.DATE) == this_date && startCalender.get(Calendar.MONTH) + 1 == this_month) {
                             tmp.add(realm.copyFromRealm(todo));
                         }
 
