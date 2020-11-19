@@ -1,14 +1,11 @@
 package com.dum.dodam.Community;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,18 +86,19 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (user.authorized.equals("0")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("게시 권한이 없습니다.");
-                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
-                    });
-                    builder.show();
-                } else {
-                    ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(communityType, communityID));
-                }
+//                if (user.authorized.equals("0")) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//                    builder.setTitle("게시 권한이 없습니다.");
+//                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int id) {
+//                        }
+//                    });
+//                    builder.show();
+//                } else {
+//                    ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(communityType, communityID));
+//                }
+                ((MainActivity) getActivity()).replaceFragmentFull(new ArticleWrite(communityType, communityID));
             }
         });
 

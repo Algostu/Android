@@ -108,7 +108,7 @@ public class alarmAdapter extends RecyclerView.Adapter<alarmAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(@NonNull alarmAdapter.Holder holder, final int position) {
-        int communityType = list.get(position).type;
+        int communityType = list.get(position).communityType;
         int communityID = list.get(position).communityID;
         String content = list.get(position).content;
 
@@ -129,6 +129,9 @@ public class alarmAdapter extends RecyclerView.Adapter<alarmAdapter.Holder> {
             if (frame.communityID == communityID)
                 title = type + frame.title + "게시판";
         }
+        Log.d("dodamdodam/alarmAdapter", "communityType: "+communityType);
+        Log.d("dodamdodam/alarmAdapter", "communityID: "+communityID);
+        Log.d("dodamdodam/alarmAdapter", "title: "+title);
 
         holder.title.setText(title);
         int lastIndex = content.length() > 15 ? 15 : content.length();
