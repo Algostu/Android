@@ -451,7 +451,11 @@ public class SchedulerPager extends Fragment implements
         Log.d(TAG, "I_CODE" + I_CODE);
         String ATPT_OFCDC_SC_CODE = I_CODE;
         String SD_SCHUL_CODE = SC_CODE;
-        String GRADE = String.valueOf(user.grade - 10);
+        int grade = user.grade - 9;
+        if(grade == 4) grade = 3;
+        else if(grade <= 0) grade = 1;
+
+        String GRADE = String.valueOf(grade);
         if (classNum == 0) classNum = 1;
         String CLASS_NM = String.valueOf(classNum);
 

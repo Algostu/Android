@@ -138,6 +138,14 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
             holder.todo_content.setPaintFlags(0);
         }
 
+        if (list.get(position).visible) {
+            holder.ic_remove.setVisibility(View.VISIBLE);
+            holder.iv_color_ball.setVisibility(View.GONE);
+        } else {
+            holder.ic_remove.setVisibility(View.GONE);
+            holder.iv_color_ball.setVisibility(View.VISIBLE);
+        }
+
         final CustomCalendarAdapter.Holder orgHolder = holder;
         holder.todo_done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

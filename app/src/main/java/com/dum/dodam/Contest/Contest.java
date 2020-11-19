@@ -89,6 +89,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
             public void onResponse(Call<ContestListResponse> call, Response<ContestListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<ContestFrame> result = response.body().body;
+                    if (result==null) return;
                     if (result.size() == 0) return;
                     Log.d(TAG, "CONTEST RESULT" + result.size());
 

@@ -26,6 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ContestInfo extends Fragment {
     private ImageView imageView;
+    protected ImageView bigIV;
     private TextView contest_title;
     private TextView area;
     private TextView period;
@@ -58,6 +59,7 @@ public class ContestInfo extends Fragment {
         homepage = view.findViewById(R.id.homepage);
         bottom_nav = view.findViewById(R.id.bottom_nav);
 
+
         Glide.with(getContext()).load(frame.imageUrl).into(imageView);
         contest_title.setText(frame.title);
         area.setText(frame.area);
@@ -84,14 +86,12 @@ public class ContestInfo extends Fragment {
         actionbar.setDisplayShowTitleEnabled(false);//기본 제목을 없애줍니다.
         actionbar.setDisplayHomeAsUpEnabled(true);
 
-
-
         return view;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.contest_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

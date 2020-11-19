@@ -219,14 +219,14 @@ public class Mypage extends Fragment {
             }
         });
 
-        recommend = view.findViewById(R.id.recommend);
-        recommend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RecommendDialog dialog = new RecommendDialog(getContext());
-                dialog.callDialog();
-            }
-        });
+//        recommend = view.findViewById(R.id.recommend);
+//        recommend.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                RecommendDialog dialog = new RecommendDialog(getContext());
+//                dialog.callDialog();
+//            }
+//        });
 
         return view;
     }
