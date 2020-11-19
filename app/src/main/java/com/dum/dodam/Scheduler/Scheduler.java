@@ -30,6 +30,11 @@ public class Scheduler extends Fragment {
     private SchedulerPagerAdapter viewPageAdapter;
     private int date = -1;
 
+    private int this_month;
+    private int this_year;
+    private int sDayNum;
+    private int endDate;
+
     public Scheduler(int date) {
         this.date = date;
     }
@@ -53,11 +58,11 @@ public class Scheduler extends Fragment {
 
         Calendar cal = Calendar.getInstance(); //캘린더 인스턴스 얻기
         int today = cal.get(Calendar.DATE);
-        int this_month = cal.get(Calendar.MONTH) + 1;
-        int this_year = cal.get(Calendar.YEAR);
+        this_month = cal.get(Calendar.MONTH) + 1;
+        this_year = cal.get(Calendar.YEAR);
         cal.set(Calendar.DATE, 1); //현재 달을 1일로 설정.
-        int sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1), MONDAY(2) , TUESDAY(3),.....
-        int endDate = cal.getActualMaximum(Calendar.DATE); //달의 마지막일 얻기
+        sDayNum = cal.get(Calendar.DAY_OF_WEEK); // 1일의 요일 얻어오기, SUNDAY (1), MONDAY(2) , TUESDAY(3),.....
+        endDate = cal.getActualMaximum(Calendar.DATE); //달의 마지막일 얻기
 
         if (date != -1) {
             today = date;
@@ -87,17 +92,5 @@ public class Scheduler extends Fragment {
             }
         });
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("RHC", "onStart: ");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("RHC", "onResume: ");
     }
 }

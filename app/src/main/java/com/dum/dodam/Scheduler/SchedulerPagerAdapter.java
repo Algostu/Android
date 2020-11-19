@@ -1,5 +1,7 @@
 package com.dum.dodam.Scheduler;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -38,5 +40,12 @@ public class SchedulerPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return fragments.size();
+    }
+
+    @Override
+
+    public int getItemPosition(Object object) {
+        Log.d("RHC", "getItemPosition: ");
+        return POSITION_NONE;
     }
 }

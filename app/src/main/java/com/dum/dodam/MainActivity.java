@@ -317,16 +317,35 @@ public class MainActivity extends AppCompatActivity {
         return alarmDataArr;
     }
 
-    public Fragment getVisibleFragment(){
+    public Fragment getVisibleFragment() {
         FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
-        if(fragments != null){
-            for(Fragment fragment : fragments){
-                if(fragment != null && fragment.isVisible())
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isVisible())
                     return fragment;
             }
         }
         return null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        if (fragmentList != null) {
+            //TODO: Perform your logic to pass back press here
+            for (Fragment fragment : fragmentList) {
+                if (fragment instanceof OnBackPressedListener) {
+                    ((OnBackPressedListener) fragment).onBackPressed();
+                    return;
+                }
+            }
+        }
+        super.onBackPressed();
+    }
+
+    public interface OnBackPressedListener {
+        void onBackPressed();
     }
 
 

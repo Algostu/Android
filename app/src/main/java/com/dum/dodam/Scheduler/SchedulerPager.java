@@ -671,6 +671,5 @@ public class SchedulerPager extends Fragment implements
             }
         }
         todoAdapter.notifyDataSetChanged();
-
     }
 }
