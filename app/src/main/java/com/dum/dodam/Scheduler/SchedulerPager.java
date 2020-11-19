@@ -447,10 +447,9 @@ public class SchedulerPager extends Fragment implements
         }
 
         UserJson user = ((MainActivity) getActivity()).getUser();
-        Log.d(TAG, "sc_code" + SC_CODE);
-        Log.d(TAG, "I_CODE" + I_CODE);
-        String ATPT_OFCDC_SC_CODE = I_CODE;
-        String SD_SCHUL_CODE = SC_CODE;
+
+        String ATPT_OFCDC_SC_CODE = user.I_CODE;
+        String SD_SCHUL_CODE = user.SC_CODE;
         int grade = user.grade - 9;
         if(grade == 4) grade = 3;
         else if(grade <= 0) grade = 1;

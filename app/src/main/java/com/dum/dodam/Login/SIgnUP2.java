@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -329,8 +330,12 @@ public class SIgnUP2 extends Fragment {
                                         if (!response.isSuccessful()) return;
                                         BaseResponse response1 = response.body();
                                         if (response1.checkError(getContext()) != 0) return;
-                                        if (response1.status.equals("<success>"))
-                                            ((startUpActivity) getActivity()).replaceFragment(new Login());
+                                        SharedPreferences sharedPref = getActivity().getSharedPreferences(
+                                                "auto", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putString("fcmToken", "need to register");
+                                        editor.commit();
+                                        ((startUpActivity) getActivity()).replaceFragment(new Login());
 
 //                                        loadingView.setVisibility(View.VISIBLE);
 //                                        String info = "";

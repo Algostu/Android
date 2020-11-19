@@ -33,7 +33,10 @@ import com.dum.dodam.Univ.SearchUniv;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -126,26 +129,39 @@ public class MainActivity extends AppCompatActivity {
         // fcm token 변경 유무 확인
         String token = sharedPref.getString("fcmToken", "");
         if (token.equals("") == false) {
-            RetrofitService service = RetrofitAdapter.getInstance(this);
-            Call<BaseResponse> call = service.registerFCM(token);
-            call.enqueue(new retrofit2.Callback<BaseResponse>() {
-                @Override
-                public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
-                    if (response.isSuccessful()) {
-                        if (response.body().checkError(getApplicationContext()) != 0) {
-                            Toast.makeText(getApplicationContext(), "Please reloading", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        editor.remove("fcmToken");
-                        editor.commit();
-                    }
-                }
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("dodam/MainActivity", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
 
-                @Override
-                public void onFailure(Call<BaseResponse> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Please reloading", Toast.LENGTH_SHORT).show();
-                }
-            });
+                            // Get new FCM registration token
+                            String token = task.getResult();
+                            RetrofitService service = RetrofitAdapter.getInstance(getApplicationContext());
+                            Call<BaseResponse> call = service.registerFCM(token);
+                            call.enqueue(new retrofit2.Callback<BaseResponse>() {
+                                @Override
+                                public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
+                                    if (response.isSuccessful()) {
+                                        if (response.body().checkError(getApplicationContext()) != 0) {
+                                            Toast.makeText(getApplicationContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        editor.remove("fcmToken");
+                                        editor.commit();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<BaseResponse> call, Throwable t) {
+                                    Toast.makeText(getApplicationContext(), "Please reloading", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
         }
 
         navigation = findViewById(R.id.nav_bar);
