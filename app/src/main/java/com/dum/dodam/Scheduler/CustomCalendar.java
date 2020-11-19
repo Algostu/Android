@@ -67,7 +67,7 @@ import petrov.kristiyan.colorpicker.ColorPicker;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class CustomCalendar extends Fragment {
+public class CustomCalendar extends Fragment implements MainActivity.OnBackPressedListener {
     private static final String TAG = "SchedulerPager";
     public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     public Calendar startCalender;
@@ -294,12 +294,23 @@ public class CustomCalendar extends Fragment {
         final class DayViewContainer extends ViewContainer {
             private TextView calendarDayText;
             private TextView todo1;
+            private TextView todo2;
+            private TextView todo3;
+            private TextView todo4;
+            private TextView todo5;
+            private TextView todo6;
             private CalendarDay day;
 
             public DayViewContainer(@NotNull View view) {
                 super(view);
                 calendarDayText = view.findViewById(R.id.DayText);
                 todo1 = view.findViewById(R.id.todo1);
+                todo2 = view.findViewById(R.id.todo2);
+                todo3 = view.findViewById(R.id.todo3);
+                todo4 = view.findViewById(R.id.todo4);
+                todo5 = view.findViewById(R.id.todo5);
+                todo6 = view.findViewById(R.id.todo6);
+
 
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -316,6 +327,7 @@ public class CustomCalendar extends Fragment {
                                 }
                             }
                             if (results.size() != 0) {
+                                list.clear();
                                 list.addAll(realm.copyFromRealm(results));
                                 ArrayList<Todo> dataArrayList = new ArrayList<Todo>();
                                 Calendar calendar = Calendar.getInstance();
@@ -401,15 +413,37 @@ public class CustomCalendar extends Fragment {
                     }
                     if (isEmpty != 0) {
                         Calendar calendar = Calendar.getInstance();
+                        int cnt = 0;
+                        int this_day_list_size = 0;
                         for (Todo data : list) {
                             calendar.setTimeInMillis(data.start);
                             if (calendar.get(Calendar.DATE) == calendarDay.getDay()) {
-                                viewContainer.todo1.setText(data.title);
-                                viewContainer.todo1.setBackgroundResource(R.color.faded_saffron);
-//                                bottomView.setBackgroundResource(R.color.classic_blue);
-//                                topView.setBackgroundResource(R.color.flame_scarlet);
+                                this_day_list_size++;
+                                if (cnt == 0) {
+                                    viewContainer.todo1.setText(data.title);
+                                    viewContainer.todo1.setBackgroundColor(data.color);
+                                    cnt++;
+                                } else if (cnt == 1) {
+                                    viewContainer.todo2.setText(data.title);
+                                    viewContainer.todo2.setBackgroundColor(data.color);
+                                    cnt++;
+                                } else if (cnt == 2) {
+                                    viewContainer.todo3.setText(data.title);
+                                    viewContainer.todo3.setBackgroundColor(data.color);
+                                    cnt++;
+                                } else if (cnt == 3) {
+                                    viewContainer.todo4.setText(data.title);
+                                    viewContainer.todo4.setBackgroundColor(data.color);
+                                    cnt++;
+                                } else if (cnt == 4) {
+                                    viewContainer.todo5.setText(data.title);
+                                    viewContainer.todo5.setBackgroundColor(data.color);
+                                    cnt++;
+                                }
                             }
-
+                        }
+                        if (this_day_list_size > 5) {
+                            viewContainer.todo6.setText(String.format("+ %d", this_day_list_size - 5));
                         }
                     }
                     if (calendarDay.getDate().getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
@@ -472,7 +506,6 @@ public class CustomCalendar extends Fragment {
             }
         });
 
-
         return layout.getRoot();
     }
 
@@ -530,7 +563,11 @@ public class CustomCalendar extends Fragment {
         transaction.detach(this).attach(this).commit();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(todo_title.getWindowToken(), 0);
-
     }
 
+    @Override
+    public void onBackPressed() {
+        ((MainActivity) getActivity()).replaceFragment(new Scheduler());
+        Log.d("RHC", "onBackPressed: true");
+    }
 }

@@ -151,7 +151,7 @@ public class Mypage extends Fragment {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("회월탈퇴");
+                builder.setTitle("회원탈퇴");
                 builder.setMessage("회원탈퇴하시겠습니까?\n(재가입시 30일 소요)");
                 builder.setPositiveButton("예(회원탈퇴)",
                         new DialogInterface.OnClickListener() {
