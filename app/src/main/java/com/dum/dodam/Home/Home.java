@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Cafeteria.CafeteriaTab;
+import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
 import com.dum.dodam.Cafeteria.dataframe.LunchFrame;
 import com.dum.dodam.Cafeteria.dataframe.LunchResponse;
 import com.dum.dodam.Community.Article;
@@ -33,7 +34,6 @@ import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.R;
-import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
@@ -251,7 +251,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         if (getContext() == null) return;
         File file = new File(getContext().getFilesDir() + "/" + filename);
         if (!file.exists()) {
-            final int contestID = 0;
+            final String contestID = "0";
             com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
             Call<ContestListResponse> call = service.getContestList(contestID);
             call.enqueue(new Callback<ContestListResponse>() {
@@ -277,6 +277,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                                 sObject.put("imageUrl", result.get(i).imageUrl);
                                 sObject.put("start", result.get(i).start);
                                 sObject.put("end", result.get(i).end);
+                                sObject.put("stroedDate", result.get(i).storedDate);
                                 jsArray.put(sObject);
                             }
                         } catch (JSONException e) {
@@ -288,8 +289,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                             if (getContext() == null) return;
                             File file = new File(getContext().getFilesDir(), "contest");
                             FileWriter fileWriter = null;
-                            if (contestID == 0) fileWriter = new FileWriter(file, false);
-                            else fileWriter = new FileWriter(file, true);
+                            fileWriter = new FileWriter(file, false);
                             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                             bufferedWriter.write(jsArray.toString());
                             bufferedWriter.close();

@@ -12,4 +12,5 @@ public class ContestFrame {
     public String imageUrl;
     public String start;
     public String end;
+    public String storedDate;
 }

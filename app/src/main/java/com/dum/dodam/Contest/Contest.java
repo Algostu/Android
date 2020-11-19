@@ -75,23 +75,23 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
 
         readContestList();
 
-        if (!list.isEmpty()) getContestList(Integer.parseInt(list.get(list.size() - 1).contestID));
+        if (!list.isEmpty()) getContestList(list.get(0).storedDate);
         return view;
     }
 
-    public void getContestList(final int contestID) {
+    public void getContestList(final String version) {
         com.dum.dodam.httpConnection.RetrofitService service = RetrofitAdapter.getInstance(getContext());
 
-        Call<ContestListResponse> call = service.getContestList(contestID);
+        Call<ContestListResponse> call = service.getContestList(version);
 
         call.enqueue(new Callback<ContestListResponse>() {
             @Override
             public void onResponse(Call<ContestListResponse> call, Response<ContestListResponse> response) {
                 if (response.isSuccessful()) {
                     ArrayList<ContestFrame> result = response.body().body;
-                    if (result==null) return;
+                    Log.d(TAG, "Contest Results: " + result.size());
+                    if (result == null) return;
                     if (result.size() == 0) return;
-                    Log.d(TAG, "CONTEST RESULT" + result.size());
 
                     JSONArray jsArray = new JSONArray();//배열이 필요할때
                     try {
@@ -99,7 +99,6 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
                             JSONObject sObject = new JSONObject();//배열 내에 들어갈 json
                             sObject.put("contestID", result.get(i).contestID);
                             sObject.put("title", result.get(i).title);
-                            Log.d(TAG, "onResponse: + " + result.get(i).content);
                             sObject.put("content", result.get(i).content);
                             sObject.put("area", result.get(i).area);
                             sObject.put("sponsor", result.get(i).sponsor);
@@ -109,6 +108,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
                             sObject.put("imageUrl", result.get(i).imageUrl);
                             sObject.put("start", result.get(i).start);
                             sObject.put("end", result.get(i).end);
+                            sObject.put("storedDate", result.get(i).storedDate);
                             jsArray.put(sObject);
                         }
                     } catch (JSONException e) {
@@ -121,8 +121,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
                         if (getContext() == null) return;
                         File file = new File(mContext.getFilesDir(), "contest");
                         FileWriter fileWriter = null;
-                        if (contestID == 0) fileWriter = new FileWriter(file, false);
-                        else fileWriter = new FileWriter(file, true);
+                        fileWriter = new FileWriter(file, false);
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                         bufferedWriter.write(jsArray.toString());
                         bufferedWriter.close();
@@ -139,7 +138,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
             @Override
             public void onFailure(Call<ContestListResponse> call, Throwable t) {
                 Log.d(TAG, "getContestList" + t.getMessage());
-                if (cnt_getContestList < 5) getContestList(0);
+                if (cnt_getContestList < 5) getContestList("0");
                 else
                     Toast.makeText(((MainActivity) getContext()), "Please reloading", Toast.LENGTH_SHORT).show();
                 cnt_getContestList++;
@@ -179,7 +178,7 @@ public class Contest extends Fragment implements ContestListAdapter.OnListItemSe
                 e.printStackTrace();
             }
         } else {
-            getContestList(0);
+            getContestList("0");
         }
     }
 
