@@ -78,9 +78,9 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
                 }
             });
 
-            ic_remove.setOnClickListener(new View.OnClickListener() {
+            ic_remove.setOnClickListener(new OnSingleClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onSingleClick(View v) {
                     try {
                         realm.executeTransactionAsync(new Realm.Transaction() {
                             @Override

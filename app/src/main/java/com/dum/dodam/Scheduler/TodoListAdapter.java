@@ -67,29 +67,32 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
             this.todo_done = (CheckBox) view.findViewById(R.id.todo_done);
             this.iv_color_ball = view.findViewById(R.id.iv_color_ball);
 
-            ic_remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                int poisition = getAbsoluteAdapterPosition();
-                                Todo deleteTodo = realm.where(Todo.class).equalTo("ID", list.get(poisition).ID).equalTo("title", list.get(poisition).title).findFirst();
-                                if (deleteTodo != null) {
-                                    list.remove(poisition);
-                                    notifyItemRemoved(poisition);
-                                    deleteTodo.deleteFromRealm();
+            try {
+                ic_remove.setOnClickListener(new OnSingleClickListener() {
+                    @Override
+                    public void onSingleClick(View v) {
+                        try {
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    int poisition = getAbsoluteAdapterPosition();
+                                    Todo deleteTodo = realm.where(Todo.class).equalTo("ID", list.get(poisition).ID).equalTo("title", list.get(poisition).title).findFirst();
+                                    if (deleteTodo != null) {
+                                        list.remove(poisition);
+                                        notifyItemRemoved(poisition);
+                                        deleteTodo.deleteFromRealm();
+                                    }
                                 }
-                            }
-                        });
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        e.printStackTrace();
+                            });
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
+
                     }
-
-                }
-            });
-
+                });
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
         }
     }
 
