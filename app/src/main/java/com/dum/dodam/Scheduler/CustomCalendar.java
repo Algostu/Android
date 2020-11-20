@@ -68,7 +68,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class CustomCalendar extends Fragment implements MainActivity.OnBackPressedListener {
-    private static final String TAG = "SchedulerPager";
+    private static final String TAG = "CustomCalendar";
     public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     public Calendar startCalender;
     public Calendar endCalender;
@@ -158,9 +158,6 @@ public class CustomCalendar extends Fragment implements MainActivity.OnBackPress
                     public void onError(Throwable error) {
                     }
                 });
-
-                startCalender.getTimeInMillis();
-                endCalender.getTimeInMillis();
 
                 todo_title.setText("");
                 Date date = new Date();
@@ -347,13 +344,10 @@ public class CustomCalendar extends Fragment implements MainActivity.OnBackPress
                 view.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-                        slidingPaneLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                         startCalender.set(Calendar.MONTH, day.getDate().getMonth().getValue());
                         startCalender.set(Calendar.DATE, day.getDay());
-                        endCalender.set(Calendar.MONTH, day.getDate().getDayOfMonth());
+                        endCalender.set(Calendar.MONTH, day.getDate().getMonth().getValue());
                         endCalender.set(Calendar.DATE, day.getDay());
-
-                        Log.d(TAG, "onLongClick: " + day.getDate().getMonth().getValue());
 
                         startCalender.set(Calendar.HOUR, 0);
                         startCalender.set(Calendar.MINUTE, 0);
@@ -363,7 +357,8 @@ public class CustomCalendar extends Fragment implements MainActivity.OnBackPress
                         startTimeTV.setText("시간을 선택해주세요");
                         endTimeTV.setText("시간을 선택해주세요");
                         new_color = Color.parseColor("#ffab91");
-                        LocalDate date = day.getDate();
+
+                        slidingPaneLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                         return true;
                     }
                 });

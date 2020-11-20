@@ -67,8 +67,8 @@ public class SchedulerPager extends Fragment implements
         TodoListAdapter.OnListItemSelectedInterface {
     private static final String TAG = "SchedulerPager";
     public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    public Calendar startCalender;
-    public Calendar endCalender;
+    public Calendar startCalender = Calendar.getInstance();
+    public Calendar endCalender = Calendar.getInstance();
     public int classNum;
     public String I_CODE;
     public String SC_CODE;
@@ -110,16 +110,34 @@ public class SchedulerPager extends Fragment implements
     private int this_year;
     private int this_date;
 
+//    public static SchedulerPager(int day_of_week, int this_date, int this_month, int this_year) {
+//        Bundle args = new Bundle();
+//        args.putInt("this_date", this_date);
+//        args.putInt("this_month", this_month);
+//        args.putInt("this_year", this_year);
+//        args.putInt("day_of_week", day_of_week);
+//        SchedulerPager schedulerPager = new SchedulerPager();
+//        schedulerPager.setArguments(args);
+//        return schedulerPager;
+//    }
+
     public SchedulerPager(int day_of_week, int this_date, int this_month, int this_year) {
+        this.day_of_week = day_of_week;
         this.this_date = this_date;
         this.this_month = this_month;
         this.this_year = this_year;
-        this.day_of_week = day_of_week;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+//        Bundle bundle = getArguments();
+//        if (bundle != null) {
+//            day_of_week = bundle.getInt("day_of_week");
+//            this_month = bundle.getInt("this_month");
+//            this_year = bundle.getInt("this_year");
+//            this_date = bundle.getInt("this_date");
+//        }
 
         if (data.getExtras().containsKey("startDate")) {
             String startDateStr = data.getExtras().getString("startDate");
@@ -145,7 +163,8 @@ public class SchedulerPager extends Fragment implements
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup
+            container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.scheduler_pager, container, false);
         view.setClickable(true);
 
@@ -258,6 +277,10 @@ public class SchedulerPager extends Fragment implements
                         if (startCalender.get(Calendar.DATE) == this_date && startCalender.get(Calendar.MONTH) + 1 == this_month) {
                             tmp.add(realm.copyFromRealm(todo));
                         }
+//                        Log.d("RHC", String.format("%d %d %d", startCalender.get(Calendar.YEAR), startCalender.get(Calendar.MONTH), startCalender.get(Calendar.DATE)));
+//                        Log.d("RHC", String.format("%d %d %d", endCalender.get(Calendar.YEAR), endCalender.get(Calendar.MONTH), endCalender.get(Calendar.DATE)));
+//                        Log.d("RHC", "ss " + startCalender.getTimeInMillis());
+//                        Log.d("RHC", "ee " + endCalender.getTimeInMillis());
 
                     }
                 }, new Realm.Transaction.OnSuccess() {
@@ -270,17 +293,16 @@ public class SchedulerPager extends Fragment implements
                     }
                 });
 
-                startCalender.getTimeInMillis();
-                endCalender.getTimeInMillis();
-
                 todo_title.setText("");
-                Date date = new Date();
-                startCalender.setTime(date);
+
+                startCalender.set(this_year, this_month-1, this_date);
                 startCalender.set(Calendar.HOUR, 0);
                 startCalender.set(Calendar.MINUTE, 0);
-                endCalender.setTime(date);
+
+                endCalender.set(this_year, this_month-1, this_date);
                 endCalender.set(Calendar.HOUR, 23);
                 endCalender.set(Calendar.MINUTE, 59);
+
                 dates.setText("날짜를 선택해주세요");
                 startTimeTV.setText("시간을 선택해주세요");
                 endTimeTV.setText("시간을 선택해주세요");
@@ -290,14 +312,11 @@ public class SchedulerPager extends Fragment implements
         });
 
         // default time set
-        Date date = new Date();
-        startCalender = Calendar.getInstance();
-        startCalender.setTime(date);
+        startCalender.set(this_year, this_month-1, this_date);
         startCalender.set(Calendar.HOUR, 0);
         startCalender.set(Calendar.MINUTE, 0);
 
-        endCalender = Calendar.getInstance();
-        endCalender.setTime(date);
+        endCalender.set(this_year, this_month-1, this_date);
         endCalender.set(Calendar.HOUR, 23);
         endCalender.set(Calendar.MINUTE, 59);
 
@@ -451,8 +470,8 @@ public class SchedulerPager extends Fragment implements
         String ATPT_OFCDC_SC_CODE = user.I_CODE;
         String SD_SCHUL_CODE = user.SC_CODE;
         int grade = user.grade - 9;
-        if(grade == 4) grade = 3;
-        else if(grade <= 0) grade = 1;
+        if (grade == 4) grade = 3;
+        else if (grade <= 0) grade = 1;
 
         String GRADE = String.valueOf(grade);
         if (classNum == 0) classNum = 1;
