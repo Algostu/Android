@@ -15,7 +15,7 @@ public class RetrofitAdapter {
     public static Retrofit retrofit2 = null;
 
     public static RetrofitService getInstance(Context context) {
-        String baseUrl = "http://115.85.180.25:5000/";
+        String baseUrl = "http://49.50.164.11:5000/";
 
         Gson gson = new GsonBuilder()
                 .setLenient()

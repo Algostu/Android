@@ -236,12 +236,12 @@ public class Login extends Fragment {
                                 return;
                             }
                             // 나이
-                            if (ageRange != null) {
-                                if (!(ageRange == AgeRange.AGE_15_19 || ageRange == AgeRange.AGE_20_29) && ageRange != AgeRange.AGE_RANGE_UNKNOWN) {
-                                    Toast.makeText(getActivity(), "나이 제한에 걸리셨습니다.", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-                            }
+//                            if (ageRange != null) {
+//                                if (!(ageRange == AgeRange.AGE_15_19 || ageRange == AgeRange.AGE_20_29) && ageRange != AgeRange.AGE_RANGE_UNKNOWN) {
+//                                    Toast.makeText(getActivity(), "나이 제한에 걸리셨습니다.", Toast.LENGTH_SHORT).show();
+//                                    return;
+//                                }
+//                            }
 
                             String genderStr;
                             String ageStr;
