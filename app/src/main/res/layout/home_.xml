@@ -26,6 +26,7 @@
             app:expandedTitleGravity="center"
             app:expandedTitleTextAppearance="@style/ExpandedTitleStyle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:maxLines="5"
             app:toolbarId="@+id/toolbar">
 
             <androidx.appcompat.widget.Toolbar

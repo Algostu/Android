@@ -1,5 +1,7 @@
 package com.dum.dodam.Home;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -105,6 +107,16 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_, container, false);
         view.setClickable(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getActivity().getWindow().setStatusBarColor(Color.parseColor("#fbdd56"));
+            }
+        } else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            getActivity().getWindow().setStatusBarColor(Color.BLACK);
+        }
 
         user = ((MainActivity) getActivity()).getUser();
 
@@ -199,7 +211,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         mySetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new Mypage());
+                ((MainActivity) getActivity()).replaceFragmentPopup(new Mypage());
             }
         });
 
@@ -592,7 +604,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 } else if (getWeekNDate().get(0) == 6) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_friday;
                 }
-                if (lunch.equals(" ")) cafeteria.setText("오늘 점심은 따듯한 집밥을 먹어봐요 ㅎ-ㅎ");
+                if (lunch.length() < 10) cafeteria.setText("오늘 점심은 따듯한 집밥을 먹어봐요 ㅎ-ㅎ");
                 else {
                     cafeteria.setText(lunch);
                 }
@@ -643,5 +655,11 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         frame.end = holder.end;
 
         ((MainActivity) getActivity()).replaceFragmentFull(new ContestInfo(frame));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("RHC", "onResume: ssssss");
     }
 }
