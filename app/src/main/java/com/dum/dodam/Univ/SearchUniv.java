@@ -14,6 +14,9 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -45,6 +48,12 @@ public class SearchUniv extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.univ_search, container, false);
         view.setClickable(true);
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        actionBar.setTitle("수능 대.박.");
+        actionBar.setSubtitle("대학 관련 자료들을 찾아보세요!");
 
         et_input = view.findViewById(R.id.et_input);
         listView = view.findViewById(R.id.listView);

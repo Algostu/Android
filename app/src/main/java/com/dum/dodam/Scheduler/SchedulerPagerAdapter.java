@@ -19,7 +19,7 @@ public class SchedulerPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
 
         for (int i = 1; i < end_date + 1; i++) {
-            pageTitles.add(String.format("%d일", i));
+            pageTitles.add(String.format("  %d일  ", i));
             fragments.add(new SchedulerPager(sDay_num % 7, i, this_month, this_year));
             sDay_num++;
         }

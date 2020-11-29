@@ -187,6 +187,7 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
             readArticleToggle = 1;
             readArticleList();
         }
+        Log.d("RHC", "onResume: ");
         super.onResume();
     }
 

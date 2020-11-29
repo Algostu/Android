@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.item_community:
                     replaceFragment(comm);
                     return true;
-//                case R.id.item_simulation:
-//                    replaceFragment(sear);
-//                    return true;
+                case R.id.item_simulation:
+                    replaceFragment(sear);
+                    return true;
                 case R.id.item_alarm:
                     replaceFragment(new AlarmTab());
                     return true;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             if (view != null) {
                 // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
                 view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                getWindow().setStatusBarColor(Color.parseColor("#FFFFFF"));
+                getWindow().setStatusBarColor(Color.parseColor("#fbdd56"));
             }
         } else if (Build.VERSION.SDK_INT >= 21) {
             // 21 버전 이상일 때

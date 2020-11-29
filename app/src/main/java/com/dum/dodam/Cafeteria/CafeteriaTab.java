@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -77,13 +76,10 @@ public class CafeteriaTab extends Fragment {
 
         user = ((MainActivity) getActivity()).getUser();
 
-        TextView month = view.findViewById(R.id.month);
-        month.setText(String.format("%d 월", getWeekNDate().get(2) + 1));
-
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        actionBar.setTitle(user.schoolName);
+        ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionbar.setTitle(String.format("%d 월", getWeekNDate().get(2) + 1));
 
         ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
         CafeteriaViewPageAdapter viewPageAdapter = new CafeteriaViewPageAdapter(getChildFragmentManager(), menu);
@@ -92,7 +88,6 @@ public class CafeteriaTab extends Fragment {
         TabLayout tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);
         tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         tab_layout.setupWithViewPager(pager);
-
         tab_layout.getTabAt(this_week).select();
 
         return view;

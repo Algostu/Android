@@ -6,51 +6,33 @@
     android:background="@color/white_gray">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clipChildren="false"
+        android:theme="@style/AppTheme.Appbar">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    app:layout_collapseMode="pin"
-                    app:menu="@menu/option_menu_alarm">
-
-                    <TextView
-                        android:id="@+id/tab_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="5dp"
-                        android:fontFamily="@font/title"
-                        android:gravity="center_horizontal|left"
-                        android:text="알림"
-                        android:textSize="23sp" />
-                </androidx.appcompat.widget.Toolbar>
-            </com.google.android.material.appbar.AppBarLayout>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-        <!--        <com.google.android.material.tabs.TabLayout-->
-        <!--            android:id="@+id/tabs"-->
-        <!--            style="@style/AppTabLayout"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:background="@color/white"-->
-        <!--            android:elevation="1dp"-->
-        <!--            app:tabBackground="@color/white"-->
-        <!--            app:tabGravity="fill"-->
-        <!--            app:tabMode="fixed" />-->
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/saffron"
+            app:menu="@menu/option_alarm_menu"
+            app:subtitleTextAppearance="@style/AppTheme.Appbar.SubTitleTextApp"
+            app:titleTextAppearance="@style/AppTheme.Appbar.TitleTextApp" />
     </com.google.android.material.appbar.AppBarLayout>
+
+    <!--        <com.google.android.material.tabs.TabLayout-->
+    <!--            android:id="@+id/tabs"-->
+    <!--            style="@style/AppTabLayout"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:background="@color/white"-->
+    <!--            android:elevation="1dp"-->
+    <!--            app:tabBackground="@color/white"-->
+    <!--            app:tabGravity="fill"-->
+    <!--            app:tabMode="fixed" />-->
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/container"

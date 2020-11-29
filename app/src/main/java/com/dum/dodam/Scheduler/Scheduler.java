@@ -2,7 +2,6 @@ package com.dum.dodam.Scheduler;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +71,7 @@ public class Scheduler extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         actionBar.setTitle("스케줄러");
+        actionBar.setSubtitle("당신의 하루 일정을 완벽하게!");
 
         pager = (ViewPager) view.findViewById(R.id.pager);
         viewPageAdapter = new SchedulerPagerAdapter(getChildFragmentManager(), sDayNum, endDate, this_month, this_year);

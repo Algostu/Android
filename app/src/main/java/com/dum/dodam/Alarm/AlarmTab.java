@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
@@ -22,7 +23,7 @@ import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 
 public class AlarmTab extends Fragment {
-//    TabLayout tabs;
+    //    TabLayout tabs;
     PageAdapter pageAdapter;
     ViewPager viewPage;
     private androidx.appcompat.widget.Toolbar toolbar;
@@ -46,13 +47,11 @@ public class AlarmTab extends Fragment {
 //        tabs.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
 //        tabs.setupWithViewPager(viewPage);
 
-        toolbar = view.findViewById(R.id.toolbar2);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionbar.setDisplayShowCustomEnabled(true);
-        actionbar.setDisplayShowTitleEnabled(false);//기본 제목을 없애줍니다.
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setDisplayHomeAsUpEnabled(false);
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        actionBar.setTitle("메세지 도착!");
+        actionBar.setSubtitle("내게 온 알림을 확인해보세요:)");
 
         return view;
     }

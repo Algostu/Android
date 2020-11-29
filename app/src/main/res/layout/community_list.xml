@@ -1,262 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_gray">
 
-    <!-- guide line -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gd_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="15dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gd_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="15dp" />
-
-    <!--  title background  -->
-    <View
-        android:id="@+id/title_background"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        tools:ignore="MissingConstraints" />
+        android:clipChildren="false"
+        android:theme="@style/AppTheme.Appbar">
 
-    <View
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/saffron"
+            app:subtitleTextAppearance="@style/AppTheme.Appbar.SubTitleTextApp"
+            app:titleTextAppearance="@style/AppTheme.Appbar.TitleTextApp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@drawable/shadow2"
-        app:layout_constraintTop_toBottomOf="@id/title_background" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:background="@color/white_gray"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:fontFamily="@font/title"
-        android:text="게시판 모음"
-        android:textSize="23sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <!-- School Community -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_school_community"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:orientation="vertical"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/title_background"
-        tools:ignore="MissingConstraints">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- guide line -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gd_left"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="15dp">
+            app:layout_constraintGuide_begin="15dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="교내 게시판"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gd_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="15dp" />
+
+        <!-- School Community -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_school_community"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:orientation="vertical"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintLeft_toLeftOf="@id/gd_left"
+            app:layout_constraintRight_toRightOf="@id/gd_right"
+            tools:ignore="MissingConstraints">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="15dp">
 
                 <TextView
-                    android:id="@+id/school_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="질문 게시판"
-                    android:textSize="15sp" />
+                    android:text="교내 게시판"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/school_free"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="자유 게시판"
-                    android:textSize="15sp" />
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/school_question"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:text="질문 게시판"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/school_free"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:text="자유 게시판"
+                        android:textSize="15sp" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-    <!-- Region Community -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_region_community"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:orientation="vertical"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/cv_school_community"
-        tools:ignore="MissingConstraints">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Region Community -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_region_community"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
             android:orientation="vertical"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="동네 게시판"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            app:cardCornerRadius="10dp"
+            app:layout_constraintLeft_toLeftOf="@id/gd_left"
+            app:layout_constraintRight_toRightOf="@id/gd_right"
+            app:layout_constraintTop_toBottomOf="@id/cv_school_community"
+            tools:ignore="MissingConstraints">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="15dp">
 
                 <TextView
-                    android:id="@+id/region_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="질문 게시판"
-                    android:textSize="15sp" />
+                    android:text="동네 게시판"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/region_recruit"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="모집 게시판"
-                    android:textSize="15sp" />
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/region_free"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="자유 게시판"
-                    android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/region_question"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:text="질문 게시판"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/region_recruit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:text="모집 게시판"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/region_free"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:text="자유 게시판"
+                        android:textSize="15sp" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
-    <!-- Country Community -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_all_community"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:orientation="vertical"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/cv_region_community"
-        tools:ignore="MissingConstraints">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Country Community -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_all_community"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
             android:orientation="vertical"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="입시 게시판"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            app:cardCornerRadius="10dp"
+            app:layout_constraintLeft_toLeftOf="@id/gd_left"
+            app:layout_constraintRight_toRightOf="@id/gd_right"
+            app:layout_constraintTop_toBottomOf="@id/cv_region_community"
+            tools:ignore="MissingConstraints">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="15dp">
 
                 <TextView
-                    android:id="@+id/country_academy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="학원&amp;인강 게시판"
-                    android:textSize="15sp" />
+                    android:text="입시 게시판"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/country_question"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="질문 게시판"
-                    android:textSize="15sp" />
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/country_free"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="자유 게시판"
-                    android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/country_academy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:text="학원&amp;인강 게시판"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/country_question"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:text="질문 게시판"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/country_free"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:text="자유 게시판"
+                        android:textSize="15sp" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-    <!-- Country Community -->
-    <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:orientation="vertical"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/cv_all_community"
-        tools:ignore="MissingConstraints">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Country Community -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
             android:orientation="vertical"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="추가 게시판"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            app:cardCornerRadius="10dp"
+            app:layout_constraintLeft_toLeftOf="@id/gd_left"
+            app:layout_constraintRight_toRightOf="@id/gd_right"
+            app:layout_constraintTop_toBottomOf="@id/cv_all_community"
+            tools:ignore="MissingConstraints">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="15dp">
 
                 <TextView
-                    android:id="@+id/tv_instagram"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="학과 정보 모아보기"
-                    android:textSize="15sp" />
+                    android:text="추가 게시판"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_instagram"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:text="학과 정보 모아보기"
+                        android:textSize="15sp" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

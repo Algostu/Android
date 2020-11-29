@@ -1,179 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="52dp">
+    android:background="@color/white_gray">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clipChildren="false"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@color/saffron"
+            android:clipChildren="false"
+            app:collapsedTitleGravity="center_vertical"
+            app:collapsedTitleTextAppearance="@style/CollapsingTitleStyle"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleGravity="center"
+            app:expandedTitleTextAppearance="@style/ExpandedTitleStyle"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/saffron"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="25dp"
+                android:src="@drawable/circle" />
+
+            <ImageView
+                android:id="@+id/user_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="35dp"
+                android:src="@drawable/ic_logov2" />
+
+        </net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_gray">
+        android:layout_marginBottom="52dp"
+        android:background="@color/transparent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- guide line -->
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gd_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="15dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gd_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="15dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gd_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="11dp" />
-
-        <!--  title background  -->
-        <View
-            android:id="@+id/title_background"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="76dp"
-            android:background="@color/white"
-            tools:ignore="MissingConstraints" />
+            android:layout_height="match_parent"
+            android:background="@color/transparent">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@drawable/shadow2"
-            app:layout_constraintTop_toBottomOf="@id/title_background" />
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:src="@drawable/ic_chick"
-            app:layout_constraintLeft_toLeftOf="@id/gd_left"
-            app:layout_constraintTop_toBottomOf="@id/gd_top"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/school_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/title"
-            android:text="아주 고등학교"
-            android:textSize="23sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="@id/icon"
-            app:layout_constraintTop_toTopOf="@id/gd_top" />
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/title"
-            android:text="user"
-            android:textSize="23sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="@id/icon"
-            app:layout_constraintTop_toBottomOf="@id/school_name" />
-
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:fontFamily="@font/title"
-            android:text="님, 안녕하세요!"
-            android:textSize="23sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="@id/user_name"
-            app:layout_constraintTop_toBottomOf="@id/school_name" />
-
-        <ImageButton
-            android:id="@+id/setting_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_baseline_people_outline_24"
-            android:tint="@android:color/black"
-            app:layout_constraintRight_toRightOf="@id/gd_right"
-            app:layout_constraintTop_toTopOf="@id/gd_top" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_school"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
-            app:layout_constraintLeft_toLeftOf="@id/gd_left"
-            app:layout_constraintRight_toRightOf="@id/gd_right"
-            app:layout_constraintTop_toBottomOf="@id/title_background"
-            tools:ignore="MissingConstraints">
-
-            <LinearLayout
-                android:id="@+id/today_lunch"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <!-- guide line -->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gd_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="15dp">
+                app:layout_constraintGuide_begin="15dp" />
 
-                <TextView
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gd_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="15dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gd_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="11dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:src="@color/saffron"
+                tools:ignore="MissingConstraints" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_school"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="1dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintLeft_toLeftOf="@id/gd_left"
+                app:layout_constraintRight_toRightOf="@id/gd_right"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:id="@+id/today_lunch"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="오늘의 급식"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <TextView
-                    android:id="@+id/cafeteria"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="MENU1\nMENU2\nMENU3"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="오늘의 급식"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-        <!-- 내 게시판 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_my_community"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
-            app:layout_constraintLeft_toLeftOf="@id/gd_left"
-            app:layout_constraintRight_toRightOf="@id/gd_right"
-            app:layout_constraintTop_toBottomOf="@id/cv_school"
-            tools:ignore="MissingConstraints">
+                    <TextView
+                        android:id="@+id/cafeteria"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="MENU1\nMENU2\nMENU3"
+                        android:textColor="@android:color/black"
+                        android:textSize="15dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-            <RelativeLayout
+
+            <TextView
+                android:id="@+id/title_my_community"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="15dp">
+                android:layout_marginVertical="10dp"
+                android:layout_marginLeft="50dp"
+                android:text="최신 게시판"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/cv_school"
+                app:layout_goneMarginBottom="10dp" />
 
-                <TextView
-                    android:id="@+id/title_my_community"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="최신 게시판"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_goneMarginBottom="10dp" />
+            <!-- 내 게시판 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_my_community"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="1dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintLeft_toLeftOf="@id/gd_left"
+                app:layout_constraintRight_toRightOf="@id/gd_right"
+                app:layout_constraintTop_toBottomOf="@id/title_my_community"
+                tools:ignore="MissingConstraints">
 
                 <!--Recycler View for my community-->
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/title_my_community"
-                    android:layout_marginTop="12dp">
+                    android:padding="15dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_my_community"
@@ -186,45 +179,38 @@
                         android:scrollbars="vertical"
                         tools:ignore="MissingConstraints" />
                 </androidx.core.widget.NestedScrollView>
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-        <!-- 핫 게시판 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_hot_article"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
-            app:layout_constraintBottom_toTopOf="@id/cv_contest"
-            app:layout_constraintLeft_toLeftOf="@id/gd_left"
-            app:layout_constraintRight_toRightOf="@id/gd_right"
-            app:layout_constraintTop_toBottomOf="@id/cv_my_community"
-            tools:ignore="MissingConstraints">
-
-            <RelativeLayout
+            <TextView
+                android:id="@+id/title_hot_community"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="15dp">
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginLeft="50dp"
+                android:text="HOT 게시물"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/cv_my_community" />
 
-                <TextView
-                    android:id="@+id/title_hot_community"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="HOT 게시물"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <!-- 핫 게시판 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_hot_article"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="1dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintLeft_toLeftOf="@id/gd_left"
+                app:layout_constraintRight_toRightOf="@id/gd_right"
+                app:layout_constraintTop_toBottomOf="@id/title_hot_community"
+                tools:ignore="MissingConstraints">
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/title_hot_community"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="10dp">
+                    android:padding="15dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_hot_article"
@@ -238,82 +224,72 @@
                         android:scrollbars="vertical"
                         tools:ignore="MissingConstraints" />
                 </androidx.core.widget.NestedScrollView>
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-        <!-- 공모전 모아보기 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_contest"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
-            app:layout_constraintLeft_toLeftOf="@id/gd_left"
-            app:layout_constraintRight_toRightOf="@id/gd_right"
-            app:layout_constraintTop_toBottomOf="@id/cv_hot_article"
-            tools:ignore="MissingConstraints">
+            <TextView
+                android:id="@+id/title_contest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginLeft="50dp"
+                android:text="공모전 모아보기"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_hot_article"
+                tools:ignore="MissingConstraints" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="15dp">
+            <TextView
+                android:id="@+id/more_contest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="15dp"
+                android:layout_marginRight="18dp"
+                android:text="더 보기"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_hot_article"
+                tools:ignore="MissingConstraints,NotSibling" />
 
-                <TextView
-                    android:id="@+id/title_contest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="공모전 모아보기"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/more_contest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/rv_contest"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="10dp"
-                    android:text="더 보기"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="NotSibling" />
-
-                <TextView
-                    android:id="@+id/pleaseTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@id/title_contest"
-                    android:gravity="center"
-                    android:textSize="12sp" />
+            <!-- 공모전 모아보기 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_contest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="1dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintLeft_toLeftOf="@id/gd_left"
+                app:layout_constraintRight_toRightOf="@id/gd_right"
+                app:layout_constraintTop_toBottomOf="@id/title_contest"
+                tools:ignore="MissingConstraints">
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/title_contest"
-                    android:layout_marginTop="17dp">
+                    android:padding="15dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_contest"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/title_contest"
                         android:orientation="horizontal"
                         android:overScrollMode="never"
                         tools:ignore="MissingConstraints" />
                 </androidx.core.widget.NestedScrollView>
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            app:layout_constraintTop_toBottomOf="@id/cv_contest"
-            tools:ignore="MissingConstraints" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                app:layout_constraintTop_toBottomOf="@id/cv_contest"
+                tools:ignore="MissingConstraints" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

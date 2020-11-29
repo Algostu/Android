@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
@@ -37,8 +40,13 @@ public class CommunityList extends Fragment {
         comAll = ((MainActivity) getActivity()).user.comAll;
         comRegion = ((MainActivity) getActivity()).user.comRegion;
         comSchool = ((MainActivity) getActivity()).user.comSchool;
-
         View view = inflater.inflate(R.layout.community_list, container, false);
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        actionBar.setTitle("재잘재잘");
+        actionBar.setSubtitle("게시판을 모아보는 곳이에요!");
 
         textViewClickListener(view, R.id.school_question, comSchool.get(0).communityID, 2);
         textViewClickListener(view, R.id.school_free, comSchool.get(1).communityID, 2);

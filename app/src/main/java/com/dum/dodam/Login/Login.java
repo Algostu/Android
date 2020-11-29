@@ -65,8 +65,8 @@ public class Login extends Fragment {
             }
         });
 
-        scene =  ((startUpActivity)getActivity()).scenarioNo;
-        if (scene == -1){
+        scene = ((startUpActivity) getActivity()).scenarioNo;
+        if (scene == -1) {
             session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);
             return inflater.inflate(R.layout.start_main, container, false);
         }
@@ -79,31 +79,31 @@ public class Login extends Fragment {
 //        });
 
         // 로그아웃
-        if(scene == 1){
+        if (scene == 1) {
             this.logout();
         }
         // 탈퇴
-        else if (scene == 2){
+        else if (scene == 2) {
             session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);
         }
         return view;
     }
 
-    public void withdraw(){
+    public void withdraw() {
         UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
             @Override
             public void onFailure(ErrorResult errorResult) {
-                Toast.makeText(getContext(),"회원탈퇴 실패! 다시 시도해 주세요.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "회원탈퇴 실패! 다시 시도해 주세요.", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onSessionClosed(ErrorResult errorResult) {
-                Toast.makeText(getContext(),"회원탈퇴 실패! 다시 시도해 주세요.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "회원탈퇴 실패! 다시 시도해 주세요.", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNotSignedUp() {
-                Toast.makeText(getContext(),"가입되지 않은 계정입니다.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "가입되지 않은 계정입니다.", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -116,23 +116,23 @@ public class Login extends Fragment {
                     public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
                         if (response.isSuccessful()) {
                             BaseResponse result = response.body();
-                            if(result.checkError(getContext())!=0) return;
-                            Toast.makeText(getContext(),"회원탈퇴 성공!",Toast.LENGTH_LONG).show();
+                            if (result.checkError(getContext()) != 0) return;
+                            Toast.makeText(getContext(), "회원탈퇴 성공!", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(),"회원탈퇴 실패! 다시 시도해 주세요.",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "회원탈퇴 실패! 다시 시도해 주세요.", Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<BaseResponse> call, Throwable t) {
-                        Toast.makeText(getContext(),"회원탈퇴 실패! 다시 시도해 주세요.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "회원탈퇴 실패! 다시 시도해 주세요.", Toast.LENGTH_LONG).show();
                     }
                 });
             }
         });
     }
 
-    public void logout(){
+    public void logout() {
         UserManagement.getInstance()
                 .requestLogout(new LogoutResponseCallback() {
                     @Override
@@ -147,16 +147,16 @@ public class Login extends Fragment {
                             public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
                                 if (response.isSuccessful()) {
                                     BaseResponse result = response.body();
-                                    if(result.checkError(getContext())!=0) return;
+                                    if (result.checkError(getContext()) != 0) return;
                                     Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(getContext(),"로그아웃 실패! 다시 시도해 주세요.",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), "로그아웃 실패! 다시 시도해 주세요.", Toast.LENGTH_LONG).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                                Toast.makeText(getContext(),"로그아웃 실패! 다시 시도해 주세요.",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "로그아웃 실패! 다시 시도해 주세요.", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -255,8 +255,8 @@ public class Login extends Fragment {
                             }
 
                             // 탈퇴
-                            if(scene == 2){
-                                kakaoID = (int)userID;
+                            if (scene == 2) {
+                                kakaoID = (int) userID;
                                 withdraw();
                                 return;
                             }

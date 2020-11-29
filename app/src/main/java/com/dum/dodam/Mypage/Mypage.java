@@ -49,10 +49,7 @@ public class Mypage extends Fragment {
         emailAddress = view.findViewById(R.id.mail_address);
         schoolName = view.findViewById(R.id.school_name);
         grade = view.findViewById(R.id.grade);
-//        age = view.findViewById(R.id.preage);
-//        gender = view.findViewById(R.id.gender);
         isChecked = view.findViewById(R.id.confirm);
-//        ask_center = view.findViewById(R.id.ask_center);
         code = view.findViewById(R.id.tv_recommend);
         code.setText(user.recommendCode);
 
@@ -60,7 +57,24 @@ public class Mypage extends Fragment {
         nickName.setText(user.nickName);
         emailAddress.setText(user.email);
         schoolName.setText(user.schoolName);
-//        age.setText("낭랑 " + String.valueOf(user.age) + "세");
+
+        if (user.grade == 13) {
+            grade.setText("졸업생");
+        } else if (user.grade == 12) {
+            grade.setText("3학년 " + user.classNum + "반");
+        } else if (user.grade == 11) {
+            grade.setText("2학년 " + user.classNum + "반");
+        } else if (user.grade == 10) {
+            grade.setText("1학년 " + user.classNum + "반");
+        } else if (user.grade == 9) {
+            grade.setText("예비고등");
+        } else {
+            grade.setText("중학생");
+        }
+
+        if (user.authorized.equals("1")) {
+            isChecked.setImageResource(R.drawable.ic_confirm);
+        }
 
         isChecked.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,25 +112,6 @@ public class Mypage extends Fragment {
                 }
             }
         });
-
-
-        if (user.grade == 13) {
-            grade.setText("졸업생");
-        } else if (user.grade == 12) {
-            grade.setText("3학년 " + user.classNum + "반");
-        } else if (user.grade == 11) {
-            grade.setText("2학년 " + user.classNum + "반");
-        } else if (user.grade == 10) {
-            grade.setText("1학년 " + user.classNum + "반");
-        } else if (user.grade == 9) {
-            grade.setText("예비고등");
-        } else {
-            grade.setText("중학생");
-        }
-
-        if (user.authorized.equals("1")) {
-            isChecked.setImageResource(R.drawable.ic_confirm);
-        }
 
         withDraw = (TextView) view.findViewById(R.id.withdrawal);
         logout = (TextView) view.findViewById(R.id.logout);
@@ -173,33 +168,6 @@ public class Mypage extends Fragment {
             }
         });
 
-//        TextView mypage_title = (TextView) view.findViewById(R.id.mypage_title);
-//        mypage_title.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n확인을 누르면 사라집니다.", Snackbar.LENGTH_INDEFINITE);
-//                snackbar.setAction("확인", new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        snackbar.dismiss();
-//                    }
-//                });
-//                snackbar.show();
-//            }
-//        });
-//
-//        userName.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final Snackbar snackbar = Snackbar.make(view, "Snackbar 메시지입니다.\n잠시 후 사라집니다.", Snackbar.LENGTH_SHORT);
-//                View view = snackbar.getView();
-//                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-//                params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
-//
-//                view.setLayoutParams(params);
-//                snackbar.show();
-//            }
-//        });
 
         TextView ask_sentence = view.findViewById(R.id.ask_sentence);
         ask_sentence.setOnClickListener(new View.OnClickListener() {
@@ -218,15 +186,6 @@ public class Mypage extends Fragment {
                 startActivity(Intent.createChooser(sendIntent, "Send email"));
             }
         });
-
-//        recommend = view.findViewById(R.id.recommend);
-//        recommend.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                RecommendDialog dialog = new RecommendDialog(getContext());
-//                dialog.callDialog();
-//            }
-//        });
 
         return view;
     }

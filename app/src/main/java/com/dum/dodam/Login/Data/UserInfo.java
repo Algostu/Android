@@ -18,5 +18,4 @@ public class UserInfo {
 
         this.expTime = expTime;
     }
-
 }

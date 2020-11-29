@@ -9,7 +9,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/saffron"
         android:clipChildren="false"
         android:theme="@style/AppTheme.Appbar">
 
@@ -18,17 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:subtitleTextAppearance="@style/AppTheme.Appbar.SubTitleTextApp"
-            app:titleTextAppearance="@style/AppTheme.Appbar.TitleTextApp">
-
-            <TextView
-                android:id="@+id/month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Month"
-                android:textSize="15sp" />
-
-        </androidx.appcompat.widget.Toolbar>
+            app:titleTextAppearance="@style/AppTheme.Appbar.TitleTextApp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
@@ -37,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:elevation="1dp"
-            app:tabGravity="center"
+            app:tabBackground="@color/saffron"
+            app:tabGravity="fill"
             app:tabMode="fixed" />
     </com.google.android.material.appbar.AppBarLayout>
 

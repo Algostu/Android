@@ -22,28 +22,25 @@
         app:layout_constraintGuide_end="15dp" />
 
     <!--  title background  -->
-
-    <TextView
-        android:id="@+id/mypage_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/title"
-        android:text="마이 페이지"
-        android:textSize="23sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@id/gd_left"
+    <ImageView
+        android:id="@+id/profile_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/ic_logov2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginTop="300dp"
         tools:ignore="MissingConstraints" />
 
     <ImageView
-        android:id="@+id/profile_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/ic_chick"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintTop_toBottomOf="@id/mypage_title"
+        android:id="@+id/confirm"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_unconfirm"
+        app:layout_constraintLeft_toRightOf="@id/user_name"
+        app:layout_constraintTop_toTopOf="@id/user_name"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -53,9 +50,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:text="Name"
-        android:textSize="20dp"
-        app:layout_constraintLeft_toRightOf="@id/profile_icon"
-        app:layout_constraintTop_toBottomOf="@id/mypage_title" />
+        android:textSize="35sp"
+        app:layout_constraintLeft_toLeftOf="@id/profile_icon"
+        app:layout_constraintRight_toRightOf="@id/profile_icon"
+        app:layout_constraintTop_toBottomOf="@id/profile_icon" />
 
     <TextView
         android:id="@+id/mail_address"
@@ -65,130 +63,178 @@
         android:text="Email Address"
         android:textColor="@color/faded_gray"
         android:textSize="15dp"
-        app:layout_constraintLeft_toRightOf="@id/profile_icon"
+        app:layout_constraintLeft_toLeftOf="@id/profile_icon"
+        app:layout_constraintRight_toRightOf="@id/profile_icon"
         app:layout_constraintTop_toBottomOf="@id/user_name" />
 
-    <ImageView
-        android:id="@+id/confirm"
+    <TextView
+        android:id="@+id/school"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginRight="20dp"
-        android:src="@drawable/ic_unconfirm"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mypage_title" />
+        android:layout_marginLeft="10dp"
+        android:text="schoolname"
+        android:textColor="@color/faded_gray"
+        android:textSize="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/profile_icon"
+        app:layout_constraintRight_toRightOf="@id/profile_icon"
+        app:layout_constraintTop_toBottomOf="@id/mail_address" />
+
+    <TextView
+        android:id="@+id/grade_n_class_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="grade n class num"
+        android:textColor="@color/faded_gray"
+        android:textSize="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/profile_icon"
+        app:layout_constraintRight_toRightOf="@id/profile_icon"
+        app:layout_constraintTop_toBottomOf="@id/school" />
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="-10dp"
+        android:src="@drawable/ic_pen"
+        android:tint="@color/faded_gray"
+        app:layout_constraintBottom_toBottomOf="@id/grade_n_class_num"
+        app:layout_constraintLeft_toRightOf="@id/grade_n_class_num"
+        tools:ignore="UseAppTint" />
 
     <View
         android:id="@+id/line"
         android:layout_width="0dp"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginTop="20dp"
         android:background="@color/faded_gray"
+        app:layout_constraintLeft_toLeftOf="@id/user_name"
+        app:layout_constraintRight_toRightOf="@id/user_name"
+        app:layout_constraintTop_toBottomOf="@id/grade_n_class_num" />
+
+    <LinearLayout
+        android:id="@+id/my_status_ll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="@id/gd_left"
         app:layout_constraintRight_toRightOf="@id/gd_right"
-        app:layout_constraintTop_toBottomOf="@id/mail_address" />
+        app:layout_constraintTop_toBottomOf="@id/line">
 
-    <TextView
-        android:id="@+id/tv1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="닉네임: "
-        android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintTop_toTopOf="@id/line" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/nick_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Nickname"
-        android:textSize="20sp"
-        app:layout_constraintLeft_toRightOf="@id/tv1"
-        app:layout_constraintTop_toTopOf="@id/line" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내가 쓴 글"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="학교: "
-        android:textSize="20dp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintTop_toBottomOf="@id/nick_name" />
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/ic_write_article" />
 
-    <TextView
-        android:id="@+id/school_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="School Name"
-        android:textSize="20dp"
-        app:layout_constraintLeft_toRightOf="@id/tv2"
-        app:layout_constraintTop_toBottomOf="@id/nick_name" />
+            <TextView
+                android:id="@+id/my_article_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="1,024"
+                android:textSize="18sp" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="학년/반: "
-        android:textSize="20dp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintTop_toBottomOf="@id/school_name" />
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="15dp"
+            android:alpha="220"
+            android:background="@color/faded_gray" />
 
-    <TextView
-        android:id="@+id/grade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Grade"
-        android:textSize="20dp"
-        app:layout_constraintLeft_toRightOf="@id/tv3"
-        app:layout_constraintTop_toBottomOf="@id/school_name" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="추천 코드 : "
-        android:textSize="20dp"
-        app:layout_constraintLeft_toLeftOf="@id/gd_left"
-        app:layout_constraintTop_toBottomOf="@id/grade" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내글의 댓글"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_recommend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="CODE"
-        android:textSize="20dp"
-        app:layout_constraintLeft_toRightOf="@id/tv4"
-        app:layout_constraintTop_toBottomOf="@id/grade" />
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/ic_fill_commnet" />
+
+            <TextView
+                android:id="@+id/my_comment_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="1,024"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="15dp"
+            android:alpha="220"
+            android:background="@color/faded_gray" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내가 쓴 글"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/ic_fill_heart" />
+
+            <TextView
+                android:id="@+id/my_heart_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="1,024"
+                android:textSize="18sp" />
+        </LinearLayout>
 
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/preage"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="5dp"-->
-    <!--        android:text="낭랑 19세"-->
-    <!--        android:textSize="20dp"-->
-    <!--        app:layout_constraintLeft_toLeftOf="@id/gd_left"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/school_name" />-->
+    </LinearLayout>
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/gender"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginLeft="10dp"-->
-    <!--        android:layout_marginTop="5dp"-->
-    <!--        android:text="Male"-->
-    <!--        android:textSize="20dp"-->
-    <!--        app:layout_constraintLeft_toRightOf="@id/preage"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/grade" />-->
+    <View
+        android:id="@+id/line2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/faded_gray"
+        app:layout_constraintLeft_toLeftOf="@id/user_name"
+        app:layout_constraintRight_toRightOf="@id/user_name"
+        app:layout_constraintTop_toBottomOf="@id/my_status_ll" />
+
 
     <LinearLayout
         android:layout_width="match_parent"

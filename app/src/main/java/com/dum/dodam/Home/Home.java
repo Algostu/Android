@@ -5,13 +5,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,9 +38,12 @@ import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
+import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,14 +92,13 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
     public UserJson user;
     private TextView cafeteria;
-    private TextView school_name;
-    private TextView user_name;
-    private TextView pleaseTab;
     private TextView more_contest;
     private TextView title_contest;
-    private ImageButton mySetting;
+    private ImageView mySetting;
 
     private LinearLayout today_lunch;
+
+    private CollapsingToolbarLayout toolBarLayout;
 
     @Nullable
     @Override
@@ -104,8 +108,31 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
         user = ((MainActivity) getActivity()).getUser();
 
-        user_name = view.findViewById(R.id.user_name);
-        user_name.setText(user.userName);
+        final Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        toolBarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
+        toolBarLayout.setTitle(String.format("%s\n%s님, 안녕하세요:)", user.schoolName, user.userName));
+
+        AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.app_bar);
+//        appbar가 접히는지에 따른 이벤트 발생
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(final AppBarLayout appBarLayout, int verticalOffset) {
+                //Initialize the size of the scroll
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                //Check if the view is collapsed
+                if (scrollRange + verticalOffset == 0) {
+                    toolBarLayout.setTitle(String.format("%s %s님", user.schoolName, user.userName));
+                    appBarLayout.setBackgroundResource(R.color.saffron);
+                } else {
+                    toolBarLayout.setTitle(String.format("%s\n%s님, 안녕하세요:)", user.schoolName, user.userName));
+                }
+            }
+        });
 
         String filename = "curCafeteria";
         File file = new File(requireContext().getFilesDir() + "/" + filename);
@@ -121,13 +148,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             }
         });
 
-        pleaseTab = view.findViewById(R.id.pleaseTab);
-
         cafeteria = view.findViewById(R.id.cafeteria);
         setTodayCafeteria();
-
-        school_name = view.findViewById(R.id.school_name);
-        school_name.setText(user.schoolName);
 
         more_contest = view.findViewById(R.id.more_contest);
         title_contest = view.findViewById(R.id.title_contest);
@@ -173,7 +195,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         contest_recyclerView.setLayoutManager(contest_layoutManager);
         contest_recyclerView.setAdapter(contest_adapter);
 
-        mySetting = view.findViewById(R.id.setting_button);
+        mySetting = view.findViewById(R.id.user_icon);
         mySetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -570,7 +592,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 } else if (getWeekNDate().get(0) == 6) {
                     lunch = list.get(getWeekNDate().get(1)).lunch_friday;
                 }
-                if (lunch.equals(" ")) cafeteria.setText("제공되는 식단이 없습니다.");
+                if (lunch.equals(" ")) cafeteria.setText("오늘 점심은 따듯한 집밥을 먹어봐요 ㅎ-ㅎ");
                 else {
                     cafeteria.setText(lunch);
                 }
