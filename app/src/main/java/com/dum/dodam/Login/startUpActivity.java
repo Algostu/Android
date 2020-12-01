@@ -44,7 +44,7 @@ public class startUpActivity extends AppCompatActivity {
             if (view != null) {
                 // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
                 view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                getWindow().setStatusBarColor(Color.parseColor("#F0ECE3"));
+                getWindow().setStatusBarColor(Color.parseColor("#F8D176"));
             }
         }else if (Build.VERSION.SDK_INT >= 21) {
             // 21 버전 이상일 때

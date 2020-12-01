@@ -26,7 +26,9 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_logo_white1" />
 
-        <activity android:name=".Login.startUpActivity">
+        <activity
+            android:name=".Login.startUpActivity"
+            android:windowSoftInputMode="stateHidden|adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

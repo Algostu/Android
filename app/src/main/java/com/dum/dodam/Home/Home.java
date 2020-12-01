@@ -1,5 +1,6 @@
 package com.dum.dodam.Home;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,11 +40,10 @@ import com.dum.dodam.R;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
-import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -111,9 +111,9 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         final Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         toolBarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
-        toolBarLayout.setTitle(String.format("%s\n%s님, 안녕하세요:)", user.schoolName, user.userName));
-
         AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.app_bar);
+        TextView textView = view.findViewById(R.id.welcome_text);
+        textView.setText(String.format("%s\n%s님, 안녕하세요:)", user.schoolName, user.userName));
 //        appbar가 접히는지에 따른 이벤트 발생
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             int scrollRange = -1;
@@ -128,8 +128,10 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 if (scrollRange + verticalOffset == 0) {
                     toolBarLayout.setTitle(String.format("%s %s님", user.schoolName, user.userName));
                     appBarLayout.setBackgroundResource(R.color.saffron);
+                    toolbar.setBackgroundColor(getActivity().getResources().getColor(R.color.saffron));
                 } else {
-                    toolBarLayout.setTitle(String.format("%s\n%s님, 안녕하세요:)", user.schoolName, user.userName));
+                    toolBarLayout.setTitle("");
+                    toolbar.setBackgroundColor(Color.TRANSPARENT);
                 }
             }
         });

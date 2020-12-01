@@ -45,12 +45,12 @@ public class Mypage extends Fragment {
         user = ((MainActivity) getActivity()).getUser();
 
         userName = view.findViewById(R.id.user_name);
-        nickName = view.findViewById(R.id.nick_name);
+//        nickName = view.findViewById(R.id.nick_name);
         emailAddress = view.findViewById(R.id.mail_address);
-        schoolName = view.findViewById(R.id.school_name);
+//        schoolName = view.findViewById(R.id.school_name);
         grade = view.findViewById(R.id.grade);
         isChecked = view.findViewById(R.id.confirm);
-        code = view.findViewById(R.id.tv_recommend);
+//        code = view.findViewById(R.id.tv_recommend);
         code.setText(user.recommendCode);
 
         userName.setText(user.userName);

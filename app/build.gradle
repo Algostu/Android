@@ -78,6 +78,7 @@ dependencies {
     implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
 
     implementation 'net.opacapp:multiline-collapsingtoolbar:27.1.1'
+
 }
 
 apply plugin: 'realm-android'

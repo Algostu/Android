@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <ImageView
         android:id="@+id/imageView10"
         android:layout_width="wrap_content"
@@ -86,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ll_nickname"
             android:layout_marginTop="10dp"
-            android:text="별명은 한글,숫자로 이루어진 5자 이상 15자 이하 문자열입니다."
+            android:text="별명은 한글,숫자로 이루어진 2자 이상 15자 이하 문자열입니다."
             android:textSize="10sp"
             tools:ignore="MissingConstraints" />
 
@@ -193,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="친구"
+                android:text="추천인"
                 android:textColor="#3C4041"
                 android:textSize="18sp" />
 
@@ -202,6 +201,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:inputType="text"
+                android:maxLines="1"
                 android:ems="10"
                 android:hint="친구 코드를 입력하세요"/>
 
@@ -277,25 +278,27 @@
 
     <EditText
         android:id="@+id/editSearch"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
-        android:layout_marginRight="10dp"
+        app:layout_constraintLeft_toLeftOf="@id/relative_layout"
+        app:layout_constraintRight_toRightOf="@id/relative_layout"
         android:hint="학교를 검색하세요."
         app:layout_constraintTop_toBottomOf="@id/relative_layout"
         tools:ignore="MissingConstraints" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/submit"
         app:layout_constraintTop_toBottomOf="@id/editSearch"
+        app:layout_constraintLeft_toLeftOf="@id/relative_layout"
+        app:layout_constraintRight_toRightOf="@id/relative_layout"
         tools:ignore="MissingConstraints">
 
         <ListView
             android:id="@+id/listView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:divider="#999999"
             android:dividerHeight="1dp" />

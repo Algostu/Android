@@ -10,6 +10,7 @@
         <item name="android:statusBarColor">@color/saffron</item>
         <item name="colorControlHighlight">#42ffaf12</item>
         <item name="android:textColor">#373a3c</item>
+        <item name="fontFamily">@font/nanumsquarer</item>
         <item name="android:windowActionBarOverlay">true</item>
 
         <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>
@@ -91,10 +92,15 @@
 
     <style name="CollapsingTitleStyle" parent="ToolbarTitleStyleParent">
         <item name="collapsedTitleGravity">center</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:fontFamily">@font/nanumsquareb</item>
+        <item name="android:textColor">@color/black</item>
         <item name="background">@color/saffron</item>
     </style>
 
     <style name="ExpandedTitleStyle" parent="ToolbarTitleStyleParent">
+        <item name="android:textSize">18dp</item>
+        <item name="android:fontFamily">@font/nanumsquareb</item>
         <item name="background">@color/saffron</item>
     </style>
 

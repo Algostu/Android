@@ -108,7 +108,7 @@ public class SIgnUP2 extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (Pattern.matches("^[가-힣a-zA-Z0-9]*$", charSequence.toString()) && charSequence.length() <= 15 && charSequence.length() >= 5) {
+                if (Pattern.matches("^[가-힣a-zA-Z0-9]*$", charSequence.toString()) && charSequence.length() <= 15 && charSequence.length() >= 2) {
                     nickNameOkay.setText("사용 가능한 닉네임 입니다.");
                     nickNameOkay.setTextColor(Color.parseColor("#52D84D"));
                     nickNamePossibleNot = false;
@@ -146,6 +146,13 @@ public class SIgnUP2 extends Fragment {
         genderSpinner = view.findViewById(R.id.gender);
         if (((startUpActivity) getActivity()).user.gender.equals("") == false) {
             genderSpinner.setEnabled(false);
+            genderSpinner.setBackgroundColor(getResources().getColor(R.color.white_gray));
+            if (((startUpActivity) getActivity()).user.gender.equals("male")){
+                genderSpinner.setSelection(1);
+            } else {
+                genderSpinner.setSelection(2);
+            }
+
             isGender = 1;
         } else {
             genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -174,6 +181,12 @@ public class SIgnUP2 extends Fragment {
         ageSpinner = view.findViewById(R.id.age);
         if (((startUpActivity) getActivity()).user.ageRange.equals("") == false) {
             ageSpinner.setEnabled(false);
+            ageSpinner.setBackgroundColor(getResources().getColor(R.color.white_gray));
+            if (((startUpActivity) getActivity()).user.gender.equals("14~19")){
+                ageSpinner.setSelection(1);
+            } else {
+                ageSpinner.setSelection(2);
+            }
             isAge = 1;
         } else {
             ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
