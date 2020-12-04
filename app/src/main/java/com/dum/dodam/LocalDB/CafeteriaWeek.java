@@ -3,26 +3,26 @@ package com.dum.dodam.LocalDB;
 import io.realm.RealmObject;
 
 public class CafeteriaWeek extends RealmObject {
-    public String monday;
-    public String tuesday;
-    public String wednesday;
-    public String thursday;
-    public String friday;
-    public String mondayCal;
-    public String tuesdayCal;
-    public String wednesdayCal;
-    public String thursdayCal;
-    public String fridayCal;
-    public int mondayDate;
-    public int tuesdayDate;
-    public int wednesdayDate;
-    public int thursdayDate;
-    public int fridayDate;
+    public String monday = "";
+    public String tuesday = "";
+    public String wednesday = "";
+    public String thursday = "";
+    public String friday = "";
+    public String mondayCal = "";
+    public String tuesdayCal = "";
+    public String wednesdayCal = "";
+    public String thursdayCal = "";
+    public String fridayCal = "";
+    public String mondayDate = "";
+    public String tuesdayDate = "";
+    public String wednesdayDate = "";
+    public String thursdayDate = "";
+    public String fridayDate = "";
 
     public CafeteriaWeek() {
     }
 
-    public CafeteriaWeek(String monday, String tuesday, String wednesday, String thursday, String friday, String mondayCal, String tuesdayCal, String wednesdayCal, String thursdayCal, String fridayCal, int mondayDate, int tuesdayDate, int wednesdayDate, int thursdayDate, int fridayDate) {
+    public CafeteriaWeek(String monday, String tuesday, String wednesday, String thursday, String friday, String mondayCal, String tuesdayCal, String wednesdayCal, String thursdayCal, String fridayCal, String mondayDate, String tuesdayDate, String wednesdayDate, String thursdayDate, String fridayDate) {
         this.monday = monday;
         this.tuesday = tuesday;
         this.wednesday = wednesday;

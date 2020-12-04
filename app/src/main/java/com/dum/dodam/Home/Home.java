@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Cafeteria.CafeteriaTab;
+import com.dum.dodam.Cafeteria.dataframe.MealInfo;
 import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
 import com.dum.dodam.Contest.Contest;
@@ -31,6 +32,9 @@ import com.dum.dodam.Home.dataframe.HotArticleFrame;
 import com.dum.dodam.Home.dataframe.HotArticleResponse;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame;
 import com.dum.dodam.Home.dataframe.MyCommunityResponse;
+import com.dum.dodam.LocalDB.CafeteriaDB;
+import com.dum.dodam.LocalDB.CafeteriaModule;
+import com.dum.dodam.LocalDB.CafeteriaWeek;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.Mypage.Mypage;
@@ -55,11 +59,20 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public class Home extends Fragment implements HotArticleAdapter.OnListItemSelectedInterface, MyCommunityAdapter.OnListItemSelectedInterface, ContestAdapter.OnListItemSelectedInterface {
     private static final String TAG = "RHC";
@@ -68,7 +81,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     private int cnt_myCommunity = 0;
     private int cnt_hotArticle = 0;
     private int cnt_getContestList = 0;
-    private int cnt_cafeteria = 0;
 
     private RecyclerView myCommunity_recyclerView;
     private RecyclerView.Adapter myCommunity_adapter;
@@ -98,6 +110,13 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
     private CollapsingToolbarLayout toolBarLayout;
 
+    private Realm realm;
+    private ArrayList<CafeteriaWeek> cafeteriaWeeks = new ArrayList<>();
+    private boolean isFirstWeekNull;
+    private String version;
+    private ArrayList<MealInfo.MIF> resultMeal;
+    private List<Integer> mydate;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -113,6 +132,12 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             // 21 버전 이상일 때
             getActivity().getWindow().setStatusBarColor(Color.BLACK);
         }
+
+        RealmCafeteriaInit();
+        mydate = getWeekNDate();
+        version = String.format("%d%d", mydate.get(0), mydate.get(1));
+        cafeteria = view.findViewById(R.id.cafeteria);
+        checkCafeteriaList();
 
         user = ((MainActivity) getActivity()).getUser();
 
@@ -148,12 +173,9 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         today_lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new CafeteriaTab());
+                ((MainActivity) getActivity()).replaceFragmentFull(new CafeteriaTab(cafeteriaWeeks, isFirstWeekNull));
             }
         });
-
-        cafeteria = view.findViewById(R.id.cafeteria);
-        setTodayCafeteria();
 
         more_contest = view.findViewById(R.id.more_contest);
         title_contest = view.findViewById(R.id.title_contest);
@@ -415,23 +437,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         ((MainActivity) getActivity()).replaceFragmentFull(Article.newInstance(articleID, communityType, communityID));
     }
 
-
-    public void setTodayCafeteria() {
-    }
-
-    public static ArrayList<Integer> getWeekNDate() {
-        ArrayList<Integer> result = new ArrayList<>();
-
-        Calendar c = Calendar.getInstance();
-        int this_week = c.get(Calendar.WEEK_OF_MONTH);
-        int sDayNum = c.get(Calendar.DAY_OF_WEEK);
-
-        result.add(sDayNum);
-        result.add(this_week - 1);
-
-        return result;
-    }
-
     @Override
     public void onContestItemSelected(View v, int position) {
         ContestAdapter.Holder holder = (ContestAdapter.Holder) contest_recyclerView.findViewHolderForAdapterPosition(position);
@@ -449,4 +454,321 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
         ((MainActivity) getActivity()).replaceFragmentFull(new ContestInfo(frame));
     }
+
+    public void setTodayCafeteria() {
+        //year, month, today, this_week, last_date, start_DOW
+        CafeteriaWeek this_week_lunch;
+        if (isFirstWeekNull) this_week_lunch = cafeteriaWeeks.get(mydate.get(3) - 2);
+        else this_week_lunch = cafeteriaWeeks.get(mydate.get(3) - 1);
+
+        String today = String.format("%02d", mydate.get(2));
+        String today_menu = "";
+
+        if (this_week_lunch.mondayDate.equals(today))
+            today_menu = (this_week_lunch.monday);
+        else if (this_week_lunch.tuesdayDate.equals(today))
+            today_menu = (this_week_lunch.tuesday);
+        else if (this_week_lunch.wednesdayDate.equals(today))
+            today_menu = (this_week_lunch.wednesday);
+        else if (this_week_lunch.thursdayDate.equals(today))
+            today_menu = (this_week_lunch.thursday);
+        else if (this_week_lunch.fridayDate.equals(today))
+            today_menu = (this_week_lunch.friday);
+
+        if (today_menu.equals("") || today_menu.equals("없음")) {
+            today_menu = "가족과 집에서 함께 먹는 따듯한 식사";
+        }
+
+        cafeteria.setText(today_menu);
+    }
+
+    public void checkCafeteriaList() {
+        Log.d(TAG, "Check Cafeteria");
+
+        CafeteriaDB cafeteriaDB = realm.where(CafeteriaDB.class).findFirst();
+
+        if (cafeteriaDB == null || !cafeteriaDB.version.equals(version)) {
+            saveCafeteria();
+        } else {
+//            loadCafeteria(cafeteriaDB);
+            saveCafeteria();
+        }
+    }
+
+    public void loadCafeteria(CafeteriaDB cafeteriaDB) {
+        cafeteriaWeeks.clear();
+
+        if (cafeteriaDB.week1.mondayDate.equals("") && cafeteriaDB.week1.tuesdayDate.equals("") && cafeteriaDB.week1.wednesdayDate.equals("") && cafeteriaDB.week1.thursdayDate.equals("") && cafeteriaDB.week1.fridayDate.equals(""))
+            isFirstWeekNull = true;
+        else
+            cafeteriaWeeks.add(cafeteriaDB.week1);
+        cafeteriaWeeks.add(cafeteriaDB.week2);
+        cafeteriaWeeks.add(cafeteriaDB.week3);
+        cafeteriaWeeks.add(cafeteriaDB.week4);
+        cafeteriaWeeks.add(cafeteriaDB.week5);
+        if (!(cafeteriaDB.week6.mondayDate.equals("") && cafeteriaDB.week6.tuesdayDate.equals("") && cafeteriaDB.week6.wednesdayDate.equals("") && cafeteriaDB.week6.thursdayDate.equals("") && cafeteriaDB.week6.fridayDate.equals("")))
+            cafeteriaWeeks.add(cafeteriaDB.week6);
+
+        setTodayCafeteria();
+    }
+
+    public void saveCafeteria() {
+        UserJson user = ((MainActivity) getActivity()).getUser();
+
+        String ATPT_OFCDC_SC_CODE = user.I_CODE;
+        String SD_SCHUL_CODE = user.SC_CODE;
+        String MLSV_YMD = version;
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://open.neis.go.kr/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        RetrofitService2 service = retrofit.create(RetrofitService2.class);
+
+        Call<MealInfo> call = service.getMealDietInfo("4db607519a0e40b2910efcdf0070a215", "json", "2", ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE, MLSV_YMD);
+        call.enqueue(new Callback<MealInfo>() {
+            @Override
+            public void onResponse(Call<MealInfo> call, final Response<MealInfo> response) {
+                if (response.isSuccessful()) {
+                    resultMeal = response.body().mealServiceDietInfo.get(1).row;
+
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            CafeteriaDB beforeCafeteriaDB = realm.where(CafeteriaDB.class).findFirst();
+                            RealmResults<CafeteriaWeek> beforeCafeteriaWeek = realm.where(CafeteriaWeek.class).findAll();
+                            if (beforeCafeteriaDB != null) beforeCafeteriaDB.deleteFromRealm();
+                            if (beforeCafeteriaWeek != null)
+                                beforeCafeteriaWeek.deleteAllFromRealm();
+
+                            CafeteriaDB cafeteriaDB = realm.createObject(CafeteriaDB.class);
+                            CafeteriaWeek week1 = realm.createObject(CafeteriaWeek.class);
+                            CafeteriaWeek week2 = realm.createObject(CafeteriaWeek.class);
+                            CafeteriaWeek week3 = realm.createObject(CafeteriaWeek.class);
+                            CafeteriaWeek week4 = realm.createObject(CafeteriaWeek.class);
+                            CafeteriaWeek week5 = realm.createObject(CafeteriaWeek.class);
+                            CafeteriaWeek week6 = realm.createObject(CafeteriaWeek.class);
+
+                            int index = 0;
+                            int DOW = mydate.get(5);
+                            int last_date = mydate.get(4);
+                            int this_week = 0;
+                            int loop_start = 1;
+
+                            String not_provided = "없음";
+
+                            List<CafeteriaWeek> weeks = Arrays.asList(week1, week2, week3, week4, week5, week6);
+                            cafeteriaDB.version = version;
+                            CafeteriaWeek cafeteriaWeek;
+
+                            if (DOW == 7) {
+                                DOW = 2;
+                                loop_start = 3;
+                                this_week++;
+                                cafeteriaWeek = weeks.get(1);
+                            } else if (DOW == 1) {
+                                DOW = 2;
+                                loop_start = 2;
+                                this_week++;
+                                cafeteriaWeek = weeks.get(1);
+                            } else {
+                                cafeteriaWeek = weeks.get(0);
+                            }
+                            // 이전달 값 세팅
+                            if (DOW != 2) {
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.add(calendar.MONTH,-1);
+                                int last_date_of_before_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+                                int before_month = calendar.get(Calendar.MONTH) + 1;
+                                int tmp_DOW = DOW-1;
+                                while (tmp_DOW > 1) {
+                                    if (tmp_DOW == 6) {
+                                        cafeteriaWeek.fridayDate = String.format("%02d/%02d", before_month, last_date_of_before_month);
+                                        tmp_DOW--;
+                                        last_date_of_before_month--;
+                                    } else if (tmp_DOW == 5) {
+                                        cafeteriaWeek.thursdayDate = String.format("%02d/%02d", before_month, last_date_of_before_month);
+                                        tmp_DOW--;
+                                        last_date_of_before_month--;
+                                    } else if (tmp_DOW == 4) {
+                                        cafeteriaWeek.wednesdayDate = String.format("%02d/%02d", before_month, last_date_of_before_month);
+                                        tmp_DOW--;
+                                        last_date_of_before_month--;
+                                    } else if (tmp_DOW == 3) {
+                                        cafeteriaWeek.tuesdayDate = String.format("%02d/%02d", before_month, last_date_of_before_month);
+                                        tmp_DOW--;
+                                        last_date_of_before_month--;
+                                    } else if (tmp_DOW == 2) {
+                                        cafeteriaWeek.mondayDate = String.format("%02d/%02d", before_month, last_date_of_before_month);
+                                        tmp_DOW--;
+                                        last_date_of_before_month--;
+                                    }
+                                }
+                            }
+                            //이번달 값 세팅
+                            for (int i = loop_start; i < last_date + 1; i++) {
+                                if (DOW == 2) { //월요일
+                                    cafeteriaWeek.mondayDate = String.format("%02d", i);
+                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                        cafeteriaWeek.monday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
+                                        cafeteriaWeek.mondayCal = resultMeal.get(index).CAL_INFO;
+                                        index++;
+                                    } else {
+                                        cafeteriaWeek.monday = not_provided;
+                                        cafeteriaWeek.mondayCal = " ";
+                                    }
+                                    DOW++;
+                                } else if (DOW == 3) { //화요일
+                                    cafeteriaWeek.tuesdayDate = String.format("%02d", i);
+                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                        cafeteriaWeek.tuesday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
+                                        cafeteriaWeek.tuesdayCal = resultMeal.get(index).CAL_INFO;
+                                        index++;
+                                    } else {
+                                        cafeteriaWeek.tuesday = not_provided;
+                                        cafeteriaWeek.tuesdayCal = " ";
+                                    }
+                                    DOW++;
+                                } else if (DOW == 4) { //수요일
+                                    cafeteriaWeek.wednesdayDate = String.format("%02d", i);
+                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                        cafeteriaWeek.wednesday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
+                                        cafeteriaWeek.wednesdayCal = resultMeal.get(index).CAL_INFO;
+                                        index++;
+                                    } else {
+                                        cafeteriaWeek.wednesday = not_provided;
+                                        cafeteriaWeek.wednesdayCal = " ";
+                                    }
+                                    DOW++;
+                                } else if (DOW == 5) { //목요일
+                                    cafeteriaWeek.thursdayDate = String.format("%02d", i);
+                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                        cafeteriaWeek.thursday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
+                                        cafeteriaWeek.thursdayCal = resultMeal.get(index).CAL_INFO;
+                                        index++;
+                                    } else {
+                                        cafeteriaWeek.thursday = not_provided;
+                                        cafeteriaWeek.thursdayCal = " ";
+                                    }
+                                    DOW++;
+                                } else if (DOW == 6) { //금요일
+                                    cafeteriaWeek.fridayDate = String.format("%02d", i);
+                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                        cafeteriaWeek.friday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
+                                        cafeteriaWeek.fridayCal = resultMeal.get(index).CAL_INFO;
+                                        index++;
+                                    } else {
+                                        cafeteriaWeek.friday = not_provided;
+                                        cafeteriaWeek.fridayCal = " ";
+                                    }
+                                    //주말 건너뛰기
+                                    i += 2;
+                                    this_week++;
+                                    cafeteriaWeek = weeks.get(this_week);
+                                    DOW = 2;
+                                }
+                            }
+                            //다음달 값 세팅
+                            int tmp_date = 1;
+                            if (DOW != 2) {
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.add(calendar.MONTH, +1);
+                                int next_month = calendar.get(calendar.MONTH) + 1;
+                                while (DOW < 7) {
+                                    if (DOW == 2) {
+                                        cafeteriaWeek.mondayDate = String.format("%02d/%02d", next_month, tmp_date);
+                                        DOW++;
+                                        tmp_date++;
+                                    } else if (DOW == 3) {
+                                        cafeteriaWeek.tuesdayDate = String.format("%02d/%02d", next_month, tmp_date);
+                                        DOW++;
+                                        tmp_date++;
+                                    } else if (DOW == 4) {
+                                        cafeteriaWeek.wednesdayDate = String.format("%02d/%02d", next_month, tmp_date);
+                                        DOW++;
+                                        tmp_date++;
+                                    } else if (DOW == 5) {
+                                        cafeteriaWeek.thursdayDate = String.format("%02d/%02d", next_month, tmp_date);
+                                        DOW++;
+                                        tmp_date++;
+                                    } else if (DOW == 6) {
+                                        cafeteriaWeek.fridayDate = String.format("%02d/%02d", next_month, tmp_date);
+                                        DOW++;
+                                        tmp_date++;
+                                    }
+                                }
+                            }
+
+                            cafeteriaDB.week1 = week1;
+                            cafeteriaDB.week2 = week2;
+                            cafeteriaDB.week3 = week3;
+                            cafeteriaDB.week4 = week4;
+                            cafeteriaDB.week5 = week5;
+                            cafeteriaDB.week6 = week6;
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            CafeteriaDB cafeteriaDB = realm.where(CafeteriaDB.class).findFirst();
+                            loadCafeteria(cafeteriaDB);
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealInfo> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+    }
+
+    private void RealmCafeteriaInit() {
+        RealmConfiguration config = new RealmConfiguration.Builder().name("Cafeteria.realm").schemaVersion(1).modules(new CafeteriaModule()).build();
+        realm = Realm.getInstance(config);
+    }
+
+    public interface RetrofitService2 {
+        @GET("/hub/mealServiceDietInfo")
+        Call<MealInfo> getMealDietInfo(@Query("KEY") String KEY,
+                                       @Query("Type") String Type,
+                                       @Query("MMEAL_SC_CODE") String MMEAL_SC_CODE,
+                                       @Query("ATPT_OFCDC_SC_CODE") String ATPT_OFCDC_SC_CODE,
+                                       @Query("SD_SCHUL_CODE") String SD_SCHUL_CODE,
+                                       @Query("MLSV_YMD") String MLSV_YMD);
+    }
+
+    public static ArrayList<Integer> getWeekNDate() {
+        ArrayList<Integer> result = new ArrayList<>();
+
+        Calendar c = Calendar.getInstance();
+        int this_week = c.get(Calendar.WEEK_OF_MONTH);
+        int today = c.get(Calendar.DATE); //오늘 일자 저장
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+        int last_date = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        c.set(Calendar.DAY_OF_MONTH, 1); //DAY_OF_MONTH를 1로 설정 (월의 첫날)
+        int start_DOW = c.get(Calendar.DAY_OF_WEEK); //그 주의 요일 반환 (일:1 ~ 토:7)
+
+        result.add(year);
+        result.add(month + 1);
+        result.add(today);
+        result.add(this_week);
+        result.add(last_date);
+        result.add(start_DOW);
+
+        //year, month, today, this_week, last_date, start_DOW
+
+        return result;
+    }
+
 }
