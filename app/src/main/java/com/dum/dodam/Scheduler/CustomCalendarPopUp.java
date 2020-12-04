@@ -54,7 +54,7 @@ public class CustomCalendarPopUp extends Fragment implements CustomCalendarAdapt
         binding = DataBindingUtil.inflate(inflater, R.layout.scheduler_calendar_popup, container, false);
         binding.getRoot().setClickable(true);
 
-        adapter = new CustomCalendarAdapter(getContext(), list, this);
+        adapter = new CustomCalendarAdapter(list);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         final Calendar calendar = Calendar.getInstance();

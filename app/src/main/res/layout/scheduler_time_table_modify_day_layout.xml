@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/DOW"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:text="월요일"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/subject1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:hint="1교시"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/subject2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:hint="2교시"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/subject3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:hint="3교시"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/subject4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:hint="4교시"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/subject5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:hint="1교시"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/subject6"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:hint="6교시"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/subject7"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:hint="7교시"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+</LinearLayout>

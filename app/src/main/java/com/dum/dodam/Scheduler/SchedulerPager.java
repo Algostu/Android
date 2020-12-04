@@ -385,9 +385,7 @@ public class SchedulerPager extends Fragment {
         timetable_cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimeTableFullPopUp e = TimeTableFullPopUp.getInstance();
-                e.show(getParentFragmentManager(), "dialog");
-                Log.d("RHC", "onClick: ");
+                ((MainActivity)getActivity()).replaceFragmentPopup(new TimeTableFullPopUp(this_date));
             }
         });
 

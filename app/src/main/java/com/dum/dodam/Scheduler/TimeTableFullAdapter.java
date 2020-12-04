@@ -14,7 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dum.dodam.LocalDB.TimeTableDay;
 import com.dum.dodam.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class TimeTableFullAdapter extends RecyclerView.Adapter<TimeTableFullAdapter.Holder> {
     private final ArrayList<TimeTableDay> list;
@@ -38,6 +43,7 @@ public class TimeTableFullAdapter extends RecyclerView.Adapter<TimeTableFullAdap
     }
 
     public class Holder extends RecyclerView.ViewHolder {
+        protected TextView DOW;
         protected TextView subject1;
         protected TextView subject2;
         protected TextView subject3;
@@ -49,6 +55,7 @@ public class TimeTableFullAdapter extends RecyclerView.Adapter<TimeTableFullAdap
 
         public Holder(View view) {
             super(view);
+            this.DOW = view.findViewById(R.id.DOW);
             this.subject1 = view.findViewById(R.id.subject1);
             this.subject2 = view.findViewById(R.id.subject2);
             this.subject3 = view.findViewById(R.id.subject3);
@@ -64,41 +71,74 @@ public class TimeTableFullAdapter extends RecyclerView.Adapter<TimeTableFullAdap
     @Override
     public void onBindViewHolder(@NonNull TimeTableFullAdapter.Holder holder, final int position) {
 
-        holder.subject1.setText(list.get(position).subject.get(1));
-        holder.subject2.setText(list.get(position).subject.get(2));
-        holder.subject3.setText(list.get(position).subject.get(3));
-        holder.subject4.setText(list.get(position).subject.get(4));
-        holder.subject5.setText(list.get(position).subject.get(5));
-        holder.subject6.setText(list.get(position).subject.get(6));
-        holder.subject7.setText(list.get(position).subject.get(7));
+        try {
+            holder.DOW.setText(getDOW(list.get(position).date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            holder.subject1.setText(list.get(position).subject.get(1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            holder.subject2.setText(list.get(position).subject.get(2));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            holder.subject3.setText(list.get(position).subject.get(3));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            holder.subject4.setText(list.get(position).subject.get(4));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            holder.subject5.setText(list.get(position).subject.get(5));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            holder.subject6.setText(list.get(position).subject.get(6));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            holder.subject7.setText(list.get(position).subject.get(7));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         holder.itemView.setTag(position);
-    }
+}
 
-//    public String getDOW(int date) throws ParseException {
-//        Calendar cal = Calendar.getInstance();
-//        String res;
-//        int year = cal.get(Calendar.YEAR);
-//        int month = cal.get(Calendar.MONTH);
-//
-//        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-//        Date change_date = dateFormat.parse(String.format("%d%02d%02d", year, month, date));
-//
-//        cal.setTime(change_date);
-//        int DOW = cal.get(Calendar.DAY_OF_WEEK);
-//        if (DOW == 2) {
-//            res = "월요일";
-//        } else if (DOW == 3) {
-//            res = "화요일";
-//        } else if (DOW == 4) {
-//            res = "수요일";
-//        } else if (DOW == 5) {
-//            res = "목요일";
-//        } else if (DOW == 6) {
-//            res = "금요일";
-//        } else {
-//            res = "???";
-//        }
-//        return res;
-//    }
+    public String getDOW(int date) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        String res;
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH)+1;
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        Date change_date = dateFormat.parse(String.format("%d%02d%02d", year, month, date));
+
+        cal.setTime(change_date);
+        int DOW = cal.get(Calendar.DAY_OF_WEEK);
+        if (DOW == 2) {
+            res = "월요일";
+        } else if (DOW == 3) {
+            res = "화요일";
+        } else if (DOW == 4) {
+            res = "수요일";
+        } else if (DOW == 5) {
+            res = "목요일";
+        } else if (DOW == 6) {
+            res = "금요일";
+        } else {
+            res = "???";
+        }
+        return res;
+    }
 }
