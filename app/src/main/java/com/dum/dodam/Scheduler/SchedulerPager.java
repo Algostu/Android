@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.LocalDB.Todo;
+import com.dum.dodam.LocalDB.TodoModule;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
@@ -52,6 +53,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import petrov.kristiyan.colorpicker.ColorPicker;
 import retrofit2.Call;
@@ -62,9 +64,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public class SchedulerPager extends Fragment implements
-        TimeTableAdapter.OnListItemSelectedInterface,
-        TodoListAdapter.OnListItemSelectedInterface {
+public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListItemSelectedInterface {
     private static final String TAG = "SchedulerPager";
     public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     public Calendar startCalender = Calendar.getInstance();
@@ -171,11 +171,10 @@ public class SchedulerPager extends Fragment implements
         new_color = Color.parseColor("#ffab91");
         Log.d("ShedulerPager", "new_color: " + new_color);
         todoArrayList.clear();
-
-        realm = Realm.getDefaultInstance();
+        RealmTodoListInit();
 
         ID = String.valueOf(this_year) + String.valueOf(this_month);
-        RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", ID).findAll();
+        final RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", ID).findAll();
 
         Calendar calendar = Calendar.getInstance();
         for (Todo todo : realm.copyFromRealm(results)) {
@@ -185,7 +184,7 @@ public class SchedulerPager extends Fragment implements
             }
         }
 
-        todoAdapter = new TodoListAdapter(getContext(), todoArrayList, this);
+        todoAdapter = new TodoListAdapter(todoArrayList, realm);
         adapter = new TimeTableAdapter(getContext(), list, this);
 
         String filename = "TimeTable";
@@ -297,11 +296,11 @@ public class SchedulerPager extends Fragment implements
 
                 todo_title.setText("");
 
-                startCalender.set(this_year, this_month-1, this_date);
+                startCalender.set(this_year, this_month - 1, this_date);
                 startCalender.set(Calendar.HOUR, 0);
                 startCalender.set(Calendar.MINUTE, 0);
 
-                endCalender.set(this_year, this_month-1, this_date);
+                endCalender.set(this_year, this_month - 1, this_date);
                 endCalender.set(Calendar.HOUR, 23);
                 endCalender.set(Calendar.MINUTE, 59);
 
@@ -314,11 +313,11 @@ public class SchedulerPager extends Fragment implements
         });
 
         // default time set
-        startCalender.set(this_year, this_month-1, this_date);
+        startCalender.set(this_year, this_month - 1, this_date);
         startCalender.set(Calendar.HOUR, 0);
         startCalender.set(Calendar.MINUTE, 0);
 
-        endCalender.set(this_year, this_month-1, this_date);
+        endCalender.set(this_year, this_month - 1, this_date);
         endCalender.set(Calendar.HOUR, 23);
         endCalender.set(Calendar.MINUTE, 59);
 
@@ -672,11 +671,6 @@ public class SchedulerPager extends Fragment implements
     }
 
     @Override
-    public void onItemSelected(ArrayList<Todo> list, final int position) {
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
@@ -692,5 +686,16 @@ public class SchedulerPager extends Fragment implements
             }
         }
         todoAdapter.notifyDataSetChanged();
+    }
+
+    private void RealmTodoListInit() {
+        RealmConfiguration config = new RealmConfiguration.Builder().name("TodoList.realm").schemaVersion(1).modules(new TodoModule()).build();
+        realm = Realm.getInstance(config);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        realm.close();
     }
 }

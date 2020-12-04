@@ -1,6 +1,5 @@
 package com.dum.dodam.httpConnection;
 
-import com.dum.dodam.Cafeteria.dataframe.LunchResponse;
 import com.dum.dodam.Community.dataframe.ArticleCommentResponse;
 import com.dum.dodam.Community.dataframe.ArticleListResponse;
 import com.dum.dodam.Community.dataframe.ArticleResponse;
@@ -80,9 +79,6 @@ public interface RetrofitService {
 
     @GET("/article/articleList")
     Call<ArticleListResponse> readArticleList(@Query("communityType") int communityType, @Query("communityID") int communityID, @Query("writtenAfter") String writtenAfter);
-
-    @GET("/cafeteria/read")
-    Call<LunchResponse> getCafeteriaList(@Query("version") String version);
 
     @GET("/contest/getList")
     Call<ContestListResponse> getContestList(@Query("storedDate") String storedDate);
