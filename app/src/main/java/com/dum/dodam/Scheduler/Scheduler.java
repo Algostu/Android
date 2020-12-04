@@ -26,6 +26,7 @@ import java.util.Calendar;
 
 public class Scheduler extends Fragment {
 
+    private static final String TAG = "RHC";
     private ViewPager pager;
     private SchedulerPagerAdapter viewPageAdapter;
     private int date = -1;
@@ -66,7 +67,6 @@ public class Scheduler extends Fragment {
             // 21 버전 이상일 때
             getActivity().getWindow().setStatusBarColor(Color.BLACK);
         }
-
 
         Calendar cal = Calendar.getInstance(); //캘린더 인스턴스 얻기
         int today = cal.get(Calendar.DATE);

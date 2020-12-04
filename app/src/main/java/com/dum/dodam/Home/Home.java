@@ -1,5 +1,7 @@
 package com.dum.dodam.Home;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,10 +37,14 @@ import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.LocalDB.CafeteriaDB;
 import com.dum.dodam.LocalDB.CafeteriaModule;
 import com.dum.dodam.LocalDB.CafeteriaWeek;
+import com.dum.dodam.LocalDB.TimeTableDB;
+import com.dum.dodam.LocalDB.TimeTableDay;
+import com.dum.dodam.LocalDB.TimeTableModule;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.Mypage.Mypage;
 import com.dum.dodam.R;
+import com.dum.dodam.Scheduler.dataframe.SchoolTimeTable;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.android.material.appbar.AppBarLayout;
@@ -117,6 +123,11 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     private ArrayList<MealInfo.MIF> resultMeal;
     private List<Integer> mydate;
 
+    private Realm realm2;
+    private ArrayList<SchoolTimeTable.TimeTable> result2;
+    private String version2;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -138,6 +149,9 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         version = String.format("%d%d", mydate.get(0), mydate.get(1));
         cafeteria = view.findViewById(R.id.cafeteria);
         checkCafeteriaList();
+
+        RealmTimeTableInit();
+        checkTimeTable();
 
         user = ((MainActivity) getActivity()).getUser();
 
@@ -741,6 +755,17 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                                        @Query("ATPT_OFCDC_SC_CODE") String ATPT_OFCDC_SC_CODE,
                                        @Query("SD_SCHUL_CODE") String SD_SCHUL_CODE,
                                        @Query("MLSV_YMD") String MLSV_YMD);
+
+        @GET("/hub/hisTimetable")
+        Call<SchoolTimeTable> getTimeTable(@Query("KEY") String KEY,
+                                           @Query("Type") String Type,
+                                           @Query("pSize") int pSize,
+                                           @Query("ATPT_OFCDC_SC_CODE") String ATPT_OFCDC_SC_CODE,
+                                           @Query("SD_SCHUL_CODE") String SD_SCHUL_CODE,
+                                           @Query("TI_FROM_YMD") String TI_FROM_YMD,
+                                           @Query("TI_TO_YMD") String TI_TO_YMD,
+                                           @Query("GRADE") String GRADE,
+                                           @Query("CLASS_NM") String CLASS_NM);
     }
 
     public static ArrayList<Integer> getWeekNDate() {
@@ -766,6 +791,147 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         //year, month, today, this_week, last_date, start_DOW
 
         return result;
+    }
+
+    public void checkTimeTable() {
+        TimeTableDB timeTableDB = realm2.where(TimeTableDB.class).findFirst();
+        ArrayList<String> startEnd = getThisMonthStartEndDate();
+        version2 = startEnd.get(0);
+
+        if (timeTableDB == null || !timeTableDB.version.equals(version2)) {
+            if (timeTableDB != null && !timeTableDB.custom) {
+//                loadTimeTable();
+            } else {
+                saveTimeTable(startEnd.get(0), startEnd.get(1));
+            }
+        } else {
+//            loadTimeTable();
+        }
+    }
+
+    public void saveTimeTable(String TI_FROM_YMD, final String TI_TO_YMD) {
+        Log.d(TAG, "saveTimeTable: ");
+        UserJson user = ((MainActivity) getActivity()).getUser();
+        String ATPT_OFCDC_SC_CODE = user.I_CODE;
+        String SD_SCHUL_CODE = user.SC_CODE;
+        int classNum = user.classNum;
+
+        int grade = user.grade - 9;
+        if (grade == 4) grade = 3;
+        else if (grade <= 0) grade = 1;
+
+        String GRADE = String.valueOf(grade);
+        if (classNum == 0) classNum = 1;
+        String CLASS_NM = String.valueOf(classNum);
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://open.neis.go.kr/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        RetrofitService2 service = retrofit.create(RetrofitService2.class);
+
+        Call<SchoolTimeTable> call = service.getTimeTable("4db607519a0e40b2910efcdf0070a215", "json", 300, ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE, TI_FROM_YMD, TI_TO_YMD, GRADE, CLASS_NM);
+        call.enqueue(new Callback<SchoolTimeTable>() {
+            @Override
+            public void onResponse(Call<SchoolTimeTable> call, Response<SchoolTimeTable> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        result2 = response.body().hisTimetable.get(1).row;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("잘못된 정보입니다.");
+                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                        builder.show();
+                        return;
+                    }
+
+                    realm2.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm2) {
+                            TimeTableDB beforeTimeTableDB = realm2.where(TimeTableDB.class).findFirst();
+                            if (beforeTimeTableDB != null) beforeTimeTableDB.deleteFromRealm();
+                            RealmResults<TimeTableDay> beforeTimeTableDays = realm2.where(TimeTableDay.class).findAll();
+                            if (beforeTimeTableDays != null)
+                                beforeTimeTableDays.deleteAllFromRealm();
+
+                            TimeTableDB timeTableDB = realm2.createObject(TimeTableDB.class);
+                            TimeTableDay timeTableDay;
+                            timeTableDB.version = version2;
+
+                            int i;
+                            ArrayList<String> customDateSet = getThisMonthStartEndDate();
+                            int DOW = Integer.parseInt(customDateSet.get(5)) - 1;
+                            for (i = 0; i < Integer.parseInt(customDateSet.get(4)) + 1; i++) {
+                                timeTableDay = realm2.createObject(TimeTableDay.class);
+                                timeTableDay.date = i;
+                                timeTableDay.subject.add("");
+                                if (DOW == 1) {
+                                    timeTableDay.subject.add("일요일");
+                                }
+                                timeTableDB.days.add(timeTableDay);
+                                DOW++;
+                                if (DOW == 8) DOW = 1;
+                            }
+
+                            int position;
+                            for (SchoolTimeTable.TimeTable table : result2) {
+                                position = Integer.parseInt(table.ALL_TI_YMD.substring(6));
+                                timeTableDB.days.get(position).subject.add(table.ITRT_CNTNT);
+                            }
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+//                            loadTimeTable();
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SchoolTimeTable> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void RealmTimeTableInit() {
+        RealmConfiguration config = new RealmConfiguration.Builder().name("TimeTableDB.realm").schemaVersion(1).modules(new TimeTableModule()).build();
+        realm2 = Realm.getInstance(config);
+    }
+
+    public ArrayList<String> getThisMonthStartEndDate() {
+        Calendar cal = Calendar.getInstance();
+        ArrayList<String> res = new ArrayList<>();
+
+        int last_date = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int this_month = cal.get(Calendar.MONTH);
+        int this_year = cal.get(Calendar.YEAR);
+
+        res.add(String.format("%d%02d%02d", this_year, this_month + 1, 1));
+        res.add(String.format("%d%02d%02d", this_year, this_month + 1, last_date));
+        res.add(String.format("%02d", this_year));
+        res.add(String.format("%02d", this_month));
+        res.add(String.valueOf(last_date));
+
+        cal.set(Calendar.DAY_OF_MONTH, 1); //DAY_OF_MONTH를 1로 설정 (월의 첫날)
+        int start_DOW = cal.get(Calendar.DAY_OF_WEEK); //그 주의 요일 반환 (일:1 ~ 토:7)
+
+        res.add(String.valueOf(start_DOW));
+
+        return res;
     }
 
 }

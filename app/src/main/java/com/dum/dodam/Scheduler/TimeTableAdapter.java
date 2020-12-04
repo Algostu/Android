@@ -1,7 +1,6 @@
 package com.dum.dodam.Scheduler;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,19 +17,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Holder> {
-    private ArrayList<String> list = new ArrayList<>();
-    private TimeTableAdapter.OnListItemSelectedInterface mListener;
-    private Context context;
+    private final ArrayList<String> list;
 
-    public TimeTableAdapter(Context context, ArrayList<String> list, TimeTableAdapter.OnListItemSelectedInterface listener) {
-        this.context = context;
+    public TimeTableAdapter(ArrayList<String> list) {
         this.list = list;
-        this.mListener = listener;
     }
 
-    public interface OnListItemSelectedInterface {
-        void onItemSelected(View v, int position);
-    }
+//    public interface OnListItemSelectedInterface {
+//        void onItemSelected(View v, int position);
+//    }
 
     @NonNull
     @Override
@@ -54,13 +49,6 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
             super(view);
             this.period = (TextView) view.findViewById(R.id.period);
             this.subject = (TextView) view.findViewById(R.id.subject);
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onItemSelected(v, getAdapterPosition());
-                }
-            });
         }
     }
 
