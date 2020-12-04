@@ -70,8 +70,7 @@
             android:id="@+id/nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:text="Name"
             android:textSize="35sp"
             app:layout_constraintLeft_toLeftOf="@id/profile_icon"
@@ -82,8 +81,7 @@
             android:id="@+id/mail_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:text="Email Address"
             android:textColor="@color/faded_gray"
             android:textSize="15dp"
@@ -95,7 +93,6 @@
             android:id="@+id/school"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:text="schoolname"
             android:textColor="@color/faded_gray"
@@ -108,7 +105,6 @@
             android:id="@+id/grade_n_class_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:text="grade n class num"
             android:textColor="@color/faded_gray"
@@ -160,13 +156,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="내가 쓴 글"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginLeft="6dp"
                     android:src="@drawable/ic_write_article" />
 
                 <TextView
@@ -175,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="1,024"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <View
@@ -196,7 +193,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="내글의 댓글"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -211,7 +208,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="1,610"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <View
@@ -232,7 +229,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="받은 하트"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -247,7 +244,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="1,004"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
 
@@ -270,7 +267,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:text="추천 코드"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="@id/gd_left"
             app:layout_constraintTop_toBottomOf="@id/line2" />
@@ -282,7 +279,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
             android:text="slkfnalsnefklsefl"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@id/gd_left"
             app:layout_constraintRight_toRightOf="@id/gd_right"
             app:layout_constraintTop_toBottomOf="@id/tv1" />
@@ -294,7 +291,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="25dp"
             android:text="복사하기"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintRight_toRightOf="@id/gd_right"
             app:layout_constraintTop_toBottomOf="@id/tv1" />
 
@@ -305,7 +302,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:text="개발자 한마디"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="@id/gd_left"
             app:layout_constraintTop_toBottomOf="@id/copy_code" />
