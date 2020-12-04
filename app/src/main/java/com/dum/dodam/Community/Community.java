@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +48,8 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     private int communityID;
     private int communityType;
     private String lastArticleWrittenString = "latest";
+    private androidx.appcompat.widget.Toolbar toolbar;
+    private ActionBar actionbar;
 
     private UserJson user;
 
@@ -67,6 +72,13 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.article_list, container, false);
         view.setClickable(true);
+        setHasOptionsMenu(true);
+        toolbar = view.findViewById(R.id.toolbar2);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionbar.setDisplayShowCustomEnabled(true);
+        actionbar.setDisplayShowTitleEnabled(false);//기본 제목을 없애줍니다.
+        actionbar.setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getArguments();
         if (bundle != null) {
             this.community_name = bundle.getString("community_name");
@@ -177,6 +189,17 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                 cnt_readArticleList++;
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //select back button
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

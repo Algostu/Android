@@ -46,13 +46,14 @@
             android:layout_height="wrap_content"
             android:text="익명이"
             android:textColor="@android:color/black"
-            android:textSize="17dp" />
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="content"
+            android:textSize="14dp"
             android:textColor="@color/faded_gray" />
 
         <TextView
@@ -60,6 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="time"
+            android:textSize="14dp"
             android:textColor="@color/faded_gray" />
     </LinearLayout>
 

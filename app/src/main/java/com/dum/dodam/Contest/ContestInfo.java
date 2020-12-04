@@ -20,6 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.dum.dodam.Contest.dataframe.ContestFrame;
 import com.dum.dodam.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -59,8 +62,8 @@ public class ContestInfo extends Fragment {
         homepage = view.findViewById(R.id.homepage);
         bottom_nav = view.findViewById(R.id.bottom_nav);
 
-
-        Glide.with(getContext()).load(frame.imageUrl).into(imageView);
+        MultiTransformation multiOption = new MultiTransformation(new RoundedCorners(20));
+        Glide.with(getContext()).load(frame.imageUrl).apply(RequestOptions.bitmapTransform(multiOption)).into(imageView);
         contest_title.setText(frame.title);
         area.setText(frame.area);
         period.setText(frame.start + " ~ " + frame.end);
@@ -74,7 +77,7 @@ public class ContestInfo extends Fragment {
             }
         });
         // WebView
-        String pish = "<html><head><style type=\"text/css\">@font-face {font-family: MyFont;src: url(\"file:///android_asset/font/BMitra.ttf\")}body {font-family: MyFont;font-size: medium;text-align: justify;}</style></head><body>";
+        String pish = "<html><head><style type=\"text/css\">@font-face {font-family: MyFont;src: url(\"file:///android_asset/font/BMitra.ttf\")}body {font-family: MyFont;font-size: 13px;text-align: justify;}</style></head><body>";
         String pas = "</body></html>";
         WebView webView = view.findViewById(R.id.content_webview);
         webView.loadDataWithBaseURL(null, pish + frame.content + pas, "text/html", "utf-8", null);

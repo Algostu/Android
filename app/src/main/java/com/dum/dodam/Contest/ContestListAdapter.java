@@ -11,6 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.dum.dodam.R;
 import com.dum.dodam.Contest.dataframe.ContestFrame;
 
@@ -88,7 +92,8 @@ public class ContestListAdapter extends RecyclerView.Adapter<ContestListAdapter.
         holder.prize.setText(String.valueOf(list.get(position).firstPrize));
         holder.sponsor.setText(String.valueOf(list.get(position).sponsor));
         holder.imageUrl = list.get(position).imageUrl;
-        Glide.with(context).load(holder.imageUrl).into(holder.imageView);
+        MultiTransformation multiOption = new MultiTransformation(new CenterCrop(), new RoundedCorners(20));
+        Glide.with(context).load(holder.imageUrl).apply(RequestOptions.bitmapTransform(multiOption)).into(holder.imageView);
         holder.firstPrize = list.get(position).firstPrize;
         holder.homePage = list.get(position).homePage;
         holder.start = list.get(position).start;

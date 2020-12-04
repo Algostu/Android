@@ -83,6 +83,7 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
     private RecyclerView.LayoutManager todoLayoutManager;
     SlidingUpPanelLayout slidingPaneLayout;
     public Button btn;
+    public ImageView ivAdd;
 
     public ArrayList<Todo> todoArrayList = new ArrayList<Todo>();
 
@@ -309,6 +310,15 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
                 endTimeTV.setText("시간을 선택해주세요");
                 new_color = Color.parseColor("#ffab91");
                 slidingPaneLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
+        });
+
+        ivAdd = view.findViewById(R.id.ic_add);
+        ivAdd.setClickable(true);
+        ivAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slidingPaneLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
             }
         });
 
