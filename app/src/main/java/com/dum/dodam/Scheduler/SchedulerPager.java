@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.LocalDB.CustomTimeTableDB;
+import com.dum.dodam.LocalDB.CustomTimeTableModule;
 import com.dum.dodam.LocalDB.TimeTableDB;
 import com.dum.dodam.LocalDB.TimeTableModule;
 import com.dum.dodam.LocalDB.Todo;
@@ -75,6 +77,7 @@ public class SchedulerPager extends Fragment {
 
     private Realm realm;
     private Realm realm2;
+    private Realm realm3;
 
     private String ID;
     private int day_of_week;
@@ -141,6 +144,7 @@ public class SchedulerPager extends Fragment {
         view.setClickable(true);
         RealmTodoListInit();
         RealmTimeTableInit();
+        CustomRealmTimeTableInit();
         loadTimeTable();
 
         new_color = Color.parseColor("#ffab91");
@@ -385,7 +389,7 @@ public class SchedulerPager extends Fragment {
         timetable_cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).replaceFragmentPopup(new TimeTableFullPopUp(this_date));
+                ((MainActivity) getActivity()).replaceFragmentPopup(new TimeTableFullPopUp(this_date));
             }
         });
 
@@ -456,14 +460,49 @@ public class SchedulerPager extends Fragment {
     public void loadTimeTable() {
         list.clear();
         TimeTableDB timeTableDB = realm2.where(TimeTableDB.class).findFirst();
-        for (String result : timeTableDB.days.get(this_date).subject) {
-            list.add(result);
+
+        if (timeTableDB.custom) {
+            realm3.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.DATE, this_date);
+                    int DOW = cal.get(Calendar.DAY_OF_WEEK);
+
+                    CustomTimeTableDB customTimeTableDB = realm3.where(CustomTimeTableDB.class).findFirst();
+
+                    if (DOW == 1) {
+                        list.add("일요일");
+                    } else if (DOW == 2) {
+                        list.addAll(customTimeTableDB.days.get(0).subject);
+                    } else if (DOW == 3) {
+                        list.addAll(customTimeTableDB.days.get(1).subject);
+                    } else if (DOW == 4) {
+                        list.addAll(customTimeTableDB.days.get(2).subject);
+                    } else if (DOW == 5) {
+                        list.addAll(customTimeTableDB.days.get(3).subject);
+                    } else if (DOW == 6) {
+                        list.addAll(customTimeTableDB.days.get(4).subject);
+                    } else if (DOW == 7) {
+                        list.add("토요일");
+                    }
+                }
+            });
+        } else {
+            for (String result : timeTableDB.days.get(this_date).subject) {
+                list.add(result);
+            }
+            list.remove(0);
         }
-        list.remove(0);
     }
 
     private void RealmTimeTableInit() {
         RealmConfiguration config = new RealmConfiguration.Builder().name("TimeTableDB.realm").schemaVersion(1).modules(new TimeTableModule()).build();
         realm2 = Realm.getInstance(config);
+    }
+
+    private void CustomRealmTimeTableInit() {
+        RealmConfiguration config = new RealmConfiguration.Builder().name("CustomTimeTableDB.realm").schemaVersion(1).modules(new CustomTimeTableModule()).build();
+        realm3 = Realm.getInstance(config);
     }
 }

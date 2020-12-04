@@ -15,6 +15,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.LocalDB.CustomTimeTableDB;
+import com.dum.dodam.LocalDB.CustomTimeTableModule;
 import com.dum.dodam.LocalDB.TimeTableDB;
 import com.dum.dodam.LocalDB.TimeTableDay;
 import com.dum.dodam.LocalDB.TimeTableModule;
@@ -39,6 +41,7 @@ public class TimeTableFullPopUp extends DialogFragment {
     private int date;
 
     private Realm realm;
+    private Realm realm2;
 
     public TimeTableFullPopUp(int date) {
         this.date = date;
@@ -49,7 +52,7 @@ public class TimeTableFullPopUp extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.scheduler_time_table_popup, container, false);
         view.setClickable(true);
-
+        RealmCustomTimeTableInit();
         RealmTimeTableInit();
         loadTimeTable();
 
@@ -95,36 +98,46 @@ public class TimeTableFullPopUp extends DialogFragment {
         list.clear();
         TimeTableDB timeTableDB = realm.where(TimeTableDB.class).findFirst();
 
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat dateFmt = new SimpleDateFormat("dd");
+        if (timeTableDB.custom) {
+            CustomTimeTableDB customTimeTableDB = realm2.where(CustomTimeTableDB.class).findFirst();
+            list.addAll(customTimeTableDB.days);
+        } else {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat dateFmt = new SimpleDateFormat("dd");
 
-        cal.set(Calendar.DATE, date);
-        Log.d("RHC", "loadTimeTable: " + cal.getTime());
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        Log.d("RHC", "loadTimeTable: " + cal.getTime());
-        int mondayDate = Integer.parseInt(dateFmt.format(cal.getTime()));
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-        Log.d("RHC", "loadTimeTable: " + cal.getTime());
-        int fridayDate = Integer.parseInt(dateFmt.format(cal.getTime()));
+            cal.set(Calendar.DATE, date);
+            Log.d("RHC", "loadTimeTable: " + cal.getTime());
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            Log.d("RHC", "loadTimeTable: " + cal.getTime());
+            int mondayDate = Integer.parseInt(dateFmt.format(cal.getTime()));
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+            Log.d("RHC", "loadTimeTable: " + cal.getTime());
+            int fridayDate = Integer.parseInt(dateFmt.format(cal.getTime()));
 
-        if (mondayDate > fridayDate) {
-            int week = cal.get(Calendar.WEEK_OF_MONTH);
-            if (week == 1) {
-                mondayDate = 1;
-            } else {
-                fridayDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            if (mondayDate > fridayDate) {
+                int week = cal.get(Calendar.WEEK_OF_MONTH);
+                if (week == 1) {
+                    mondayDate = 1;
+                } else {
+                    fridayDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+                }
             }
-        }
 
-        Log.d("RHC", String.format("%d %d", mondayDate, fridayDate));
+            Log.d("RHC", String.format("%d %d", mondayDate, fridayDate));
 
-        for (int i = mondayDate; i < fridayDate + 1; i++) {
-            list.add(timeTableDB.days.get(i));
+            for (int i = mondayDate; i < fridayDate + 1; i++) {
+                list.add(timeTableDB.days.get(i));
+            }
         }
     }
 
     private void RealmTimeTableInit() {
         RealmConfiguration config = new RealmConfiguration.Builder().name("TimeTableDB.realm").schemaVersion(1).modules(new TimeTableModule()).build();
         realm = Realm.getInstance(config);
+    }
+
+    private void RealmCustomTimeTableInit() {
+        RealmConfiguration config2 = new RealmConfiguration.Builder().name("CustomTimeTableDB.realm").schemaVersion(1).modules(new CustomTimeTableModule()).build();
+        realm2 = Realm.getInstance(config2);
     }
 }
