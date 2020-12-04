@@ -21,9 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.Cafeteria.CafeteriaTab;
-import com.dum.dodam.Cafeteria.dataframe.CafeteriaFrame;
-import com.dum.dodam.Cafeteria.dataframe.LunchFrame;
-import com.dum.dodam.Cafeteria.dataframe.LunchResponse;
 import com.dum.dodam.Community.Article;
 import com.dum.dodam.Community.Community;
 import com.dum.dodam.Contest.Contest;
@@ -146,12 +143,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                 }
             }
         });
-
-        String filename = "curCafeteria";
-        File file = new File(requireContext().getFilesDir() + "/" + filename);
-        if (file.exists() == false) {
-            downloadCafeteriaList(1);
-        }
 
         today_lunch = view.findViewById(R.id.today_lunch);
         today_lunch.setOnClickListener(new View.OnClickListener() {
@@ -424,207 +415,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         ((MainActivity) getActivity()).replaceFragmentFull(Article.newInstance(articleID, communityType, communityID));
     }
 
-    public void downloadCafeteriaList(int isFirst) {
-        Log.d(TAG, "DOWN MENU");
-        String version = "0";
-
-        BufferedReader bReader = null;
-        try {
-            if (getContext() == null) return;
-            File file4 = new File(getContext().getFilesDir(), "versionCafeteria");
-            bReader = new BufferedReader(new FileReader(file4));
-            version = bReader.readLine();
-            bReader.close();
-        } catch (IOException e) {
-//            e.printStackTrace();
-        }
-
-        RetrofitService service = RetrofitAdapter.getInstance(getContext());
-        Call<LunchResponse> call = service.getCafeteriaList(version);
-
-        call.enqueue(new retrofit2.Callback<LunchResponse>() {
-            @Override
-            public void onResponse(Call<LunchResponse> call, retrofit2.Response<LunchResponse> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<LunchFrame> curMonth = response.body().body.curMonth;
-                    ArrayList<LunchFrame> nextMonth = response.body().body.nextMonth;
-                    String version = response.body().body.version;
-
-                    JSONArray current = new JSONArray();
-                    JSONArray next = new JSONArray();
-                    JSONObject jsonObject = new JSONObject();
-
-                    int index = 0;
-                    int before_index = 0;
-                    try {
-                        for (LunchFrame item : curMonth) {
-//                            Log.d("dodam", "date" + item.date);
-//                            Log.d("dodam", "week" + item.week);
-//                            Log.d("dodam", "week_day" + item.week_day);
-                            index = Math.round(Float.parseFloat(item.week)) - 1;
-                            if (before_index != index) {
-                                current.put(jsonObject);
-                                jsonObject = new JSONObject();
-                                before_index = index;
-                            }
-                            if (item.week_day.equals("월")) {
-                                jsonObject.put("date_monday", item.date);
-                                jsonObject.put("lunch_monday", item.lunch);
-                            } else if (item.week_day.equals("화")) {
-                                jsonObject.put("date_tuesday", item.date);
-                                jsonObject.put("lunch_tuesday", item.lunch);
-                            } else if (item.week_day.equals("수")) {
-                                jsonObject.put("date_wednesday", item.date);
-                                jsonObject.put("lunch_wednesday", item.lunch);
-                            } else if (item.week_day.equals("목")) {
-                                jsonObject.put("date_thursday", item.date);
-                                jsonObject.put("lunch_thursday", item.lunch);
-                            } else if (item.week_day.equals("금")) {
-                                jsonObject.put("date_friday", item.date);
-                                jsonObject.put("lunch_friday", item.lunch);
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    current.put(jsonObject);
-//                    Log.d("dodam", "cur Length" + current.length());
-                    // Define the File Path and its Name
-                    if (getContext() == null) return;
-                    File file = new File(getContext().getFilesDir(), "curCafeteria");
-                    FileWriter fileWriter = null;
-                    try {
-                        fileWriter = new FileWriter(file);
-                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                        bufferedWriter.write(current.toString());
-                        bufferedWriter.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    jsonObject = new JSONObject();
-                    before_index = 0;
-                    // NEXT MONTH
-                    try {
-                        for (LunchFrame item : nextMonth) {
-                            index = Math.round(Float.parseFloat(item.week)) - 1;
-                            if (before_index != index) {
-                                next.put(jsonObject);
-                                jsonObject = new JSONObject();
-                                before_index = index;
-                            }
-                            if (item.week_day.equals("월")) {
-                                jsonObject.put("date_monday", item.date);
-                                jsonObject.put("lunch_monday", item.lunch);
-                            } else if (item.week_day.equals("화")) {
-                                jsonObject.put("date_tuesday", item.date);
-                                jsonObject.put("lunch_tuesday", item.lunch);
-                            } else if (item.week_day.equals("수")) {
-                                jsonObject.put("date_wednesday", item.date);
-                                jsonObject.put("lunch_wednesday", item.lunch);
-                            } else if (item.week_day.equals("목")) {
-                                jsonObject.put("date_thursday", item.date);
-                                jsonObject.put("lunch_thursday", item.lunch);
-                            } else if (item.week_day.equals("금")) {
-                                jsonObject.put("date_friday", item.date);
-                                jsonObject.put("lunch_friday", item.lunch);
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    next.put(jsonObject);
-                    // Define the File Path and its Name
-                    if (getContext() == null) return;
-                    File file2 = new File(getContext().getFilesDir(), "nextCafeteria");
-                    FileWriter fileWriter2 = null;
-                    try {
-                        fileWriter2 = new FileWriter(file2);
-                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter2);
-                        bufferedWriter.write(next.toString());
-                        bufferedWriter.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (getContext() == null) return;
-                    File file3 = new File(getContext().getFilesDir(), "versionCafeteria");
-                    try {
-                        BufferedWriter writer = new BufferedWriter(new FileWriter(file3));
-                        writer.write(version);
-                        writer.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Log.d(TAG, "onResponse: Fail " + response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LunchResponse> call, Throwable t) {
-                if (cnt_cafeteria < 5) downloadCafeteriaList(0);
-                else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
-                cnt_cafeteria++;
-            }
-        });
-    }
 
     public void setTodayCafeteria() {
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
-        String filename = "curCafeteria";
-        File file = new File(getContext().getFilesDir() + "/" + filename);
-        if (file.exists()) {
-            try {
-                FileReader fileReader = new FileReader(file);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                String line = bufferedReader.readLine();
-                while (line != null) {
-                    stringBuilder.append(line).append("\n");
-                    line = bufferedReader.readLine();
-                }
-                bufferedReader.close();
-                String response = stringBuilder.toString();
-
-                ArrayList<CafeteriaFrame> list = gson.fromJson(response, new TypeToken<ArrayList<CafeteriaFrame>>() {
-                }.getType());
-
-                String lunch = " ";
-
-                if (getWeekNDate().get(0) == 2) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_monday;
-                } else if (getWeekNDate().get(0) == 3) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_tuesday;
-                } else if (getWeekNDate().get(0) == 4) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_wednesday;
-                } else if (getWeekNDate().get(0) == 5) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_thursday;
-                } else if (getWeekNDate().get(0) == 6) {
-                    lunch = list.get(getWeekNDate().get(1)).lunch_friday;
-                }
-                if (lunch.length() < 10) cafeteria.setText("오늘 점심은 따듯한 집밥을 먹어봐요 ㅎ-ㅎ");
-                else {
-                    cafeteria.setText(lunch);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IndexOutOfBoundsException e) {
-                cafeteria.setText("저장된 식단정보가 없습니다. 고객센터로 문의해주세요.");
-                String[] filenames = {"nextCafeteria", "curCafeteria", "versionCafeteria"};
-                for (String f : filenames) {
-                    file = new File(getContext().getFilesDir() + "/" + f);
-                    file.delete();
-                }
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            cafeteria.setText("탭 해주세요 ㅎㅎ");
-        }
     }
 
     public static ArrayList<Integer> getWeekNDate() {
@@ -656,11 +448,5 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         frame.end = holder.end;
 
         ((MainActivity) getActivity()).replaceFragmentFull(new ContestInfo(frame));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("RHC", "onResume: ssssss");
     }
 }
