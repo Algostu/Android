@@ -483,15 +483,12 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     }
 
     public void checkCafeteriaList() {
-        Log.d(TAG, "Check Cafeteria");
-
         CafeteriaDB cafeteriaDB = realm.where(CafeteriaDB.class).findFirst();
 
         if (cafeteriaDB == null || !cafeteriaDB.version.equals(version)) {
             saveCafeteria();
         } else {
-//            loadCafeteria(cafeteriaDB);
-            saveCafeteria();
+            loadCafeteria(cafeteriaDB);
         }
     }
 
@@ -582,10 +579,10 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                             // 이전달 값 세팅
                             if (DOW != 2) {
                                 Calendar calendar = Calendar.getInstance();
-                                calendar.add(calendar.MONTH,-1);
+                                calendar.add(calendar.MONTH, -1);
                                 int last_date_of_before_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
                                 int before_month = calendar.get(Calendar.MONTH) + 1;
-                                int tmp_DOW = DOW-1;
+                                int tmp_DOW = DOW - 1;
                                 while (tmp_DOW > 1) {
                                     if (tmp_DOW == 6) {
                                         cafeteriaWeek.fridayDate = String.format("%02d/%02d", before_month, last_date_of_before_month);

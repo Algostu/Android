@@ -48,6 +48,11 @@ public class Cafeteria extends Fragment {
         TextView lunch_wednesday = view.findViewById(R.id.lunch_wednesday);
         TextView lunch_thursday = view.findViewById(R.id.lunch_thursday);
         TextView lunch_friday = view.findViewById(R.id.lunch_friday);
+        TextView cal_monday = view.findViewById(R.id.cal_monday);
+        TextView cal_tuesday = view.findViewById(R.id.cal_tuesday);
+        TextView cal_wednesday = view.findViewById(R.id.cal_wednesday);
+        TextView cal_thursday = view.findViewById(R.id.cal_thursday);
+        TextView cal_friday = view.findViewById(R.id.cal_friday);
 
         monday.setText(String.format("월요일 (%s)", frame.mondayDate));
         tuesday.setText(String.format("화요일 (%s)", frame.tuesdayDate));
@@ -60,6 +65,12 @@ public class Cafeteria extends Fragment {
         lunch_wednesday.setText(frame.wednesday.replace(" ", "\n"));
         lunch_thursday.setText(frame.thursday.replace(" ", "\n"));
         lunch_friday.setText(frame.friday.replace(" ", "\n"));
+
+        cal_monday.setText(frame.mondayCal);
+        cal_tuesday.setText(frame.tuesdayCal);
+        cal_wednesday.setText(frame.wednesdayCal);
+        cal_thursday.setText(frame.thursdayCal);
+        cal_friday.setText(frame.fridayCal);
 
         return view;
     }
