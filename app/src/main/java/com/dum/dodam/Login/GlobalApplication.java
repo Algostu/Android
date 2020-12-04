@@ -11,7 +11,6 @@ import com.kakao.auth.KakaoAdapter;
 import com.kakao.auth.KakaoSDK;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 
 public class GlobalApplication extends Application {
@@ -31,10 +30,6 @@ public class GlobalApplication extends Application {
         instance = this;
 
         Realm.init(this);
-        RealmConfiguration config = new RealmConfiguration.Builder()
-                .name("TodoList.realm")
-                .build();
-        Realm.setDefaultConfiguration(config);
 
         // Kakao Sdk 초기화
         KakaoSDK.init(new KakaoSDKAdapter());

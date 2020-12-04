@@ -1,6 +1,5 @@
 package com.dum.dodam.Scheduler;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -25,19 +24,11 @@ import io.realm.Realm;
 
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder> {
     private ArrayList<Todo> list = new ArrayList<>();
-    private TodoListAdapter.OnListItemSelectedInterface mListener;
-    private Context context;
     private Realm realm;
 
-    public TodoListAdapter(Context context, ArrayList<Todo> list, TodoListAdapter.OnListItemSelectedInterface listener) {
-        this.context = context;
+    public TodoListAdapter(ArrayList<Todo> list, Realm realm) {
         this.list = list;
-        this.mListener = listener;
-        this.realm = Realm.getDefaultInstance();
-    }
-
-    public interface OnListItemSelectedInterface {
-        void onItemSelected(ArrayList<Todo> list, int position);
+        this.realm = realm;
     }
 
     @NonNull

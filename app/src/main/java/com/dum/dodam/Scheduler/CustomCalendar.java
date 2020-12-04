@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.dum.dodam.LocalDB.Todo;
 import com.dum.dodam.LocalDB.TodoData;
+import com.dum.dodam.LocalDB.TodoModule;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.databinding.SchedulerCalendarBinding;
@@ -55,6 +56,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import kotlin.Unit;
@@ -92,8 +94,7 @@ public class CustomCalendar extends Fragment implements MainActivity.OnBackPress
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         layout = DataBindingUtil.inflate(inflater, R.layout.scheduler_calendar, container, false);
         layout.getRoot().setClickable(true);
-
-        realm = Realm.getDefaultInstance();
+        RealmTodoListInit();
 
         new_color = Color.parseColor("#ffab91");
 
@@ -563,6 +564,16 @@ public class CustomCalendar extends Fragment implements MainActivity.OnBackPress
     @Override
     public void onBackPressed() {
         ((MainActivity) getActivity()).replaceFragment(new Scheduler());
-        Log.d("RHC", "onBackPressed: true");
+    }
+
+    private void RealmTodoListInit() {
+        RealmConfiguration config = new RealmConfiguration.Builder().name("TodoList.realm").schemaVersion(1).modules(new TodoModule()).build();
+        realm = Realm.getInstance(config);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        realm.close();
     }
 }
