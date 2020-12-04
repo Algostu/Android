@@ -3,8 +3,8 @@ package com.dum.dodam.Scheduler;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,20 +105,28 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
 
         if (list.get(position).done == true) {
             holder.todo_content.setTextColor(Color.GRAY);
-            holder.todo_content.setTypeface(null, Typeface.ITALIC);
+//            holder.todo_content.setTypeface(null, Typeface.ITALIC);
             holder.todo_content.setPaintFlags(holder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             holder.todo_content.setTextColor(Color.BLACK);
-            holder.todo_content.setTypeface(null, Typeface.NORMAL);
-            holder.todo_content.setPaintFlags(0);
+//            holder.todo_content.setTypeface(null, Typeface.NORMAL);
+            if ((holder.todo_content.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0){
+                holder.todo_content.setPaintFlags( holder.todo_content.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+            }
         }
 
         if (list.get(position).visible) {
+            Log.d("TodoListAdapter", "here we go 1");
+            Log.d("TodoListAdapter", "color list: " + list.get(position).color);
             holder.ic_remove.setVisibility(View.VISIBLE);
             holder.iv_color_ball.setVisibility(View.GONE);
+            Log.d("TodoListAdapter", "done");
         } else {
+            Log.d("TodoListAdapter", "here we go 2");
+            Log.d("TodoListAdapter", "color list: " + list.get(position).color);
             holder.ic_remove.setVisibility(View.GONE);
             holder.iv_color_ball.setVisibility(View.VISIBLE);
+            Log.d("TodoListAdapter", "done");
         }
         final TodoListAdapter.Holder orgHolder = holder;
         holder.todo_done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -138,12 +146,14 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
 
                 if (b == true) {
                     orgHolder.todo_content.setTextColor(Color.GRAY);
-                    orgHolder.todo_content.setTypeface(null, Typeface.ITALIC);
+//                    orgHolder.todo_content.setTypeface(null, Typeface.ITALIC);
                     orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
                     orgHolder.todo_content.setTextColor(Color.BLACK);
-                    orgHolder.todo_content.setTypeface(null, Typeface.NORMAL);
-                    orgHolder.todo_content.setPaintFlags(0);
+//                    orgHolder.todo_content.setTypeface(null, Typeface.NORMAL);
+                    if ((orgHolder.todo_content.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0){
+                        orgHolder.todo_content.setPaintFlags( orgHolder.todo_content.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                    }
                 }
             }
         });

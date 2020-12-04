@@ -112,8 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="할일 추가"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                    android:textSize="16dp" />
                 <!--        제목 설정-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -128,8 +127,7 @@
                         android:layout_weight="3"
                         android:gravity="left"
                         android:text="제목"
-                        android:textSize="13dp"
-                        android:textStyle="bold" />
+                        android:textSize="14dp" />
 
                     <EditText
                         android:id="@+id/todo_title"
@@ -139,7 +137,8 @@
                         android:hint="할일을 입력해주세요."
                         android:inputType="text"
                         android:maxLines="1"
-                        android:textSize="13dp" />
+                        android:textColor="@color/faded_gray"
+                        android:textSize="14dp" />
                 </LinearLayout>
                 <!--        날짜 및 시간-->
                 <LinearLayout
@@ -160,8 +159,7 @@
                             android:layout_weight="3"
                             android:gravity="left"
                             android:text="날짜 설정"
-                            android:textSize="13dp"
-                            android:textStyle="bold" />
+                            android:textSize="14dp" />
 
                         <TextView
                             android:id="@+id/todo_dates"
@@ -170,7 +168,8 @@
                             android:layout_weight="7"
                             android:gravity="left"
                             android:text="날짜를 선택해주세요"
-                            android:textSize="13dp" />
+                            android:textSize="14dp"
+                            android:textColor="@color/faded_gray"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -186,8 +185,7 @@
                             android:layout_weight="3"
                             android:gravity="left"
                             android:text="시작 시간"
-                            android:textSize="13dp"
-                            android:textStyle="bold" />
+                            android:textSize="14dp" />
 
                         <TextView
                             android:id="@+id/todo_start_time"
@@ -196,7 +194,8 @@
                             android:layout_weight="7"
                             android:gravity="left"
                             android:text="시작 시간을 선택해주세요"
-                            android:textSize="13dp" />
+                            android:textSize="14dp"
+                            android:textColor="@color/faded_gray"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -212,8 +211,7 @@
                             android:layout_weight="3"
                             android:gravity="left"
                             android:text="끝나는 시간"
-                            android:textSize="13dp"
-                            android:textStyle="bold" />
+                            android:textSize="14dp"/>
 
                         <TextView
                             android:id="@+id/todo_end_time"
@@ -222,7 +220,8 @@
                             android:layout_weight="7"
                             android:gravity="left"
                             android:text="끝나는 시간을 선택해주세요"
-                            android:textSize="13dp" />
+                            android:textSize="14dp"
+                            android:textColor="@color/faded_gray"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -241,8 +240,7 @@
                         android:layout_weight="3"
                         android:gravity="left"
                         android:text="색상 선택"
-                        android:textSize="13dp"
-                        android:textStyle="bold" />
+                        android:textSize="14dp"/>
 
                     <View
                         android:id="@+id/color_box"
@@ -260,7 +258,8 @@
                         android:layout_weight="6"
                         android:gravity="left"
                         android:text="색깔을 선택해주세요."
-                        android:textSize="13dp" />
+                        android:textSize="14dp"
+                        android:textColor="@color/faded_gray"/>
                 </LinearLayout>
 
                 <!--        버튼-->
@@ -274,7 +273,7 @@
                     android:padding="10dp"
                     android:text="할일 추가"
                     android:textColor="@color/white"
-                    android:textSize="20dp" />
+                    android:textSize="16dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>

@@ -44,7 +44,8 @@
             android:layout_height="match_parent"
             android:layout_weight="7"
             android:paddingHorizontal="10dp"
-            android:paddingVertical="10dp"
+            android:gravity="center_vertical"
+            android:textSize="14dp"
             android:text="잘때 이 닦고 자기" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
@@ -52,8 +53,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="end"
-            android:paddingVertical="10dp" />
+            android:layout_gravity="center"
+            android:paddingVertical="10dp"/>
 
     </LinearLayout>
 </LinearLayout>

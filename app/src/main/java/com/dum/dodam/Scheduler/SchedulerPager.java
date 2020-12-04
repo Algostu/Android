@@ -169,7 +169,7 @@ public class SchedulerPager extends Fragment implements
         view.setClickable(true);
 
         new_color = Color.parseColor("#ffab91");
-
+        Log.d("ShedulerPager", "new_color: " + new_color);
         todoArrayList.clear();
 
         realm = Realm.getDefaultInstance();
@@ -273,6 +273,8 @@ public class SchedulerPager extends Fragment implements
                         todo.title = todo_title.getText().toString();
                         todo.done = false;
                         todo.color = new_color;
+                        todo.visible = false;
+                        Log.d("SchedulerPager", "todo.color: " + todo.color);
 
                         if (startCalender.get(Calendar.DATE) == this_date && startCalender.get(Calendar.MONTH) + 1 == this_month) {
                             tmp.add(realm.copyFromRealm(todo));
@@ -444,6 +446,7 @@ public class SchedulerPager extends Fragment implements
                     @Override
                     public void onChooseColor(int position, int color) {
                         color_box_view.setBackgroundColor(color);  // OK 버튼 클릭 시 이벤트
+                        Log.d("SchedulerPager-color", "color: " + color);
                         new_color = color;
                     }
 

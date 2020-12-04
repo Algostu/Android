@@ -18,6 +18,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:paddingBottom="5dp"
             app:subtitleTextAppearance="@style/AppTheme.Appbar.SubTitleTextApp"
             app:titleTextAppearance="@style/AppTheme.Appbar.TitleTextApp" />
 
