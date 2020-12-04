@@ -74,7 +74,7 @@ public class TimeTableFullPopUp extends DialogFragment {
         btn_modify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).replaceFragmentPopup(new TimeTableModify());
+                ((MainActivity) getActivity()).replaceFragmentPopup(new TimeTableModify(list));
             }
         });
 
