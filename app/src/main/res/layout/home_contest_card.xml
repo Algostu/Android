@@ -23,7 +23,7 @@
         android:lines="2"
         android:marqueeRepeatLimit="marquee_forever"
         android:text="contest_name"
-        android:textSize="15dp"
+        android:textSize="14dp"
         tools:ignore="MissingConstraints" />
 
 

@@ -57,13 +57,13 @@ public class CommunityList extends Fragment {
         textViewClickListener(view, R.id.country_question, comAll.get(1).communityID, 0);
         textViewClickListener(view, R.id.country_free, comAll.get(2).communityID, 0);
 
-        TextView tv_instagram = view.findViewById(R.id.tv_instagram);
-        tv_instagram.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(InstagramPost1.newInstance());
-            }
-        });
+//        TextView tv_instagram = view.findViewById(R.id.tv_instagram);
+//        tv_instagram.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ((MainActivity) getActivity()).replaceFragmentFull(InstagramPost1.newInstance());
+//            }
+//        });
 
         return view;
     }
