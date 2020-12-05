@@ -70,8 +70,7 @@ public class RankingPage extends Fragment implements RankingRecyclerAdapter.OnLi
         UnivSearchDialog dialog = new UnivSearchDialog(getContext(), univFrame, new UnivSearchDialog.myOnClickListener() {
             @Override
             public void onYoutubeClick() {
-                Log.d("RHC", "col" + univFrame.youtube);
-                if (univFrame.youtube == null) {
+                if (univFrame.youtube == null || univFrame.youtube.equals("")) {
                     Toast.makeText(getContext(), "관련 정보가 없어 검색페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
                     String youtubeUrl = "https://www.youtube.com/results?search_query=" + univFrame.univName;
                     ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(youtubeUrl));
@@ -82,12 +81,11 @@ public class RankingPage extends Fragment implements RankingRecyclerAdapter.OnLi
 
             @Override
             public void onEduPageClick() {
-                Log.d("RHC", "col" + univFrame.admission);
-                if (univFrame.admission == null) {
+                if (univFrame.admission == null || univFrame.admission.equals("")) {
                     Toast.makeText(getContext(), "입학처 정보가 없어 홈페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
                     ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(univFrame.homePage));
                 } else {
-                    ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(univFrame.eduHomePage));
+                    ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(univFrame.admission));
                 }
             }
         });
@@ -126,6 +124,13 @@ public class RankingPage extends Fragment implements RankingRecyclerAdapter.OnLi
                     majorList.clear();
                     univList.addAll(result.univList);
                     majorList.addAll(result.majorList);
+
+                    for (UnivFrame frame : univList) {
+                        Log.d("RHC", "onResponse: " + frame.univName);
+                    }
+                    for (MajorFrame frame : majorList) {
+                        Log.d("RHC", "onResponse: " + frame.mClass);
+                    }
 
                     adapter.notifyDataSetChanged();
                 } else {

@@ -174,7 +174,6 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
                     UnivSearchDialog dialog = new UnivSearchDialog(getContext(), collage, new UnivSearchDialog.myOnClickListener() {
                         @Override
                         public void onYoutubeClick() {
-                            Log.d("RHC", "col " + collage.youtube);
                             if (collage.youtube == null | collage.youtube.equals("")) {
                                 Toast.makeText(getContext(), "관련 정보가 없어 검색페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
                                 String youtubeUrl = "https://www.youtube.com/results?search_query=" + collage.univName;
@@ -186,7 +185,6 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
 
                         @Override
                         public void onEduPageClick() {
-                            Log.d("RHC", "col " + collage.admission);
                             if (collage.admission == null | collage.admission.equals("")) {
                                 Toast.makeText(getContext(), "입학처 정보가 없어 홈페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
                                 ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.homePage));
