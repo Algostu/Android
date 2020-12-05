@@ -10,6 +10,7 @@ import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.Univ.dataframe.LiveShowResponse;
+import com.dum.dodam.Univ.dataframe.MajorResponse;
 import com.dum.dodam.Univ.dataframe.RankingResponse;
 import com.dum.dodam.Univ.dataframe.UnivArticleResponse;
 import com.dum.dodam.Univ.dataframe.UnivLogoResponse;
@@ -44,6 +45,9 @@ public interface RetrofitService {
 
     @GET("/search/univList")
     Call<UnivResponse> searchCollageName(@Query("univName") String univName);
+
+    @GET("/search/majorList")
+    Call<MajorResponse> searchMajorName(@Query("majorName") String majorName);
 
     @GET("/univ/logoImage")
     Call<UnivLogoResponse> getUnivLogo(@Query("univID") int univID);
@@ -93,14 +97,18 @@ public interface RetrofitService {
     @GET("/univ/liveShowList")
     Call<LiveShowResponse> readLiveShowList(@Query("writtenAfter") String writtenAfter);
 
+    @GET("/univ/viewUniv")
+    Call<BaseResponse> getViewUniv(@Query("univID") int id);
+
+    @GET("/univ/viewMajor")
+    Call<BaseResponse> getViewMajor(@Query("majorID") int id);
+
+    @GET("/univ/ranking")
+    Call<RankingResponse> loadRanking();
+
     @GET("/17841442985795349/media")
     Call<FeedResult> getFeeds(@Query("fields") String fields, @Query("access_token") String access_token);
 
     @GET("/{id}/children")
     Call<FeedResult> getFeedDetails(@Path("id") String id, @Query("fields") String fields, @Query("access_token") String access_token);
-
-    @GET("/ranking")
-    Call<RankingResponse> loadRanking();
-
-
 }
