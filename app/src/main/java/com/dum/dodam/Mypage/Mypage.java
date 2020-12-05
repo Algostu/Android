@@ -35,9 +35,17 @@ import androidx.fragment.app.FragmentTransaction;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.Login.startUpActivity;
 import com.dum.dodam.MainActivity;
+import com.dum.dodam.Mypage.Dataframe.MyWorkResponse;
+import com.dum.dodam.Mypage.Dataframe.SurveyResponse;
 import com.dum.dodam.R;
+import com.dum.dodam.httpConnection.RetrofitAdapter;
+import com.dum.dodam.httpConnection.RetrofitService;
+
+import retrofit2.Call;
 
 public class Mypage extends Fragment {
+    // debug
+    public final String TAG = "Mypage";
 
     private TextView nickName;
     private TextView emailAddress;
@@ -54,6 +62,7 @@ public class Mypage extends Fragment {
     private TextView copy_code;
 
     UserJson user;
+    public String surveyLink;
 
     @Nullable
     @Override
@@ -219,9 +228,73 @@ public class Mypage extends Fragment {
                 dig.show();
             }
         });
-
-
+        getMyWork();
+        getSurveyLink();
         return view;
+    }
+
+    private void getSurveyLink() {
+        RetrofitAdapter rAdapter = new RetrofitAdapter();
+        RetrofitService service = rAdapter.getInstance(getActivity());
+        Call<SurveyResponse> call = service.getSurveyLink();
+
+        call.enqueue(new retrofit2.Callback<SurveyResponse>() {
+            @Override
+            public void onResponse(Call<SurveyResponse> call, retrofit2.Response<SurveyResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().checkError(getContext()) != 0) {
+                        return;
+                    }
+                    Log.d(TAG, "response" + response.raw());
+                    SurveyResponse result = response.body();
+                    surveyLink = result.body;
+                    survey_code.setText("설문조사 링크입니다. 참여 부탁드립니다.");
+                    survey_code.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(surveyLink));
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SurveyResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void getMyWork() {
+        RetrofitAdapter rAdapter = new RetrofitAdapter();
+        RetrofitService service = rAdapter.getInstance(getActivity());
+        Call<MyWorkResponse> call = service.getMyWork();
+
+        call.enqueue(new retrofit2.Callback<MyWorkResponse>() {
+            @Override
+            public void onResponse(Call<MyWorkResponse> call, retrofit2.Response<MyWorkResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().checkError(getContext()) != 0) {
+                        return;
+                    }
+                    Log.d(TAG, "response" + response.raw());
+                    MyWorkResponse result = response.body();
+                    my_article_number.setText(String.valueOf(result.body.numArticles));
+                    my_comment_number.setText(String.valueOf(result.body.numReplies));
+                    my_heart_number.setText(String.valueOf(result.body.numHearts));
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyWorkResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
     }
 
     @Override

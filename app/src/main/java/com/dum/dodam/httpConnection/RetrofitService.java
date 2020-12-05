@@ -9,6 +9,8 @@ import com.dum.dodam.Home.dataframe.HotArticleResponse;
 import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.SearchResponse;
+import com.dum.dodam.Mypage.Dataframe.MyWorkResponse;
+import com.dum.dodam.Mypage.Dataframe.SurveyResponse;
 import com.dum.dodam.Univ.dataframe.LiveShowResponse;
 import com.dum.dodam.Univ.dataframe.MajorResponse;
 import com.dum.dodam.Univ.dataframe.RankingResponse;
@@ -39,6 +41,12 @@ public interface RetrofitService {
 
     @POST("/auth/kakaoSignup")
     Call<BaseResponse> registerKAKAO(@Body JsonObject body);
+
+    @GET("/mypage/surveyLink")
+    Call<SurveyResponse> getSurveyLink();
+
+    @GET("/mypage/myWork")
+    Call<MyWorkResponse> getMyWork();
 
     @GET("/search/schoolList")
     Call<SearchResponse> searchSchoolName(@Query("schoolName") String schoolName);
