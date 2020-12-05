@@ -2,6 +2,9 @@ package com.dum.dodam.Univ.Adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +18,19 @@ import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Utils.TextUtils;
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class UnivSearchAdapter extends BaseAdapter {
 
+    // debug
+    public final String TAG = "UnivSearchAdapter";
+
     private Context context;
     private ArrayList<UnivFrame> list;
+    private ArrayList<String> logoNameList;
     private LayoutInflater inflate;
     private UnivSearchAdapter.ViewHolder viewHolder;
     private EditText tvSearchText;
@@ -30,6 +40,13 @@ public class UnivSearchAdapter extends BaseAdapter {
         this.context = context;
         this.inflate = LayoutInflater.from(context);
         this.tvSearchText = tvSearchText;
+        try {
+            AssetManager assetMgr = context.getAssets();
+            logoNameList = new ArrayList<>(Arrays.asList(assetMgr.list("logo/")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -56,6 +73,7 @@ public class UnivSearchAdapter extends BaseAdapter {
             viewHolder.collage_name = (TextView) convertView.findViewById(R.id.collage_name);
             viewHolder.collage_logo = (ImageView) convertView.findViewById(R.id.collage_logo);
             viewHolder.remove_icon = (ImageView) convertView.findViewById(R.id.ic_remove);
+            viewHolder.region_name = (TextView) convertView.findViewById(R.id.region_name);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (UnivSearchAdapter.ViewHolder) convertView.getTag();
@@ -72,10 +90,31 @@ public class UnivSearchAdapter extends BaseAdapter {
         }
 
         // logo
-        viewHolder.collage_logo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_school));
+        viewHolder.collage_logo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_university));
+        String univEngName = list.get(position).engname;
+        Log.d(TAG, "univEngName: " + univEngName);
+        if (univEngName!=null){
+            Log.d(TAG, "univEngName: " + univEngName);
+            for(String filename : logoNameList){
+                Log.d(TAG, "fileanem: " + filename);
+                if (filename.toString().split("\\.")[0].equals(univEngName)){
+                    AssetManager assetMgr = context.getAssets();
+                    try {
+                        InputStream is = assetMgr.open("logo/"+filename);
+                        viewHolder.collage_logo.setImageDrawable(Drawable.createFromStream(is, null));
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+
 
         // remove Icon
         if (query.length() == 0){
+            viewHolder.region_name.setVisibility(View.GONE);
             viewHolder.remove_icon.setVisibility(View.VISIBLE);
             viewHolder.remove_icon.setClickable(true);
             viewHolder.remove_icon.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +127,8 @@ public class UnivSearchAdapter extends BaseAdapter {
             });
         } else {
             viewHolder.remove_icon.setVisibility(View.GONE);
+            viewHolder.region_name.setText(list.get(position).subRegion);
+            viewHolder.region_name.setVisibility(View.VISIBLE);
         }
 
 //        viewHolder.collage_logo.setImageDrawable();
@@ -98,6 +139,7 @@ public class UnivSearchAdapter extends BaseAdapter {
         public TextView collage_name;
         public ImageView collage_logo;
         public ImageView remove_icon;
+        public TextView region_name;
     }
 
     public void removeHistory(){

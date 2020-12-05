@@ -127,6 +127,10 @@ public class UnivSearch extends Fragment {
             @Override
             public void onResponse(Call<UnivResponse> call, retrofit2.Response<UnivResponse> response) {
                 if (response.isSuccessful()) {
+                    if(response.body().checkError(getContext())!=0){
+                        return;
+                    }
+                    Log.d(TAG, "response" + response.raw());
                     UnivResponse result = response.body();
                     list.clear();
                     list.addAll(result.body);

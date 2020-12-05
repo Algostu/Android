@@ -6,6 +6,9 @@ public class UnivFrame {
     public String homePage;
     public String eduHomePage;
     public int univID;
+    public String youtube;
+    public String admission;
+    public String engname;
 //    public ImageView logo;
 
     @Override
