@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.Log;
@@ -27,6 +29,7 @@ import java.util.Random;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
+    public final String TAG = "MyFireBaseMessaging";
     String json;
     ArrayList<AlarmData> alarmDataArr;
     AlarmData alarmData;
@@ -51,12 +54,14 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
+        Log.d(TAG, "message received here");
         if (remoteMessage.getNotification() != null) { //포그라운드
+            Log.d(TAG, "message received go to 1");
             sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle());
 //            up_Nt(remoteMessage.getData().get("orderCnt1"), null, null);
         } else if (remoteMessage.getData().size() > 0) { //백그라운드
-            sendNotification(remoteMessage.getData().get("body"), remoteMessage.getData().get("title"));
+            Log.d(TAG, "message received go to 2");
+            sendNotification(remoteMessage.getData().get("message"), remoteMessage.getData().get("title"));
 //            up_Nt(remoteMessage.getData().get("orderCnt1"), null, null);
 
         }
@@ -104,17 +109,35 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         String CHANNEL_ID = "my_channel_02";
 
         try {
-            Notification notification = new Notification.Builder(MyFireBaseMessagingService.this)
-                    .setContentTitle(URLDecoder.decode(messageTitle, "UTF-8"))
-                    .setContentText(URLDecoder.decode(alarmData.content, "UTF-8"))
-                    .setSmallIcon(R.drawable.ic_logo_white1)
-                    .setChannelId(CHANNEL_ID)
-                    .setContentIntent(pendingIntent)
-                    .build();
+
             // 알람을 위한 것
 //            mediaPlayer = MediaPlayer.create(this,R.raw.alarm);
 //            mediaPlayer.start();
+            Bitmap icon = BitmapFactory.decodeResource(getApplication().getResources(), R.drawable.app_notication);
+            Notification notification;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                notification = new Notification.Builder(MyFireBaseMessagingService.this)
+                        .setContentTitle(URLDecoder.decode(messageTitle, "UTF-8"))
+                        .setContentText(URLDecoder.decode(alarmData.content, "UTF-8"))
+                        .setSmallIcon(R.drawable.ic_app_notication)
+                        .setColor(getResources().getColor(R.color.saffron))
+                        .setChannelId(CHANNEL_ID)
+                        .setShowWhen(true)
+                        .setLargeIcon(icon)
+                        .setContentIntent(pendingIntent)
+                        .build();
 
+            } else {
+                notification = new Notification.Builder(MyFireBaseMessagingService.this)
+                        .setContentTitle(URLDecoder.decode(messageTitle, "UTF-8"))
+                        .setContentText(URLDecoder.decode(alarmData.content, "UTF-8"))
+                        .setSmallIcon(R.drawable.ic_app_notication)
+                        .setChannelId(CHANNEL_ID)
+                        .setContentIntent(pendingIntent)
+                        .setShowWhen(true)
+                        .setLargeIcon(icon)
+                        .build();
+            }
             mNotificationManager.notify(notifyID, notification);
         } catch (Exception e) {
             e.printStackTrace();
