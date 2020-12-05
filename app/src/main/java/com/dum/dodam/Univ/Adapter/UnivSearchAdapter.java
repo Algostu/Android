@@ -1,4 +1,4 @@
-package com.dum.dodam.Univ;
+package com.dum.dodam.Univ.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

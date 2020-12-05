@@ -29,7 +29,7 @@ import com.dum.dodam.Home.Home;
 import com.dum.dodam.Home.dataframe.MyCommunityFrame2;
 import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.Scheduler.Scheduler;
-import com.dum.dodam.Univ.SearchUniv;
+import com.dum.dodam.Univ.Fragment.UnivMain;
 import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     public UserJson user;
     public Home home;
     public CommunityList comm;
-    public SearchUniv sear;
+    public UnivMain sear;
     Intent intent;
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         home = new Home();
         comm = new CommunityList();
-        sear = new SearchUniv();
+        sear = new UnivMain();
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (view != null) {

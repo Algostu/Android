@@ -7,5 +7,5 @@ public class ImageData {
     public String permalink;
     public String username;
     public String caption;
-
+    public String hashTag;
 }

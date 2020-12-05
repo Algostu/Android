@@ -24,6 +24,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.Univ.Adapter.UnivViewPageAdapter;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Univ.dataframe.UnivLogoFrame;
 import com.dum.dodam.Univ.dataframe.UnivLogoResponse;

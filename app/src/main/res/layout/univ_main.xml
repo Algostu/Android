@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_gray">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- guide line -->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gd_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="15dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gd_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="15dp" />
+<!--            대학교 검색-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:layout_constraintLeft_toLeftOf="@id/gd_left"
+                app:layout_constraintRight_toRightOf="@id/gd_right"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:id="@+id/search"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/cardview_background"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="15dp"
+                        android:src="@drawable/ic_search" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:text="대학 검색" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+<!--            인스타그램 라이브 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_liveshow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:layout_constraintLeft_toLeftOf="@id/gd_left"
+                app:layout_constraintRight_toRightOf="@id/gd_right"
+                app:layout_constraintTop_toBottomOf="@id/cv_search"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@drawable/cardview_background"
+                    android:gravity="center"
+                    android:padding="7dp">
+                    <ImageView
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_onair"/>
+                    <TextView
+                        android:layout_weight="8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="인스타 라이브 쇼가 진행중이에요~"
+                        android:textSize="14dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_ranking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="58dp"
+                android:text="실시간 대학 검색순위"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/cv_liveshow"
+                app:layout_constraintTop_toBottomOf="@+id/cv_liveshow"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/ic_ranking"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_ranking"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="25dp"
+                app:layout_constraintLeft_toLeftOf="@+id/cv_liveshow"
+                app:layout_constraintTop_toBottomOf="@+id/cv_liveshow"/>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_ranking"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:layout_constraintLeft_toLeftOf="@id/gd_left"
+                app:layout_constraintRight_toRightOf="@id/gd_right"
+                app:layout_constraintTop_toBottomOf="@id/ic_ranking"
+                tools:ignore="MissingConstraints,NotSibling"
+                />
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp_ranking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="@id/gd_left"
+                app:layout_constraintRight_toRightOf="@id/gd_right"
+                app:layout_constraintTop_toBottomOf="@id/tab_ranking"
+                tools:ignore="MissingConstraints,NotSibling"/>
+
+
+            <!-- 공모전 모아보기 -->
+            <TextView
+                android:id="@+id/title_contest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="58dp"
+                android:text="학과정보 보아보기"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/gd_left"
+                app:layout_constraintTop_toBottomOf="@+id/vp_ranking"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/title_contest_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_information"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="25dp"
+                app:layout_constraintLeft_toLeftOf="@+id/gd_left"
+                app:layout_constraintTop_toBottomOf="@+id/vp_ranking"/>
+
+            <TextView
+                android:id="@+id/more_contest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="18dp"
+                android:text="더 보기"
+                android:textSize="12sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vp_ranking"
+                tools:ignore="MissingConstraints,NotSibling" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_contest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:layout_constraintLeft_toLeftOf="@id/gd_left"
+                app:layout_constraintRight_toRightOf="@id/gd_right"
+                app:layout_constraintTop_toBottomOf="@id/title_contest"
+                tools:ignore="MissingConstraints">
+
+                <androidx.core.widget.NestedScrollView
+                    android:background="@drawable/cardview_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_contest"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:overScrollMode="never"
+                        tools:ignore="MissingConstraints" />
+                </androidx.core.widget.NestedScrollView>
+            </androidx.cardview.widget.CardView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                app:layout_constraintTop_toBottomOf="@id/cv_contest"
+                tools:ignore="MissingConstraints" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clipChildren="false"
+        android:theme="@style/AppTheme.Appbar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/saffron"
+            app:subtitleTextAppearance="@style/AppTheme.Appbar.SubTitleTextApp"
+            app:titleTextAppearance="@style/AppTheme.Appbar.TitleTextApp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,10 +1,11 @@
-package com.dum.dodam.Univ;
+package com.dum.dodam.Univ.Fragment;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -17,11 +18,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.Univ.Adapter.UnivSearchAdapter;
+import com.dum.dodam.Univ.Univ;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
@@ -33,31 +35,39 @@ import retrofit2.Call;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-public class SearchUniv extends Fragment {
+public class UnivSearch extends Fragment {
+    // log tag
+    public final String TAG = "UnivSearch";
 
-    private final String TAG = "RHC";
+    // toolbar
+    private Toolbar toolbar;
+    private ActionBar actionbar;
+
+    private ArrayList<UnivFrame> list;
 
     private EditText et_input;
     private ListView listView;
-    private ArrayList<UnivFrame> list;
-
     private UnivSearchAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.univ_search, container, false);
-        view.setClickable(true);
 
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        // appbar 적용
+        setHasOptionsMenu(true);
+        toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        actionBar.setTitle("수능 대.박.");
-        actionBar.setSubtitle("대학 관련 자료들을 찾아보세요!");
+        actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionbar.setDisplayShowCustomEnabled(true);
+        actionbar.setDisplayShowTitleEnabled(false);//기본 제목을 없애줍니다.
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
-        et_input = view.findViewById(R.id.et_input);
-        listView = view.findViewById(R.id.listView);
+        // layout 연결
+        listView = view.findViewById(R.id.lv_search);
+        et_input = view.findViewById(R.id.et_search);
 
+        // listener 설정
         list = new ArrayList<UnivFrame>();
         adapter = new UnivSearchAdapter(getContext(), list);
         listView.setAdapter(adapter);
@@ -86,14 +96,6 @@ public class SearchUniv extends Fragment {
             public void afterTextChanged(Editable editable) {
                 String text = et_input.getText().toString();
                 search(text);
-            }
-        });
-
-        CardView cv_liveshow = (CardView) view.findViewById(R.id.cv_liveshow);
-        cv_liveshow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new LiveShow());
             }
         });
 
@@ -129,5 +131,16 @@ public class SearchUniv extends Fragment {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //select back button
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

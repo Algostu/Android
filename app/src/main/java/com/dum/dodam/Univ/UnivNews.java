@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.R;
 import com.dum.dodam.RvItemDecoration;
+import com.dum.dodam.Univ.Adapter.UnivNewsAdapter;
 import com.dum.dodam.Univ.dataframe.UnivArticleFrame;
 import com.dum.dodam.Univ.dataframe.UnivArticleResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;

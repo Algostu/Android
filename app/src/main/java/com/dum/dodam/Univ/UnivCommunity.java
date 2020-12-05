@@ -21,6 +21,7 @@ import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.RvItemDecoration;
+import com.dum.dodam.Univ.Adapter.UnivCommunityAdapter;
 import com.dum.dodam.Univ.dataframe.UnivArticleFrame;
 import com.dum.dodam.Univ.dataframe.UnivArticleResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
