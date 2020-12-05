@@ -7,16 +7,19 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +31,7 @@ import androidx.fragment.app.Fragment;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.Univ.Adapter.UnivSearchAdapter;
+import com.dum.dodam.Univ.UnivWebView;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
@@ -77,6 +81,7 @@ public class UnivSearch extends Fragment {
         // layout 연결
         listView = view.findViewById(R.id.lv_search);
         et_input = view.findViewById(R.id.edit_search);
+        et_input.setFocusable(true);
 
         // major search 변경
         majorMode = false;
@@ -103,6 +108,11 @@ public class UnivSearch extends Fragment {
             }
         });
 
+
+        DisplayMetrics dm = getActivity().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
+        final int width = dm.widthPixels; //디바이스 화면 너비
+        final int height = dm.heightPixels; //디바이스 화면 높이
+
         // listener 설정
         list = new ArrayList<UnivFrame>();
         list2 = new ArrayList<UnivFrame>();
@@ -111,8 +121,48 @@ public class UnivSearch extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                
+                final UnivFrame collage = list.get(i);
+                addHistory(collage);
+                InputMethodManager imm = (InputMethodManager) ((MainActivity) getActivity()).getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(et_input.getWindowToken(), 0);
 
+                UnivSearchDialog dialog = new UnivSearchDialog(getContext(), collage, new UnivSearchDialog.myOnClickListener() {
+                    @Override
+                    public void onYoutubeClick() {
+                        Log.d("RHC", "col" + collage.youtube);
+                        if (collage.youtube == null) {
+                            Toast.makeText(getContext(), "관련 정보가 없어 검색페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
+                            String youtubeUrl = "https://www.youtube.com/results?search_query=" + collage.univName;
+                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(youtubeUrl));
+                        } else {
+                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.youtube));
+                        }
+                    }
+
+                    @Override
+                    public void onEduPageClick() {
+                        Log.d("RHC", "col" + collage.admission);
+                        if (collage.admission == null) {
+                            Toast.makeText(getContext(), "입학처 정보가 없어 홈페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
+                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.homePage));
+                        } else {
+                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.eduHomePage));
+                        }
+                    }
+                });
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setCancelable(true);
+
+                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+                WindowManager.LayoutParams wm = dialog.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
+                wm.copyFrom(dialog.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
+                wm.width = (int) (width * 0.9);  //화면 너비의 절반
+                wm.height = height / 2;  //화면 높이의 절반
+
+                dialog.show();
+
+                et_input.setText("");
+                et_input.clearFocus();
             }
         });
         et_input.addTextChangedListener(new TextWatcher() {
@@ -158,7 +208,7 @@ public class UnivSearch extends Fragment {
             @Override
             public void onResponse(Call<UnivResponse> call, retrofit2.Response<UnivResponse> response) {
                 if (response.isSuccessful()) {
-                    if(response.body().checkError(getContext())!=0){
+                    if (response.body().checkError(getContext()) != 0) {
                         return;
                     }
                     Log.d(TAG, "response" + response.raw());
@@ -234,7 +284,7 @@ public class UnivSearch extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    public void addHistory(UnivFrame univ){
+    public void addHistory(UnivFrame univ) {
         // 저장되어있는 알람 중 오래된것들 삭제
         SharedPreferences sharedPref = getActivity().getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
@@ -268,4 +318,5 @@ public class UnivSearch extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
