@@ -84,7 +84,7 @@ public class UnivSearchAdapter extends BaseAdapter {
         viewHolder.collage_name.setText("");
         int start = list.get(position).univName.indexOf(query);
         if (start != -1){
-            TextUtils.setColorInPartitial(list.get(position).univName, start, start+query.length(), "#fbdd56", viewHolder.collage_name);
+            TextUtils.setColorInPartitial(list.get(position).univName, start, start+query.length(), "#03DAC5", viewHolder.collage_name);
         } else {
             viewHolder.collage_name.setText(list.get(position).univName);
         }
