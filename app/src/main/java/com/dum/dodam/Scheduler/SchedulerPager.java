@@ -166,7 +166,6 @@ public class SchedulerPager extends Fragment {
         adapter = new TimeTableAdapter(list, this_date);
 
         todoRecyclerView = (RecyclerView) view.findViewById(R.id.rv_todo_list);
-        todoRecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.HORIZONTAL));
         todoRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         todoRecyclerView.setLayoutManager(layoutManager);

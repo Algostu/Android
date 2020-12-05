@@ -26,8 +26,7 @@
             android:layout_marginVertical="3.5dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="3dp"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/saffron" />
+            android:background="@drawable/circle" />
 
         <ImageView
             android:id="@+id/ic_remove"
@@ -48,14 +47,13 @@
             android:text="잘때 이 닦고 자기"
             android:textSize="14dp" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <CheckBox
             android:id="@+id/todo_done"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:paddingVertical="10dp" />
-
     </LinearLayout>
 </LinearLayout>
 
