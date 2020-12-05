@@ -130,7 +130,6 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
         instagram_recyclerView.setAdapter(instagram_adapter);
         getFeed();
 
-
         return view;
     }
 

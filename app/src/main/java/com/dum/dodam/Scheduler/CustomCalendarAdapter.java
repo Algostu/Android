@@ -117,7 +117,7 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
         holder.time.setText(startEndTime);
 
         GradientDrawable bgShape = (GradientDrawable) holder.iv_color_ball.getBackground();
-        bgShape.setColor(list.get(position).color);
+        bgShape.setTint(list.get(position).color);
 
         holder.todo_content.setText(list.get(position).title);
 

@@ -3,7 +3,6 @@ package com.dum.dodam.Univ;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -88,15 +87,6 @@ public class Univ extends Fragment {
 //                }
 //            }
 //        });
-
-        iv_univ_bg = view.findViewById(R.id.iv_univ_bg);
-//      Temp Color
-        if (univ.univName.equals("아주대학교")) {
-            iv_univ_bg.setImageResource(R.drawable.ajou_univ);
-            Drawable alpha = iv_univ_bg.getDrawable();
-            alpha.setAlpha(150);
-        }
-//        getUnivLogo(univ.univID);
 
         go_web = (TextView) view.findViewById(R.id.go_web);
         go_web.setOnClickListener(new View.OnClickListener() {

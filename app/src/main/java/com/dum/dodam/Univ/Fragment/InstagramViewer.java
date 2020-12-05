@@ -66,7 +66,6 @@ public class InstagramViewer extends Fragment {
         recyclerView.setAdapter(adapter);
         getFeed();
 
-
         return view;
     }
 
