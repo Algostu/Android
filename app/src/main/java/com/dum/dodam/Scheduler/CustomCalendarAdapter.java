@@ -2,7 +2,6 @@ package com.dum.dodam.Scheduler;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,15 +122,16 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
 
         holder.itemView.setTag(position);
 
-        holder.todo_done.setChecked(list.get(position).done);
         if (list.get(position).done == true) {
             holder.todo_content.setTextColor(Color.GRAY);
-            holder.todo_content.setTypeface(null, Typeface.ITALIC);
+//            holder.todo_content.setTypeface(null, Typeface.ITALIC);
             holder.todo_content.setPaintFlags(holder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             holder.todo_content.setTextColor(Color.BLACK);
-            holder.todo_content.setTypeface(null, Typeface.NORMAL);
-            holder.todo_content.setPaintFlags(0);
+//            holder.todo_content.setTypeface(null, Typeface.NORMAL);
+            if ((holder.todo_content.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0) {
+                holder.todo_content.setPaintFlags(holder.todo_content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            }
         }
 
         if (list.get(position).visible) {
@@ -160,12 +160,14 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
 
                 if (b == true) {
                     orgHolder.todo_content.setTextColor(Color.GRAY);
-                    orgHolder.todo_content.setTypeface(null, Typeface.ITALIC);
+//                    orgHolder.todo_content.setTypeface(null, Typeface.ITALIC);
                     orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
                     orgHolder.todo_content.setTextColor(Color.BLACK);
-                    orgHolder.todo_content.setTypeface(null, Typeface.NORMAL);
-                    orgHolder.todo_content.setPaintFlags(0);
+//                    orgHolder.todo_content.setTypeface(null, Typeface.NORMAL);
+                    if ((orgHolder.todo_content.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0) {
+                        orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    }
                 }
             }
         });

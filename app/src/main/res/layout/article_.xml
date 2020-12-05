@@ -29,7 +29,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="50dp"
         android:overScrollMode="never"
         android:scrollbarFadeDuration="0"
         android:scrollbarSize="5dp"
@@ -175,7 +175,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:background="@android:color/white">
 
