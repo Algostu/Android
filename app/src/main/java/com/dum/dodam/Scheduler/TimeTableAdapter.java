@@ -15,12 +15,15 @@ import com.dum.dodam.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Holder> {
     private final ArrayList<String> list;
+    private int this_date;
 
-    public TimeTableAdapter(ArrayList<String> list) {
+    public TimeTableAdapter(ArrayList<String> list, int this_date) {
         this.list = list;
+        this.this_date = this_date;
     }
 
 //    public interface OnListItemSelectedInterface {
@@ -56,11 +59,15 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull TimeTableAdapter.Holder holder, final int position) {
-        int hour = Integer.parseInt(getCurrentTime());
-        if (position == hour - 9) {
-            holder.period.setTextAppearance(R.style.textAppearanceInTime);
-            holder.subject.setTextAppearance(R.style.textAppearanceInTime);
+        Calendar calendar = Calendar.getInstance();
+        if (this_date == calendar.get(Calendar.DATE)) {
+            int hour = Integer.parseInt(getCurrentTime());
+            if (position == hour - 9) {
+                holder.period.setTextAppearance(R.style.textAppearanceInTime);
+                holder.subject.setTextAppearance(R.style.textAppearanceInTime);
+            }
         }
+
         holder.period.setText(String.format("%d교시", position + 1));
         holder.subject.setText(list.get(position));
 

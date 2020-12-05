@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.dum.dodam.LocalDB.Todo;
-import com.dum.dodam.LocalDB.TodoData;
 import com.dum.dodam.LocalDB.TodoModule;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
@@ -57,7 +56,6 @@ import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import kotlin.Unit;
 import kotlin.collections.ArraysKt;
@@ -382,16 +380,10 @@ public class CustomCalendar extends Fragment implements MainActivity.OnBackPress
                 TextView calendarDayText = viewContainer.calendarDayText;
                 calendarDayText.setText(String.valueOf(calendarDay.getDate().getDayOfMonth()));
 
-                View bottomView = view.findViewById(R.id.bottomView);
-                View topView = view.findViewById(R.id.topView);
-                bottomView.setBackgroundResource(R.color.transparent);
-                topView.setBackgroundResource(R.color.transparent);
-
                 String id = String.valueOf(calendarDay.getDate().getYear()) + String.valueOf(calendarDay.getDate().getMonth().getValue());
                 RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", id).findAll();
 
                 int isEmpty = 0;
-                RealmList<TodoData> todoData;
                 if (results != null) {
                     isEmpty = 1;
                     list.addAll(realm.copyFromRealm(results));
