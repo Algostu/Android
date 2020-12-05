@@ -59,7 +59,6 @@ public class InstagramViewerAdapter extends RecyclerView.Adapter<InstagramViewer
 
     public class Holder extends RecyclerView.ViewHolder {
         protected TextView content;
-        protected TextView extendContent;
         protected ImageView photo;
         protected ViewPager2 viewPager2;
         protected InstagramViewPagerAdapter adapter;
@@ -68,7 +67,6 @@ public class InstagramViewerAdapter extends RecyclerView.Adapter<InstagramViewer
         public Holder(View view) {
             super(view);
             this.content = view.findViewById(R.id.content);
-            this.extendContent = view.findViewById(R.id.extend_content);
             this.photo = view.findViewById(R.id.photo);
             this.viewPager2 = view.findViewById(R.id.viewPager);
             imgList = new ArrayList<ImageData>();
@@ -82,19 +80,24 @@ public class InstagramViewerAdapter extends RecyclerView.Adapter<InstagramViewer
         holder.viewPager2.setId(position + 1);
         holder.viewPager2.setAdapter(holder.adapter);
 
-        holder.content.setText(list.get(position).caption);
-
-        holder.itemView.setTag(position);
         getPhotos(list.get(position).id, holder);
 
-        ReadMoreOption readMoreOption = new ReadMoreOption.Builder(context).textLength(30, ReadMoreOption.TYPE_CHARACTER) // OR
+        ReadMoreOption readMoreOption = new ReadMoreOption.Builder(context).textLength(50, ReadMoreOption.TYPE_CHARACTER) // OR
                 .moreLabel("more")
-                .lessLabel("...less")
+                .lessLabel("..less")
                 .moreLabelColor(Color.rgb(128, 128, 128))
                 .lessLabelColor(Color.rgb(128, 128, 128))
                 .labelUnderLine(false)
                 .expandAnimation(true)
                 .build();
+
+        try {
+            readMoreOption.addReadMoreTo(holder.content, list.get(position).caption);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        holder.itemView.setTag(position);
     }
 
     public void getPhotos(String feedID, final Holder holder) {

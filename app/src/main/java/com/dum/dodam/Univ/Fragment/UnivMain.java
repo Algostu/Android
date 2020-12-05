@@ -30,6 +30,7 @@ import com.dum.dodam.Univ.Adapter.RankingPageAdapter;
 import com.dum.dodam.Univ.LiveShow;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -61,6 +62,8 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
     private RecyclerView.Adapter instagram_adapter;
     private RecyclerView.LayoutManager instagram_layoutManager;
 
+    private ShimmerFrameLayout shimmerFrameLayout;
+
 
     @Nullable
     @Override
@@ -78,6 +81,8 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
         // layout 연결
         CardView cv_liveshow = (CardView) view.findViewById(R.id.cv_liveshow);
         llSearch = view.findViewById(R.id.search);
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_layout);
+        shimmerFrameLayout.startShimmer();
 
         // 각 layout listener연결
         // search
@@ -133,7 +138,7 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
         return view;
     }
 
-    public void getFeed(){
+    public void getFeed() {
         // Retrofit 삽질 4시간 경험 한 후기
         // 1. Retrofit 의 Service는 BaseURL과는 연관이 없다.
         // 2. Retrofit은 여러개를 만들어서 사용해도 상관 없다.
@@ -162,6 +167,8 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
                     }
                     instagramList.addAll(temp);
                     instagram_adapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
                 }
@@ -178,7 +185,6 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
     public void onFeedSelected(View v, int position) {
         ((MainActivity) getActivity()).replaceFragmentFull(new InstagramViewer());
     }
-
 
 
 }

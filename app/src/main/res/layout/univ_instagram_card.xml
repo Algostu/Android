@@ -9,6 +9,7 @@
         android:id="@+id/contest_image"
         android:layout_width="160dp"
         android:layout_height="150dp"
-        android:fitsSystemWindows="true"/>
+        android:background="#DDDDDD"
+        android:fitsSystemWindows="true" />
 
 </LinearLayout>

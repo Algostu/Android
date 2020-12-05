@@ -22,6 +22,7 @@ import com.dum.dodam.R;
 import com.dum.dodam.Univ.Adapter.InstagramViewerAdapter;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,10 +44,16 @@ public class InstagramViewer extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private ShimmerFrameLayout shimmerFrameLayout;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.univ_instagram_viewer, container, false);
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_layout);
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
 
         // toolbar
         setHasOptionsMenu(true);
@@ -62,14 +69,16 @@ public class InstagramViewer extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_contest);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
+//        layoutManager.smoothScrollToPosition(recyclerView, new RecyclerView.State(), position);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
         getFeed();
 
         return view;
     }
 
-    public void getFeed(){
+    public void getFeed() {
         // Retrofit 삽질 4시간 경험 한 후기
         // 1. Retrofit 의 Service는 BaseURL과는 연관이 없다.
         // 2. Retrofit은 여러개를 만들어서 사용해도 상관 없다.
@@ -98,6 +107,8 @@ public class InstagramViewer extends Fragment {
                     }
                     instagramList.addAll(temp);
                     adapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
                 }
