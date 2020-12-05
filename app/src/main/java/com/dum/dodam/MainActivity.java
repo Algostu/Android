@@ -353,10 +353,12 @@ public class MainActivity extends AppCompatActivity {
             for (Fragment fragment : fragmentList) {
                 if (fragment instanceof OnBackPressedListener) {
                     ((OnBackPressedListener) fragment).onBackPressed();
+                    Log.d("MainActivity", "onBackPressed 1");
                     return;
                 }
             }
         }
+        Log.d("MainActivity", "onBackPressed 2");
         super.onBackPressed();
     }
 

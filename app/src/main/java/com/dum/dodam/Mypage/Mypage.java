@@ -263,7 +263,7 @@ public class Mypage extends Fragment {
                 break;
             case R.id.termsNcondition:
                 Log.d("RHC", "onOptionsItemSelected: 약관보기");
-                ((MainActivity) getActivity()).replaceFragmentPopup(new TermsNCondition());
+                ((MainActivity) getActivity()).replaceFragmentFull(new TermsNCondition());
 
                 break;
             case R.id.signout:
@@ -313,7 +313,7 @@ public class Mypage extends Fragment {
                 builder2.show();
                 break;
         }
-        refresh();
+//        refresh();
         return super.onOptionsItemSelected(item);
     }
 
