@@ -21,12 +21,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.dum.dodam.Alarm.Adapter.PageAdapter;
 import com.dum.dodam.Community.dataframe.FeedResult;
 import com.dum.dodam.Community.dataframe.ImageData;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.Univ.Adapter.InstagramAdapter;
+import com.dum.dodam.Univ.Adapter.RankingPageAdapter;
 import com.dum.dodam.Univ.LiveShow;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
@@ -47,7 +47,7 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
 
     // ranking
     public TabLayout tabs;
-    public PageAdapter pageAdapter;
+    public RankingPageAdapter pageAdapter;
     public ViewPager viewPage;
 
     // instagram
@@ -97,7 +97,7 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
         });
 
         // ranking
-        pageAdapter = new PageAdapter(getChildFragmentManager());
+        pageAdapter = new RankingPageAdapter(getChildFragmentManager());
         viewPage = (ViewPager) view.findViewById(R.id.vp_ranking);
         viewPage.setAdapter(pageAdapter);
         viewPage.setSaveEnabled(false);
