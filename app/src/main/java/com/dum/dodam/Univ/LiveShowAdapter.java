@@ -67,7 +67,6 @@ public class LiveShowAdapter extends RecyclerView.Adapter<LiveShowAdapter.Holder
             this.time = (TextView) view.findViewById(R.id.time);
             this.heart = (TextView) view.findViewById(R.id.heart);
             this.heart_ic = (ImageView) view.findViewById(R.id.icon_heart);
-            this.cv_liveshow = (CardView) view.findViewById(R.id.cv_liveshow);
 
             heart_ic.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,7 +75,7 @@ public class LiveShowAdapter extends RecyclerView.Adapter<LiveShowAdapter.Holder
                 }
             });
 
-            cv_liveshow.setOnClickListener(new View.OnClickListener() {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mListener2.onItemSelected2(view, getAdapterPosition());
@@ -94,9 +93,8 @@ public class LiveShowAdapter extends RecyclerView.Adapter<LiveShowAdapter.Holder
         holder.school.setText(list.get(position).univTitle);
         holder.major.setText(list.get(position).major);
         holder.content1.setText(contents[0].trim());
-        holder.content2.setText(contents[1].trim());
-        holder.content3.setText(contents[2].trim());
-        holder.time.setText(list.get(position).writtenTime);
+        String time = list.get(position).writtenTime;
+        holder.time.setText(String.format("%s월%s일\n%s~", time.substring(5, 7), time.substring(8, 10), time.substring(11, 16)));
         holder.heart.setText(list.get(position).heart);
 
         holder.univID = list.get(position).univID;
