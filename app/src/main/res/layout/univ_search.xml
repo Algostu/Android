@@ -7,20 +7,15 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <androidx.core.widget.NestedScrollView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_search"
         android:overScrollMode="never"
         android:scrollbarFadeDuration="0"
         android:scrollbarSize="5dp"
         android:scrollbarThumbVertical="@android:color/darker_gray"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lv_search"/>
-    </androidx.core.widget.NestedScrollView>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -52,7 +47,7 @@
                     android:maxLines="1"
                     android:imeOptions="actionSearch"
                     android:textColor="@android:color/black"
-                    android:textSize="15dp"/>
+                    android:textSize="16dp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -87,7 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="대학 검색"
-                        android:textSize="15dp"
+                        android:textSize="18dp"
                         android:textStyle="bold"
                         android:layout_marginRight="20dp"
                         android:paddingVertical="10dp"

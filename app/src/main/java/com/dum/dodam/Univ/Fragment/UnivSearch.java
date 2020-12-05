@@ -1,5 +1,7 @@
 package com.dum.dodam.Univ.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,7 +30,10 @@ import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -69,15 +74,17 @@ public class UnivSearch extends Fragment {
 
         // listener 설정
         list = new ArrayList<UnivFrame>();
-        adapter = new UnivSearchAdapter(getContext(), list);
+        adapter = new UnivSearchAdapter(getContext(), list, et_input);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UnivFrame collage = list.get(i);
+                addHistory(collage);
                 InputMethodManager imm = (InputMethodManager) ((MainActivity) getActivity()).getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(et_input.getWindowToken(), 0);
                 ((MainActivity) getActivity()).replaceFragmentFull(new Univ(collage));
+                et_input.setText("");
                 et_input.clearFocus();
             }
         });
@@ -89,16 +96,19 @@ public class UnivSearch extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                String text = et_input.getText().toString();
+                if(charSequence.length() > 0){
+                    search(text);
+                } else {
+                    showHistory();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String text = et_input.getText().toString();
-                search(text);
             }
         });
-
+        showHistory();
         return view;
     }
 
@@ -131,6 +141,51 @@ public class UnivSearch extends Fragment {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    public void showHistory(){
+        // 저장되어있는 알람 중 오래된것들 삭제
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(
+                "auto", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        ArrayList<UnivFrame> univFrameArrayList;
+        String json = sharedPref.getString("univSearchHistory", "");
+        if (json.equals("") == true) {
+            univFrameArrayList = new ArrayList<UnivFrame>();
+            Log.d("alarm debug", "no data stored");
+        } else {
+            Log.d("alarm debug", "data are stored");
+            Type listType = new TypeToken<ArrayList<UnivFrame>>() {
+            }.getType();
+            univFrameArrayList = gson.fromJson(json, listType);
+        }
+        list.clear();
+        list.addAll(univFrameArrayList);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void addHistory(UnivFrame univ){
+        // 저장되어있는 알람 중 오래된것들 삭제
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(
+                "auto", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        ArrayList<UnivFrame> univFrameArrayList;
+        String json = sharedPref.getString("univSearchHistory", "");
+        if (json.equals("") == true) {
+            univFrameArrayList = new ArrayList<UnivFrame>();
+            Log.d("alarm debug", "no data stored");
+        } else {
+            Log.d("alarm debug", "data are stored");
+            Type listType = new TypeToken<ArrayList<UnivFrame>>() {
+            }.getType();
+            univFrameArrayList = gson.fromJson(json, listType);
+        }
+        if (univFrameArrayList.contains(univ))
+            return;
+        univFrameArrayList.add(univ);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("univSearchHistory", gson.toJson(univFrameArrayList));
+        editor.commit();
     }
 
     @Override
