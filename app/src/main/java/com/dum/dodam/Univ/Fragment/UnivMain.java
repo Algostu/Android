@@ -100,6 +100,7 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
         pageAdapter = new PageAdapter(getChildFragmentManager());
         viewPage = (ViewPager) view.findViewById(R.id.vp_ranking);
         viewPage.setAdapter(pageAdapter);
+        viewPage.setSaveEnabled(false);
 
         tabs = (TabLayout) view.findViewById(R.id.tab_ranking);
         tabs.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
