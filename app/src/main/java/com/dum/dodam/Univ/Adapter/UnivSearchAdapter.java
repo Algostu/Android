@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dum.dodam.R;
+import com.dum.dodam.Univ.dataframe.MajorFrame;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Utils.TextUtils;
 import com.google.gson.Gson;
@@ -29,13 +31,15 @@ public class UnivSearchAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<UnivFrame> list;
+    private ArrayList<MajorFrame> list2;
     private ArrayList<String> logoNameList;
     private LayoutInflater inflate;
     private UnivSearchAdapter.ViewHolder viewHolder;
     private EditText tvSearchText;
 
-    public UnivSearchAdapter(Context context, ArrayList<UnivFrame> list, EditText tvSearchText) {
+    public UnivSearchAdapter(Context context, ArrayList<UnivFrame> list, ArrayList<MajorFrame> list2, EditText tvSearchText) {
         this.list = list;
+        this.list2 = list2;
         this.context = context;
         this.inflate = LayoutInflater.from(context);
         this.tvSearchText = tvSearchText;
@@ -50,7 +54,10 @@ public class UnivSearchAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return list.size();
+        if (list.size() > 0)
+            return list.size();
+        else
+            return list2.size();
     }
 
     @Override
@@ -77,37 +84,54 @@ public class UnivSearchAdapter extends BaseAdapter {
         } else {
             viewHolder = (UnivSearchAdapter.ViewHolder) convertView.getTag();
         }
-
-        // 검색한 쿼리와 동일한 부분을 강조한다.
+        // 검색한 문자열
         String query = tvSearchText.getText().toString();
-        viewHolder.collage_name.setText("");
-        int start = list.get(position).univName.indexOf(query);
-        if (start != -1){
-            TextUtils.setColorInPartitial(list.get(position).univName, start, start+query.length(), "#03DAC5", viewHolder.collage_name);
-        } else {
-            viewHolder.collage_name.setText(list.get(position).univName);
-        }
+        Log.d("searchAdapter", "Here we go");
+        // 학교 검색일 경우
+        if (list.size() > 0){
+            Log.d("searchAdapter", "To list 1");
+            // logo
+            viewHolder.collage_logo.setVisibility(View.VISIBLE);
+            viewHolder.collage_logo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_university));
+            String univEngName = list.get(position).engname;
+            if (univEngName!=null){
+                for(String filename : logoNameList){
+                    if (filename.toString().split("\\.")[0].equals(univEngName)){
+                        AssetManager assetMgr = context.getAssets();
+                        try {
+                            InputStream is = assetMgr.open("logo/"+filename);
+                            viewHolder.collage_logo.setImageDrawable(Drawable.createFromStream(is, null));
+                            is.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-        // logo
-        viewHolder.collage_logo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_university));
-        String univEngName = list.get(position).engname;
-        if (univEngName!=null){
-            for(String filename : logoNameList){
-                if (filename.toString().split("\\.")[0].equals(univEngName)){
-                    AssetManager assetMgr = context.getAssets();
-                    try {
-                        InputStream is = assetMgr.open("logo/"+filename);
-                        viewHolder.collage_logo.setImageDrawable(Drawable.createFromStream(is, null));
-                        is.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-
                 }
             }
+            // 검색한 쿼리와 동일한 부분을 강조한다.
+            viewHolder.collage_name.setText("");
+            int start = list.get(position).univName.indexOf(query);
+            if (start != -1){
+                TextUtils.setColorInPartitial(list.get(position).univName, start, start+query.length(), "#03DAC5", viewHolder.collage_name);
+            } else {
+                viewHolder.collage_name.setText(list.get(position).univName);
+            }
         }
-
-
+        // 학과 검색일 경우
+        else {
+            Log.d("searchAdapter", "To list 2");
+            //logo
+            viewHolder.collage_logo.setVisibility(View.GONE);
+            // 검색한 쿼리와 동일한 부분을 강조한다.
+            viewHolder.collage_name.setText("");
+            int start = list2.get(position).mClass.indexOf(query) + 7;
+            if (start != -1){
+                TextUtils.setColorInPartitial("       "+list2.get(position).mClass, start, start+query.length(), "#03DAC5", viewHolder.collage_name);
+            } else {
+                viewHolder.collage_name.setText(list2.get(position).mClass);
+            }
+        }
         // remove Icon
         if (query.length() == 0){
             viewHolder.region_name.setVisibility(View.GONE);
@@ -123,8 +147,18 @@ public class UnivSearchAdapter extends BaseAdapter {
             });
         } else {
             viewHolder.remove_icon.setVisibility(View.GONE);
-            viewHolder.region_name.setText(list.get(position).subRegion);
             viewHolder.region_name.setVisibility(View.VISIBLE);
+            if (list.size() > 0) {
+                viewHolder.region_name.setText(list.get(position).subRegion);
+            } else {
+                String subText = list2.get(position).avg_salary;
+                if (subText != null){
+                    viewHolder.region_name.setText(subText.split("\\.")[0] + "만원");
+                } else {
+                    viewHolder.region_name.setText("정보미제공");
+                }
+
+            }
         }
 
 //        viewHolder.collage_logo.setImageDrawable();

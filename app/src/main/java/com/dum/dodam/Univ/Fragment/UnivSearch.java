@@ -3,7 +3,7 @@ package com.dum.dodam.Univ.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,8 +32,11 @@ import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.Univ.Adapter.UnivSearchAdapter;
 import com.dum.dodam.Univ.UnivWebView;
+import com.dum.dodam.Univ.dataframe.MajorFrame;
+import com.dum.dodam.Univ.dataframe.MajorResponse;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
+import com.dum.dodam.httpConnection.BaseResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
 import com.dum.dodam.httpConnection.RetrofitService;
 import com.google.gson.Gson;
@@ -58,7 +61,7 @@ public class UnivSearch extends Fragment {
     private ImageView major;
     public boolean majorMode;
     private ArrayList<UnivFrame> list; // univ
-    private ArrayList<UnivFrame> list2; // major
+    private ArrayList<MajorFrame> list2; // major
 
     private EditText et_input;
     private ListView listView;
@@ -68,6 +71,19 @@ public class UnivSearch extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.univ_search, container, false);
+
+        // status bar color
+        View window = getActivity().getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (window != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                window.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getActivity().getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
+            }
+        } else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            getActivity().getWindow().setStatusBarColor(Color.WHITE);
+        }
 
         // appbar 적용
         setHasOptionsMenu(true);
@@ -91,19 +107,22 @@ public class UnivSearch extends Fragment {
             @Override
             public void onClick(View view) {
                 if(majorMode){
-                    et_input.setTypeface(null, Typeface.NORMAL);
                     major.setImageResource(R.drawable.ic_mortarboard);
                     et_input.setBackgroundColor(Color.WHITE);
+                    et_input.setHint("예) 아주대학교");
                     majorMode = false;
                 } else {
                     major.setImageResource(R.drawable.ic_mortarboard_selected);
-                    et_input.setTypeface(null, Typeface.BOLD);
                     et_input.setBackground(getResources().getDrawable(R.drawable.edge3));
+                    et_input.setHint("예) 소프트웨어학과");
                     majorMode = true;
                 }
                 et_input.setText("");
                 list2.clear();
                 list.clear();
+                if(!majorMode){
+                    showHistory();
+                }
                 adapter.notifyDataSetChanged();
             }
         });
@@ -115,54 +134,69 @@ public class UnivSearch extends Fragment {
 
         // listener 설정
         list = new ArrayList<UnivFrame>();
-        list2 = new ArrayList<UnivFrame>();
-        adapter = new UnivSearchAdapter(getContext(), list, et_input);
+        list2 = new ArrayList<MajorFrame>();
+        adapter = new UnivSearchAdapter(getContext(), list, list2, et_input);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final UnivFrame collage = list.get(i);
-                addHistory(collage);
+                // 학과 검색
+                if (majorMode){
+                    final MajorFrame major = list2.get(i);
+                    viewMajor(major);
+                }
+                // 대학 검색
+                else {
+                    final UnivFrame collage = list.get(i);
+                    addHistory(collage);
+                    viewUniv(collage);
+                    UnivSearchDialog dialog = new UnivSearchDialog(getContext(), collage, new UnivSearchDialog.myOnClickListener() {
+                        @Override
+                        public void onYoutubeClick() {
+                            Log.d("RHC", "col" + collage.youtube);
+                            if (collage.youtube == null) {
+                                Toast.makeText(getContext(), "관련 정보가 없어 검색페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
+                                String youtubeUrl = "https://www.youtube.com/results?search_query=" + collage.univName;
+                                ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(youtubeUrl));
+                            } else {
+                                ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.youtube));
+                            }
+                        }
+
+                        @Override
+                        public void onEduPageClick() {
+                            Log.d("RHC", "col" + collage.admission);
+                            if (collage.admission == null) {
+                                Toast.makeText(getContext(), "입학처 정보가 없어 홈페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
+                                ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.homePage));
+                            } else {
+                                ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.eduHomePage));
+                            }
+                        }
+                    });
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.setCancelable(true);
+
+                    dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+                    WindowManager.LayoutParams wm = dialog.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
+                    wm.copyFrom(dialog.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
+                    wm.width = (int) (width * 0.9);  //화면 너비의 절반
+                    wm.height = height / 2;  //화면 높이의 절반
+
+                    dialog.show();
+                }
+
+                // 공통적으로 하는 작업
                 InputMethodManager imm = (InputMethodManager) ((MainActivity) getActivity()).getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(et_input.getWindowToken(), 0);
-
-                UnivSearchDialog dialog = new UnivSearchDialog(getContext(), collage, new UnivSearchDialog.myOnClickListener() {
-                    @Override
-                    public void onYoutubeClick() {
-                        Log.d("RHC", "col" + collage.youtube);
-                        if (collage.youtube == null) {
-                            Toast.makeText(getContext(), "관련 정보가 없어 검색페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
-                            String youtubeUrl = "https://www.youtube.com/results?search_query=" + collage.univName;
-                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(youtubeUrl));
-                        } else {
-                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.youtube));
-                        }
-                    }
-
-                    @Override
-                    public void onEduPageClick() {
-                        Log.d("RHC", "col" + collage.admission);
-                        if (collage.admission == null) {
-                            Toast.makeText(getContext(), "입학처 정보가 없어 홈페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
-                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.homePage));
-                        } else {
-                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.eduHomePage));
-                        }
-                    }
-                });
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.setCancelable(true);
-
-                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-                WindowManager.LayoutParams wm = dialog.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
-                wm.copyFrom(dialog.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
-                wm.width = (int) (width * 0.9);  //화면 너비의 절반
-                wm.height = height / 2;  //화면 높이의 절반
-
-                dialog.show();
-
                 et_input.setText("");
                 et_input.clearFocus();
+                list.clear();
+                list2.clear();
+                if(!majorMode){
+                    showHistory();
+                }
+                adapter.notifyDataSetChanged();
             }
         });
         et_input.addTextChangedListener(new TextWatcher() {
@@ -181,6 +215,8 @@ public class UnivSearch extends Fragment {
                         search(text);
                     }
                 } else {
+                    list.clear();
+                    list2.clear();
                     showHistory();
                 }
             }
@@ -214,6 +250,7 @@ public class UnivSearch extends Fragment {
                     Log.d(TAG, "response" + response.raw());
                     UnivResponse result = response.body();
                     list.clear();
+                    list2.clear();
                     list.addAll(result.body);
                     adapter.notifyDataSetChanged();
                 } else {
@@ -229,7 +266,8 @@ public class UnivSearch extends Fragment {
     }
 
     private void search2(String query) {
-        list.clear();
+
+        list2.clear();
         if (query.equals("")) {
             adapter.notifyDataSetChanged();
             return;
@@ -237,19 +275,20 @@ public class UnivSearch extends Fragment {
 
         RetrofitAdapter rAdapter = new RetrofitAdapter();
         RetrofitService service = rAdapter.getInstance(getActivity());
-        Call<UnivResponse> call = service.searchCollageName(query);
+        Call<MajorResponse> call = service.searchMajorName(query);
 
-        call.enqueue(new retrofit2.Callback<UnivResponse>() {
+        call.enqueue(new retrofit2.Callback<MajorResponse>() {
             @Override
-            public void onResponse(Call<UnivResponse> call, retrofit2.Response<UnivResponse> response) {
+            public void onResponse(Call<MajorResponse> call, retrofit2.Response<MajorResponse> response) {
                 if (response.isSuccessful()) {
                     if(response.body().checkError(getContext())!=0){
                         return;
                     }
-                    Log.d(TAG, "response" + response.raw());
-                    UnivResponse result = response.body();
+                    Log.d(TAG, "response" + response.body().body.size());
+                    MajorResponse result = response.body();
                     list.clear();
-                    list.addAll(result.body);
+                    list2.clear();
+                    list2.addAll(result.body);
                     adapter.notifyDataSetChanged();
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
@@ -257,7 +296,55 @@ public class UnivSearch extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<UnivResponse> call, Throwable t) {
+            public void onFailure(Call<MajorResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void viewUniv(UnivFrame univ) {
+        RetrofitAdapter rAdapter = new RetrofitAdapter();
+        RetrofitService service = rAdapter.getInstance(getActivity());
+        Call<BaseResponse> call = service.getViewUniv(univ.univID);
+
+        call.enqueue(new retrofit2.Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if(response.body().checkError(getContext())!=0){
+                        return;
+                    }
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void viewMajor(MajorFrame major) {
+        RetrofitAdapter rAdapter = new RetrofitAdapter();
+        RetrofitService service = rAdapter.getInstance(getActivity());
+        Call<BaseResponse> call = service.getViewMajor(major.majorID);
+
+        call.enqueue(new retrofit2.Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if(response.body().checkError(getContext())!=0){
+                        return;
+                    }
+                } else {
+                    Log.d(TAG, "onResponse: Fail " + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
@@ -319,4 +406,20 @@ public class UnivSearch extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // status bar color
+        View window = getActivity().getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (window != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                window.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getActivity().getWindow().setStatusBarColor(Color.parseColor("#fbdd56"));
+            }
+        } else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            getActivity().getWindow().setStatusBarColor(Color.WHITE);
+        }
+    }
 }
