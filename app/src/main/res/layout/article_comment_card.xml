@@ -45,7 +45,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="익명이"
                 android:textColor="@android:color/black"
-                android:textSize="17dp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/writtenTime"
@@ -53,25 +53,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="time"
-                android:textColor="@color/faded_gray" />
+                android:textColor="@color/faded_gray"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/im_comment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_marginRight="5dp"
             android:src="@drawable/ic_comment2"
             app:layout_constraintRight_toLeftOf="@id/im_menu"
-            app:layout_constraintTop_toTopOf="@id/ll_who" />
+            app:layout_constraintTop_toTopOf="@id/ll_who"
+            app:tint="@color/faded_gray" />
 
         <ImageView
             android:id="@+id/im_menu"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
             android:src="@drawable/ic_baseline_menu_24"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ll_who" />
+            app:layout_constraintTop_toTopOf="@id/ll_who"
+            app:tint="@color/faded_gray" />
 
         <TextView
             android:id="@+id/content"
@@ -80,7 +83,7 @@
             android:layout_marginTop="5dp"
             android:text="Content"
             android:textColor="@android:color/black"
-            android:textSize="15dp"
+            android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/ll_who" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

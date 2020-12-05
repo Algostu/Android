@@ -50,7 +50,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="23sp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/NextMonthImage"
                         app:layout_constraintStart_toEndOf="@id/PreviousMonthImage"
@@ -168,8 +169,8 @@
                             android:layout_weight="7"
                             android:gravity="left"
                             android:text="날짜를 선택해주세요"
-                            android:textSize="14dp"
-                            android:textColor="@color/faded_gray"/>
+                            android:textColor="@color/faded_gray"
+                            android:textSize="14dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -194,8 +195,8 @@
                             android:layout_weight="7"
                             android:gravity="left"
                             android:text="시작 시간을 선택해주세요"
-                            android:textSize="14dp"
-                            android:textColor="@color/faded_gray"/>
+                            android:textColor="@color/faded_gray"
+                            android:textSize="14dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -211,7 +212,7 @@
                             android:layout_weight="3"
                             android:gravity="left"
                             android:text="끝나는 시간"
-                            android:textSize="14dp"/>
+                            android:textSize="14dp" />
 
                         <TextView
                             android:id="@+id/todo_end_time"
@@ -220,8 +221,8 @@
                             android:layout_weight="7"
                             android:gravity="left"
                             android:text="끝나는 시간을 선택해주세요"
-                            android:textSize="14dp"
-                            android:textColor="@color/faded_gray"/>
+                            android:textColor="@color/faded_gray"
+                            android:textSize="14dp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -240,7 +241,7 @@
                         android:layout_weight="3"
                         android:gravity="left"
                         android:text="색상 선택"
-                        android:textSize="14dp"/>
+                        android:textSize="14dp" />
 
                     <View
                         android:id="@+id/color_box"
@@ -258,8 +259,8 @@
                         android:layout_weight="6"
                         android:gravity="left"
                         android:text="색깔을 선택해주세요."
-                        android:textSize="14dp"
-                        android:textColor="@color/faded_gray"/>
+                        android:textColor="@color/faded_gray"
+                        android:textSize="14dp" />
                 </LinearLayout>
 
                 <!--        버튼-->
