@@ -46,7 +46,7 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import petrov.kristiyan.colorpicker.ColorPicker;
 
-public class SchedulerPager extends Fragment {
+public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListItemSelectedInterface {
     //    private static final String TAG = "SchedulerPager";
     private static final String TAG = "RHC";
     public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -163,7 +163,7 @@ public class SchedulerPager extends Fragment {
         }
 
         todoAdapter = new TodoListAdapter(todoArrayList, realm);
-        adapter = new TimeTableAdapter(list, this_date);
+        adapter = new TimeTableAdapter(list, this_date, this);
 
         todoRecyclerView = (RecyclerView) view.findViewById(R.id.rv_todo_list);
         todoRecyclerView.setHasFixedSize(true);
@@ -503,5 +503,10 @@ public class SchedulerPager extends Fragment {
     private void CustomRealmTimeTableInit() {
         RealmConfiguration config = new RealmConfiguration.Builder().name("CustomTimeTableDB.realm").schemaVersion(1).modules(new CustomTimeTableModule()).build();
         realm3 = Realm.getInstance(config);
+    }
+
+    @Override
+    public void onItemSelected() {
+        ((MainActivity) getActivity()).replaceFragmentPopup(new TimeTableFullPopUp(this_date));
     }
 }

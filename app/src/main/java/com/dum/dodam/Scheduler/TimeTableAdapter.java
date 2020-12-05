@@ -20,15 +20,17 @@ import java.util.Calendar;
 public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Holder> {
     private final ArrayList<String> list;
     private int this_date;
+    private OnListItemSelectedInterface mListener;
 
-    public TimeTableAdapter(ArrayList<String> list, int this_date) {
+    public TimeTableAdapter(ArrayList<String> list, int this_date, OnListItemSelectedInterface mListener) {
         this.list = list;
         this.this_date = this_date;
+        this.mListener = mListener;
     }
 
-//    public interface OnListItemSelectedInterface {
-//        void onItemSelected(View v, int position);
-//    }
+    public interface OnListItemSelectedInterface {
+        void onItemSelected();
+    }
 
     @NonNull
     @Override
@@ -52,6 +54,18 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
             super(view);
             this.period = (TextView) view.findViewById(R.id.period);
             this.subject = (TextView) view.findViewById(R.id.subject);
+            period.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemSelected();
+                }
+            });
+            subject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemSelected();
+                }
+            });
         }
     }
 
