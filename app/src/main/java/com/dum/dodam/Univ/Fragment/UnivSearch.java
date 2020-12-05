@@ -71,7 +71,7 @@ public class UnivSearch extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.univ_search, container, false);
-
+        view.setClickable(true);
         // status bar color
         View window = getActivity().getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -215,7 +215,9 @@ public class UnivSearch extends Fragment {
                 } else {
                     list.clear();
                     list2.clear();
-                    showHistory();
+                    adapter.notifyDataSetInvalidated();
+                    if(!majorMode)
+                        showHistory();
                 }
             }
 

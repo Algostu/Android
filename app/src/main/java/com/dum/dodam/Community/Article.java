@@ -373,13 +373,13 @@ public class Article extends Fragment implements ArticleCommentAdapter.OnListIte
             tmp_holder.layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
             before_select = position;
             parentReplyID = replyID;
-            holder.layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray)); //왜 댓글만 색깔이 바뀌지??
+            holder.layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rereply)); //왜 댓글만 색깔이 바뀌지??
         }
 
         if (parentReplyID == 0) {
             before_select = position;
             parentReplyID = replyID;
-            holder.layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray)); //왜 댓글만 색깔이 바뀌지??
+            holder.layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rereply)); //왜 댓글만 색깔이 바뀌지??
         } else {
             parentReplyID = 0;
             replyID = 0;
