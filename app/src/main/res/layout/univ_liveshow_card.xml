@@ -36,32 +36,32 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="3dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:ignore="MissingConstraints">
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginRight="15dp"-->
+        <!--            android:layout_marginBottom="3dp"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintRight_toRightOf="parent"-->
+        <!--            tools:ignore="MissingConstraints">-->
 
-            <ImageView
-                android:id="@+id/icon_heart"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginRight="5dp"
-                android:background="?attr/selectableItemBackground"
-                android:src="@drawable/ic_heart"
-                app:layout_constraintRight_toLeftOf="@id/heart" />
+        <!--            <ImageView-->
+        <!--                android:id="@+id/icon_heart"-->
+        <!--                android:layout_width="20dp"-->
+        <!--                android:layout_height="20dp"-->
+        <!--                android:layout_marginRight="5dp"-->
+        <!--                android:background="?attr/selectableItemBackground"-->
+        <!--                android:src="@drawable/ic_heart"-->
+        <!--                app:layout_constraintRight_toLeftOf="@id/heart" />-->
 
-            <TextView
-                android:id="@+id/heart"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:textColor="@color/faded_gray"
-                android:textSize="12dp" />
-        </LinearLayout>
+        <!--            <TextView-->
+        <!--                android:id="@+id/heart"-->
+        <!--                android:layout_width="20dp"-->
+        <!--                android:layout_height="20dp"-->
+        <!--                android:textColor="@color/faded_gray"-->
+        <!--                android:textSize="12dp" />-->
+        <!--        </LinearLayout>-->
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="School"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="major"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout

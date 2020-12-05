@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void replaceFragmentFull(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         transaction.replace(R.id.fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -209,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void replaceFragmentPopup(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         transaction.replace(R.id.popup_fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();

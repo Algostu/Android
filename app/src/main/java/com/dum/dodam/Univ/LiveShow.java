@@ -86,7 +86,7 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
             }
         });
 
-        adapter = new LiveShowAdapter(getContext(), list, this, this);
+        adapter = new LiveShowAdapter(getContext(), list, this);
 
         readLiveShowList();
 
@@ -148,48 +148,6 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
     }
 
     @Override
-    public void onItemSelected(View v, int position) {
-        LiveShowAdapter.Holder holder = (LiveShowAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
-
-        if (added_heart == 0) added_heart = 1;
-        else added_heart = 0;
-
-        if (added_heart == 0) {
-            holder.heart_ic.setImageResource(R.drawable.ic_heart);
-        } else {
-            holder.heart_ic.setImageResource(R.drawable.explodin_heart);
-        }
-
-//        RetrofitAdapter adapter = new RetrofitAdapter();
-//        com.dum.dodam.httpConnection.RetrofitService service = adapter.getInstance(getContext());
-//        Call<BaseResponse> call = service.modifyHeart(articleID, communityType, communityID, added_heart);
-//
-//        call.enqueue(new retrofit2.Callback<BaseResponse>() {
-//            @Override
-//            public void onResponse(Call<BaseResponse> call, retrofit2.Response<BaseResponse> response) {
-//                if (response.isSuccessful()) {
-//                    BaseResponse result = response.body();
-//                    if (result.checkError(getActivity()) != 0) return;
-//                    heart.setText(String.valueOf(org_heart + added_heart));
-//                    if (added_heart == 0) {
-//                        heart_ic.setImageResource(R.drawable.ic_heart);
-//                    } else {
-//                        heart_ic.setImageResource(R.drawable.explodin_heart);
-//                    }
-//                } else {
-//                    Log.d(TAG, "onResponse: Fail " + response.body());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<BaseResponse> call, Throwable t) {
-//                Log.d(TAG, "onFailure: " + t.getMessage());
-//                Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-    }
-
-    @Override
     public void onItemSelected2(View v, int position) {
         LiveShowAdapter.Holder holder = (LiveShowAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
 
@@ -216,8 +174,7 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
                     UnivSearchDialog dialog = new UnivSearchDialog(getContext(), collage, new UnivSearchDialog.myOnClickListener() {
                         @Override
                         public void onYoutubeClick() {
-                            Log.d("RHC", "col" + collage.youtube);
-                            if (collage.youtube == null) {
+                            if (collage.youtube == null | collage.youtube.equals("")) {
                                 Toast.makeText(getContext(), "관련 정보가 없어 검색페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
                                 String youtubeUrl = "https://www.youtube.com/results?search_query=" + collage.univName;
                                 ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(youtubeUrl));
@@ -228,12 +185,11 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
 
                         @Override
                         public void onEduPageClick() {
-                            Log.d("RHC", "col" + collage.admission);
-                            if (collage.admission == null) {
+                            if (collage.admission == null | collage.admission.equals("")) {
                                 Toast.makeText(getContext(), "입학처 정보가 없어 홈페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
                                 ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.homePage));
                             } else {
-                                ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.eduHomePage));
+                                ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.admission));
                             }
                         }
                     });
