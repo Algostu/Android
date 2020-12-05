@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -38,10 +39,11 @@ public class UnivWebView extends Fragment {
         mWebSettings.setUseWideViewPort(true); // 화면 사이즈 맞추기 허용 여부
         mWebSettings.setSupportZoom(false); // 화면 줌 허용 여부
         mWebSettings.setBuiltInZoomControls(false); // 화면 확대 축소 허용 여부
-        mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
         mWebSettings.setCacheMode(WebSettings.LOAD_NO_CACHE); // 브라우저 캐시 허용 여부
         mWebSettings.setDomStorageEnabled(true); // 로컬저장소 허용 여부
 
+        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.loadUrl(homepage); // 웹뷰에 표시할 웹사이트 주소, 웹뷰 시작
         return view;
     }

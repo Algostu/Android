@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,11 +91,8 @@ public class UnivSearchAdapter extends BaseAdapter {
         // logo
         viewHolder.collage_logo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_university));
         String univEngName = list.get(position).engname;
-        Log.d(TAG, "univEngName: " + univEngName);
         if (univEngName!=null){
-            Log.d(TAG, "univEngName: " + univEngName);
             for(String filename : logoNameList){
-                Log.d(TAG, "fileanem: " + filename);
                 if (filename.toString().split("\\.")[0].equals(univEngName)){
                     AssetManager assetMgr = context.getAssets();
                     try {

@@ -52,17 +52,23 @@ public class RankingRecyclerAdapter extends RecyclerView.Adapter<RankingRecycler
         protected TextView tv_rank;
         protected TextView tv_title;
         protected ImageView iv_logo;
+        protected TextView tv_feature;
 
         public Holder(View view) {
             super(view);
             this.tv_rank = view.findViewById(R.id.tv_rank);
             this.tv_title = view.findViewById(R.id.tv_title);
             this.iv_logo = view.findViewById(R.id.iv_logo);
+            this.tv_feature = view.findViewById(R.id.tv_feature);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onItemSelected(v, getAbsoluteAdapterPosition());
+                    if (type == 1) {
+                        mListener.onItemSelected1(v, univList.get(getAbsoluteAdapterPosition()));
+                    } else {
+                        mListener.onItemSelected2(v, majorList.get(getAbsoluteAdapterPosition()));
+                    }
                 }
             });
         }
@@ -71,25 +77,26 @@ public class RankingRecyclerAdapter extends RecyclerView.Adapter<RankingRecycler
     @Override
     public void onBindViewHolder(@NonNull RankingRecyclerAdapter.Holder holder, final int position) {
 
-        String rank;
-        String title;
-        String logoName;
+        holder.tv_rank.setText(String.valueOf(position + 1));
 
-        if(type==1){
-            rank = univList.get(position).
+        if (type == 1) {
+            holder.tv_feature.setVisibility(View.GONE);
+            holder.tv_title.setText(univList.get(position).univName);
+
+        } else {
+            holder.iv_logo.setVisibility(View.GONE);
+            holder.tv_title.setText(majorList.get(position).mClass);
+
+            MajorFrame frame = majorList.get(position);
+            holder.tv_feature.setText(String.format("%s / %s / %s", frame.employment_rate, frame.gender, frame.avg_salary));
         }
-
-        holder.tv_rank.setText(rank);
-        holder.tv_title.setText(title);
-
-        //        int resId = context.getResources().getIdentifier(logoName, "drawable", context.getPackageName());
-//        logo.setBackgroundResource();
-
 
         holder.itemView.setTag(position);
     }
 
     public interface OnListItemSelectedInterface {
-        void onItemSelected(View v, int position);
+        void onItemSelected1(View v, UnivFrame univFrame);
+
+        void onItemSelected2(View v, MajorFrame majorFrame);
     }
 }

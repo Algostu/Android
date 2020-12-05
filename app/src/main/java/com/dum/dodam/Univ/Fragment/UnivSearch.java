@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.Univ.Adapter.UnivSearchAdapter;
+import com.dum.dodam.Univ.UnivWebView;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
@@ -85,7 +87,7 @@ public class UnivSearch extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                UnivFrame collage = list.get(i);
+                final UnivFrame collage = list.get(i);
                 addHistory(collage);
                 InputMethodManager imm = (InputMethodManager) ((MainActivity) getActivity()).getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(et_input.getWindowToken(), 0);
@@ -93,13 +95,25 @@ public class UnivSearch extends Fragment {
                 UnivSearchDialog dialog = new UnivSearchDialog(getContext(), collage, new UnivSearchDialog.myOnClickListener() {
                     @Override
                     public void onYoutubeClick() {
-                        String utubeUrl = "https://www.youtube.com/results?search_query=";
-//                        ((MainActivity)getActivity()).replaceFragmentFull(new UnivWebView());
+                        Log.d("RHC", "col" + collage.youtube);
+                        if (collage.youtube == null) {
+                            Toast.makeText(getContext(), "관련 정보가 없어 검색페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
+                            String youtubeUrl = "https://www.youtube.com/results?search_query=" + collage.univName;
+                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(youtubeUrl));
+                        } else {
+                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.youtube));
+                        }
                     }
 
                     @Override
                     public void onEduPageClick() {
-//                        ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView());
+                        Log.d("RHC", "col" + collage.admission);
+                        if (collage.admission == null) {
+                            Toast.makeText(getContext(), "입학처 정보가 없어 홈페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
+                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.homePage));
+                        } else {
+                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.eduHomePage));
+                        }
                     }
                 });
                 dialog.setCanceledOnTouchOutside(true);
@@ -156,7 +170,7 @@ public class UnivSearch extends Fragment {
             @Override
             public void onResponse(Call<UnivResponse> call, retrofit2.Response<UnivResponse> response) {
                 if (response.isSuccessful()) {
-                    if(response.body().checkError(getContext())!=0){
+                    if (response.body().checkError(getContext()) != 0) {
                         return;
                     }
                     Log.d(TAG, "response" + response.raw());

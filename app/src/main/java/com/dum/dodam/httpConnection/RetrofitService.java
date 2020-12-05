@@ -10,6 +10,7 @@ import com.dum.dodam.Home.dataframe.MyCommunityResponse;
 import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.Univ.dataframe.LiveShowResponse;
+import com.dum.dodam.Univ.dataframe.RankingResponse;
 import com.dum.dodam.Univ.dataframe.UnivArticleResponse;
 import com.dum.dodam.Univ.dataframe.UnivLogoResponse;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
@@ -97,5 +98,9 @@ public interface RetrofitService {
 
     @GET("/{id}/children")
     Call<FeedResult> getFeedDetails(@Path("id") String id, @Query("fields") String fields, @Query("access_token") String access_token);
+
+    @GET("/ranking")
+    Call<RankingResponse> loadRanking();
+
 
 }

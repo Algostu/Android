@@ -2,8 +2,10 @@ package com.dum.dodam.Univ.Fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +17,10 @@ import com.dum.dodam.R;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.google.android.material.button.MaterialButton;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class UnivSearchDialog extends Dialog {
@@ -22,6 +28,8 @@ public class UnivSearchDialog extends Dialog {
     private Context context;
     private myOnClickListener mListener;
     private UnivFrame univFrame;
+
+    private ArrayList<String> logoNameList;
 
     public UnivSearchDialog(@NonNull Context context, UnivFrame univFrame, myOnClickListener mListener) {
         super(context);
@@ -49,8 +57,29 @@ public class UnivSearchDialog extends Dialog {
 
         univName.setText(univFrame.univName);
 
-//        int resId = context.getResources().getIdentifier(mDrawableName, "drawable", context.getPackageName());
-//        logo.setBackgroundResource();
+        // Find Univ Logo exist.
+        try {
+            AssetManager assetMgr = context.getAssets();
+            logoNameList = new ArrayList<>(Arrays.asList(assetMgr.list("logo/")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String univEngName = univFrame.engname;
+        if (univEngName != null) {
+            for (String filename : logoNameList) {
+                if (filename.split("\\.")[0].equals(univEngName)) {
+                    AssetManager assetMgr = context.getAssets();
+                    try {
+                        InputStream is = assetMgr.open("logo/" + filename);
+                        logo.setImageDrawable(Drawable.createFromStream(is, null));
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
 
         btnEduPage.setOnClickListener(new View.OnClickListener() {
             @Override
