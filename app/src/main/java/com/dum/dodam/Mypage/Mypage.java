@@ -248,7 +248,7 @@ public class Mypage extends Fragment {
                     Log.d(TAG, "response" + response.raw());
                     SurveyResponse result = response.body();
                     surveyLink = result.body;
-                    survey_code.setText("설문조사 링크입니다. 참여 부탁드립니다.");
+                    survey_code.setText("설문조사 링크입니다. 참여 부탁드립니다.(클릭)");
                     survey_code.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
