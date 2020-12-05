@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 
 public class TermsNCondition extends Fragment {
@@ -40,12 +39,12 @@ public class TermsNCondition extends Fragment {
         contract3.setText(getText(R.string.terms_and_conditions3));
         contract4.setText(getText(R.string.terms_and_conditions4));
 
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).onBackPressed();
-            }
-        });
+//        btn_ok.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ((MainActivity) getActivity()).onBackPressed();
+//            }
+//        });
         return view;
     }
 }

@@ -91,8 +91,9 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
     public void onBindViewHolder(@NonNull TodoListAdapter.Holder holder, final int position) {
         holder.todo_content.setText(list.get(position).title);
         holder.todo_done.setChecked(list.get(position).done);
-        GradientDrawable bgShape = (GradientDrawable) holder.iv_color_ball.getBackground();
-        bgShape.setColor(list.get(position).color);
+
+        GradientDrawable bgShape = (GradientDrawable) holder.iv_color_ball.getBackground().mutate();
+        bgShape.setTint(list.get(position).color);
 
         if (list.get(position).done == true) {
             holder.todo_content.setTextColor(Color.GRAY);
@@ -101,8 +102,8 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
         } else {
             holder.todo_content.setTextColor(Color.BLACK);
 //            holder.todo_content.setTypeface(null, Typeface.NORMAL);
-            if ((holder.todo_content.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0){
-                holder.todo_content.setPaintFlags( holder.todo_content.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+            if ((holder.todo_content.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0) {
+                holder.todo_content.setPaintFlags(holder.todo_content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             }
         }
 
@@ -142,8 +143,8 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.Holder
                 } else {
                     orgHolder.todo_content.setTextColor(Color.BLACK);
 //                    orgHolder.todo_content.setTypeface(null, Typeface.NORMAL);
-                    if ((orgHolder.todo_content.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0){
-                        orgHolder.todo_content.setPaintFlags( orgHolder.todo_content.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                    if ((orgHolder.todo_content.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0) {
+                        orgHolder.todo_content.setPaintFlags(orgHolder.todo_content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     }
                 }
             }

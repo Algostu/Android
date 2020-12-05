@@ -1,6 +1,5 @@
 package com.dum.dodam.Scheduler;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -17,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dum.dodam.LocalDB.Todo;
+import com.dum.dodam.LocalDB.TodoModule;
 import com.dum.dodam.R;
 
 import java.text.SimpleDateFormat;
@@ -25,18 +25,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAdapter.Holder> {
     private ArrayList<Todo> list = new ArrayList<Todo>();
-    private OnListItemSelectedInterface mListener;
-    private Context context;
     private Realm realm;
 
-    public CustomCalendarAdapter(Context context, ArrayList<Todo> list, OnListItemSelectedInterface listener) {
-        this.context = context;
+    public CustomCalendarAdapter(ArrayList<Todo> list) {
         this.list = list;
-        this.mListener = listener;
-        this.realm = Realm.getDefaultInstance();
     }
 
     public interface OnListItemSelectedInterface {
@@ -48,7 +44,7 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.scheduler_calendar_event_item, parent, false);
         CustomCalendarAdapter.Holder holder = new Holder(view);
-
+        RealmTodoListInit();
         return holder;
     }
 
@@ -173,5 +169,10 @@ public class CustomCalendarAdapter extends RecyclerView.Adapter<CustomCalendarAd
                 }
             }
         });
+    }
+
+    private void RealmTodoListInit() {
+        RealmConfiguration config = new RealmConfiguration.Builder().name("TodoList.realm").schemaVersion(1).modules(new TodoModule()).build();
+        realm = Realm.getInstance(config);
     }
 }

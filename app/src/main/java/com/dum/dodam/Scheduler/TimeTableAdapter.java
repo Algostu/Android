@@ -1,7 +1,6 @@
 package com.dum.dodam.Scheduler;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +15,21 @@ import com.dum.dodam.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Holder> {
-    private ArrayList<String> list = new ArrayList<>();
-    private TimeTableAdapter.OnListItemSelectedInterface mListener;
-    private Context context;
+    private final ArrayList<String> list;
+    private int this_date;
+    private OnListItemSelectedInterface mListener;
 
-    public TimeTableAdapter(Context context, ArrayList<String> list, TimeTableAdapter.OnListItemSelectedInterface listener) {
-        this.context = context;
+    public TimeTableAdapter(ArrayList<String> list, int this_date, OnListItemSelectedInterface mListener) {
         this.list = list;
-        this.mListener = listener;
+        this.this_date = this_date;
+        this.mListener = mListener;
     }
 
     public interface OnListItemSelectedInterface {
-        void onItemSelected(View v, int position);
+        void onItemSelected();
     }
 
     @NonNull
@@ -54,11 +54,16 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
             super(view);
             this.period = (TextView) view.findViewById(R.id.period);
             this.subject = (TextView) view.findViewById(R.id.subject);
-
-            view.setOnClickListener(new View.OnClickListener() {
+            period.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onItemSelected(v, getAdapterPosition());
+                    mListener.onItemSelected();
+                }
+            });
+            subject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemSelected();
                 }
             });
         }
@@ -68,11 +73,15 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull TimeTableAdapter.Holder holder, final int position) {
-        int hour = Integer.parseInt(getCurrentTime());
-        if (position == hour - 9) {
-            holder.period.setTextAppearance(R.style.textAppearanceInTime);
-            holder.subject.setTextAppearance(R.style.textAppearanceInTime);
+        Calendar calendar = Calendar.getInstance();
+        if (this_date == calendar.get(Calendar.DATE)) {
+            int hour = Integer.parseInt(getCurrentTime());
+            if (position == hour - 9) {
+                holder.period.setTextAppearance(R.style.textAppearanceInTime);
+                holder.subject.setTextAppearance(R.style.textAppearanceInTime);
+            }
         }
+
         holder.period.setText(String.format("%d교시", position + 1));
         holder.subject.setText(list.get(position));
 

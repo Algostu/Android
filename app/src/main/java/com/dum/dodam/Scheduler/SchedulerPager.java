@@ -1,8 +1,6 @@
 package com.dum.dodam.Scheduler;
 
-import android.app.AlertDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,53 +17,38 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dum.dodam.LocalDB.CustomTimeTableDB;
+import com.dum.dodam.LocalDB.CustomTimeTableModule;
+import com.dum.dodam.LocalDB.TimeTableDB;
+import com.dum.dodam.LocalDB.TimeTableModule;
 import com.dum.dodam.LocalDB.Todo;
 import com.dum.dodam.LocalDB.TodoModule;
-import com.dum.dodam.Login.Data.UserJson;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
-import com.dum.dodam.Scheduler.dataframe.SchoolTimeTable;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import petrov.kristiyan.colorpicker.ColorPicker;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListItemSelectedInterface {
-    private static final String TAG = "SchedulerPager";
+    //    private static final String TAG = "SchedulerPager";
+    private static final String TAG = "RHC";
     public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     public Calendar startCalender = Calendar.getInstance();
     public Calendar endCalender = Calendar.getInstance();
@@ -80,7 +63,6 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
 
     private RecyclerView todoRecyclerView;
     private RecyclerView.Adapter todoAdapter;
-    private RecyclerView.LayoutManager todoLayoutManager;
     SlidingUpPanelLayout slidingPaneLayout;
     public Button btn;
     public ImageView ivAdd;
@@ -94,16 +76,9 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
     private ArrayList<String> list = new ArrayList<>();
     final ArrayList<Todo> tmp = new ArrayList<>();
 
-    private ArrayList<SchoolTimeTable.TimeTable> result;
-
-    private ArrayList<String> monday = new ArrayList<>();
-    private ArrayList<String> tuesday = new ArrayList<>();
-    private ArrayList<String> wednesday = new ArrayList<>();
-    private ArrayList<String> thursday = new ArrayList<>();
-    private ArrayList<String> friday = new ArrayList<>();
-    private ArrayList<String> time_table = new ArrayList<>();
-
     private Realm realm;
+    private Realm realm2;
+    private Realm realm3;
 
     private String ID;
     private int day_of_week;
@@ -168,11 +143,14 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
             container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.scheduler_pager, container, false);
         view.setClickable(true);
+        RealmTodoListInit();
+        RealmTimeTableInit();
+        CustomRealmTimeTableInit();
+        loadTimeTable();
 
         new_color = Color.parseColor("#ffab91");
         Log.d("ShedulerPager", "new_color: " + new_color);
         todoArrayList.clear();
-        RealmTodoListInit();
 
         ID = String.valueOf(this_year) + String.valueOf(this_month);
         final RealmResults<Todo> results = realm.where(Todo.class).equalTo("ID", ID).findAll();
@@ -186,18 +164,9 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
         }
 
         todoAdapter = new TodoListAdapter(todoArrayList, realm);
-        adapter = new TimeTableAdapter(getContext(), list, this);
-
-        String filename = "TimeTable";
-        File file = new File(requireContext().getFilesDir() + "/" + filename);
-        if (file.exists()) {
-            readTimeTable();
-        } else {
-            getTimeTable();
-        }
+        adapter = new TimeTableAdapter(list, this_date, this);
 
         todoRecyclerView = (RecyclerView) view.findViewById(R.id.rv_todo_list);
-        todoRecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.HORIZONTAL));
         todoRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         todoRecyclerView.setLayoutManager(layoutManager);
@@ -425,6 +394,14 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
             }
         });
 
+        CardView timetable_cv = view.findViewById(R.id.timetable_cv);
+        timetable_cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).replaceFragmentPopup(new TimeTableFullPopUp(this_date));
+            }
+        });
+
         return view;
     }
 
@@ -466,220 +443,6 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
                 }).show();  // dialog 생성
     }
 
-    public void getTimeTable() {
-        Calendar cal = Calendar.getInstance();
-
-        String AY = String.valueOf(cal.get(Calendar.YEAR));
-        String SEM;
-        if (cal.get(Calendar.MONTH) < 7) {
-            SEM = "1";
-        } else {
-            SEM = "2";
-        }
-
-        UserJson user = ((MainActivity) getActivity()).getUser();
-
-        String ATPT_OFCDC_SC_CODE = user.I_CODE;
-        String SD_SCHUL_CODE = user.SC_CODE;
-        int grade = user.grade - 9;
-        if (grade == 4) grade = 3;
-        else if (grade <= 0) grade = 1;
-
-        String GRADE = String.valueOf(grade);
-        if (classNum == 0) classNum = 1;
-        String CLASS_NM = String.valueOf(classNum);
-
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                //서버 url설정
-                .baseUrl("https://open.neis.go.kr/")
-                //데이터 파싱 설정
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                //객체정보 반환
-                .build();
-
-        RetrofitService2 service = retrofit.create(RetrofitService2.class);
-
-        Call<SchoolTimeTable> call = service.getTimeTable("4db607519a0e40b2910efcdf0070a215", "json", 1, 50, ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE, AY, SEM, GRADE, CLASS_NM);
-        call.enqueue(new Callback<SchoolTimeTable>() {
-            @Override
-            public void onResponse(Call<SchoolTimeTable> call, Response<SchoolTimeTable> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        result = response.body().hisTimetable.get(1).row;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle("잘못된 정보입니다.");
-                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        });
-                        builder.show();
-                        return;
-                    }
-                    try {
-                        makeTimeTable();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        Log.d(TAG, "onResponse: Fail " + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SchoolTimeTable> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
-    }
-
-    public interface RetrofitService2 {
-        @GET("/hub/hisTimetable")
-        Call<SchoolTimeTable> getTimeTable(@Query("KEY") String KEY,
-                                           @Query("Type") String Type,
-                                           @Query("pIndex") int pIndex,
-                                           @Query("pSize") int pSize,
-                                           @Query("ATPT_OFCDC_SC_CODE") String ATPT_OFCDC_SC_CODE,
-                                           @Query("SD_SCHUL_CODE") String SD_SCHUL_CODE,
-                                           @Query("AY") String AY,
-                                           @Query("SEM") String SEM,
-                                           @Query("GRADE") String GRADE,
-                                           @Query("CLASS_NM") String CLASS_NM);
-    }
-
-    public void makeTimeTable() throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-        Calendar calendar = Calendar.getInstance();
-        Date date;
-
-        boolean monday_flag = true;
-        boolean tuesday_flag = true;
-        boolean wednesday_flag = true;
-        boolean thursday_flag = true;
-        boolean friday_flag = true;
-
-        int monday_before_period = 0;
-        int tuesday_before_period = 0;
-        int wednesday_before_period = 0;
-        int thursday_before_period = 0;
-        int friday_before_period = 0;
-
-        int DOF;
-
-        for (SchoolTimeTable.TimeTable table : result) {
-            date = dateFormat.parse(table.ALL_TI_YMD);
-            calendar.setTime(date);
-            DOF = calendar.get(Calendar.DAY_OF_WEEK);
-
-            if (DOF == 2 && monday_flag) {
-                if (monday_before_period > Integer.parseInt(table.PERIO)) {
-                    monday_flag = false;
-                    continue;
-                }
-                monday.add(table.ITRT_CNTNT);
-                monday_before_period = Integer.parseInt(table.PERIO);
-            } else if (DOF == 3 && tuesday_flag) {
-                if (tuesday_before_period > Integer.parseInt(table.PERIO)) {
-                    tuesday_flag = false;
-                    continue;
-                }
-                tuesday.add(table.ITRT_CNTNT);
-                tuesday_before_period = Integer.parseInt(table.PERIO);
-            } else if (DOF == 4 && wednesday_flag) {
-                if (wednesday_before_period > Integer.parseInt(table.PERIO)) {
-                    wednesday_flag = false;
-                    continue;
-                }
-                wednesday.add(table.ITRT_CNTNT);
-                wednesday_before_period = Integer.parseInt(table.PERIO);
-            } else if (DOF == 5 && thursday_flag) {
-                if (thursday_before_period > Integer.parseInt(table.PERIO)) {
-                    thursday_flag = false;
-                    continue;
-                }
-                thursday.add(table.ITRT_CNTNT);
-                thursday_before_period = Integer.parseInt(table.PERIO);
-            } else if (DOF == 6 && friday_flag) {
-                if (friday_before_period > Integer.parseInt(table.PERIO)) {
-                    friday_flag = false;
-                    continue;
-                }
-                friday.add(table.ITRT_CNTNT);
-                friday_before_period = Integer.parseInt(table.PERIO);
-            }
-        }
-        saveTimeTable();
-    }
-
-    public void saveTimeTable() {
-        String listString;
-
-        if (getContext() == null) return;
-        File file = new File(getContext().getFilesDir(), "TimeTable");
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter(file);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write("  휴일  " + "\n");
-            bufferedWriter.write("  휴일  " + "\n");
-            listString = TextUtils.join(", ", monday);
-            bufferedWriter.write(listString + "\n");
-            listString = TextUtils.join(", ", tuesday);
-            bufferedWriter.write(listString + "\n");
-            listString = TextUtils.join(", ", wednesday);
-            bufferedWriter.write(listString + "\n");
-            listString = TextUtils.join(", ", thursday);
-            bufferedWriter.write(listString + "\n");
-            listString = TextUtils.join(", ", friday);
-            bufferedWriter.write(listString + "\n");
-
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        readTimeTable();
-    }
-
-    public void readTimeTable() {
-        String filename = "TimeTable";
-        File file = new File(requireContext().getFilesDir() + "/" + filename);
-        if (file.exists()) {
-            try {
-                FileReader fileReader = new FileReader(file);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
-                String line = bufferedReader.readLine();
-                while (line != null) {
-                    time_table.add(line);
-                    line = bufferedReader.readLine();
-                }
-                bufferedReader.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        list.clear();
-        List<String> obj = Arrays.asList(time_table.get(day_of_week).split(","));
-        list.addAll(obj);
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onItemSelected(View v, int position) {
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -703,9 +466,57 @@ public class SchedulerPager extends Fragment implements TimeTableAdapter.OnListI
         realm = Realm.getInstance(config);
     }
 
+    public void loadTimeTable() {
+        list.clear();
+        TimeTableDB timeTableDB = realm2.where(TimeTableDB.class).findFirst();
+
+        if (timeTableDB.custom) {
+            realm3.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.DATE, this_date);
+                    int DOW = cal.get(Calendar.DAY_OF_WEEK);
+
+                    CustomTimeTableDB customTimeTableDB = realm3.where(CustomTimeTableDB.class).findFirst();
+
+                    if (DOW == 1) {
+                        list.add("일요일");
+                    } else if (DOW == 2) {
+                        list.addAll(customTimeTableDB.days.get(0).subject);
+                    } else if (DOW == 3) {
+                        list.addAll(customTimeTableDB.days.get(1).subject);
+                    } else if (DOW == 4) {
+                        list.addAll(customTimeTableDB.days.get(2).subject);
+                    } else if (DOW == 5) {
+                        list.addAll(customTimeTableDB.days.get(3).subject);
+                    } else if (DOW == 6) {
+                        list.addAll(customTimeTableDB.days.get(4).subject);
+                    } else if (DOW == 7) {
+                        list.add("토요일");
+                    }
+                }
+            });
+        } else {
+            for (String result : timeTableDB.days.get(this_date).subject) {
+                list.add(result);
+            }
+            list.remove(0);
+        }
+    }
+
+    private void RealmTimeTableInit() {
+        RealmConfiguration config = new RealmConfiguration.Builder().name("TimeTableDB.realm").schemaVersion(1).modules(new TimeTableModule()).build();
+        realm2 = Realm.getInstance(config);
+    }
+
+    private void CustomRealmTimeTableInit() {
+        RealmConfiguration config = new RealmConfiguration.Builder().name("CustomTimeTableDB.realm").schemaVersion(1).modules(new CustomTimeTableModule()).build();
+        realm3 = Realm.getInstance(config);
+    }
+
     @Override
-    public void onStop() {
-        super.onStop();
-        realm.close();
+    public void onItemSelected() {
+        ((MainActivity) getActivity()).replaceFragmentPopup(new TimeTableFullPopUp(this_date));
     }
 }

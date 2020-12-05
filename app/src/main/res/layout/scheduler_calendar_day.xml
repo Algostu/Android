@@ -32,30 +32,40 @@
                     android:id="@+id/todo1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/todo2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/todo3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/todo4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/todo5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textSize="10sp" />
 
                 <TextView
@@ -65,23 +75,6 @@
                     android:textSize="10sp" />
 
             </LinearLayout>
-
-
-            <View
-                android:id="@+id/topView"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="18dp"
-                android:background="#455A64" />
-
-            <View
-                android:id="@+id/bottomView"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
-                android:background="#5D4037" />
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
