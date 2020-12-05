@@ -144,6 +144,8 @@ public class UnivSearch extends Fragment {
                 if (majorMode) {
                     final MajorFrame major = list2.get(i);
                     viewMajor(major);
+                    String careerNetUrl = "https://www.career.go.kr/cnet/front/base/major/FunivMajorView.do?SEQ=" + major.majorSeq;
+                    ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(careerNetUrl));
                 }
                 // 대학 검색
                 else {

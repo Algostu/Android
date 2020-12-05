@@ -95,7 +95,7 @@ public class RankingPage extends Fragment implements RankingRecyclerAdapter.OnLi
 
     @Override
     public void onItemSelected2(View v, MajorFrame majorFrame) {
-        String careerNetUrl = "https://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=" + majorFrame.majorSeq;
+        String careerNetUrl = "https://www.career.go.kr/cnet/front/base/major/FunivMajorView.do?SEQ=" + majorFrame.majorSeq;
         ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(careerNetUrl));
     }
 }
