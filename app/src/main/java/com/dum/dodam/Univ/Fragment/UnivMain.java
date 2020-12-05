@@ -1,10 +1,12 @@
 package com.dum.dodam.Univ.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,7 +77,7 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        actionBar.setTitle("수능 대.박.");
+        actionBar.setTitle("입시 대.박.");
         actionBar.setSubtitle("대학 관련 자료들을 찾아보세요!");
 
         // layout 연결
@@ -90,6 +92,9 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
         llSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
                 ((MainActivity) getActivity()).replaceFragmentFull(new UnivSearch());
             }
         });

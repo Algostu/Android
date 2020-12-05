@@ -5,11 +5,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -25,7 +27,6 @@ import androidx.fragment.app.Fragment;
 import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
 import com.dum.dodam.Univ.Adapter.UnivSearchAdapter;
-import com.dum.dodam.Univ.Univ;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
 import com.dum.dodam.httpConnection.RetrofitAdapter;
@@ -71,6 +72,11 @@ public class UnivSearch extends Fragment {
         // layout 연결
         listView = view.findViewById(R.id.lv_search);
         et_input = view.findViewById(R.id.et_search);
+        et_input.setFocusable(true);
+
+        DisplayMetrics dm = getActivity().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
+        final int width = dm.widthPixels; //디바이스 화면 너비
+        final int height = dm.heightPixels; //디바이스 화면 높이
 
         // listener 설정
         list = new ArrayList<UnivFrame>();
@@ -83,7 +89,30 @@ public class UnivSearch extends Fragment {
                 addHistory(collage);
                 InputMethodManager imm = (InputMethodManager) ((MainActivity) getActivity()).getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(et_input.getWindowToken(), 0);
-                ((MainActivity) getActivity()).replaceFragmentFull(new Univ(collage));
+
+                UnivSearchDialog dialog = new UnivSearchDialog(getContext(), collage, new UnivSearchDialog.myOnClickListener() {
+                    @Override
+                    public void onYoutubeClick() {
+                        String utubeUrl = "https://www.youtube.com/results?search_query=";
+//                        ((MainActivity)getActivity()).replaceFragmentFull(new UnivWebView());
+                    }
+
+                    @Override
+                    public void onEduPageClick() {
+//                        ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView());
+                    }
+                });
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setCancelable(true);
+
+                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+                WindowManager.LayoutParams wm = dialog.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
+                wm.copyFrom(dialog.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
+                wm.width = (int) (width * 0.9);  //화면 너비의 절반
+                wm.height = height / 2;  //화면 높이의 절반
+
+                dialog.show();
+
                 et_input.setText("");
                 et_input.clearFocus();
             }
@@ -97,7 +126,7 @@ public class UnivSearch extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String text = et_input.getText().toString();
-                if(charSequence.length() > 0){
+                if (charSequence.length() > 0) {
                     search(text);
                 } else {
                     showHistory();
@@ -143,7 +172,7 @@ public class UnivSearch extends Fragment {
         });
     }
 
-    public void showHistory(){
+    public void showHistory() {
         // 저장되어있는 알람 중 오래된것들 삭제
         SharedPreferences sharedPref = getActivity().getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
@@ -164,7 +193,7 @@ public class UnivSearch extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    public void addHistory(UnivFrame univ){
+    public void addHistory(UnivFrame univ) {
         // 저장되어있는 알람 중 오래된것들 삭제
         SharedPreferences sharedPref = getActivity().getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);
@@ -198,4 +227,5 @@ public class UnivSearch extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
