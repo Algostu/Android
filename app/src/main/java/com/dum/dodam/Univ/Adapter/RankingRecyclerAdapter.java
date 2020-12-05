@@ -87,8 +87,9 @@ public class RankingRecyclerAdapter extends RecyclerView.Adapter<RankingRecycler
             holder.iv_logo.setVisibility(View.GONE);
             holder.tv_title.setText(majorList.get(position).mClass);
 
-            MajorFrame frame = majorList.get(position);
-            holder.tv_feature.setText(String.format("%s / %s / %s", frame.employment_rate, frame.gender, frame.avg_salary));
+//            MajorFrame frame = majorList.get(position);
+//            holder.tv_feature.setText(String.format("%s / %s / %s", frame.employment_rate, frame.gender, frame.avg_salary));
+            holder.tv_feature.setText(majorList.get(position).avg_salary);
         }
 
         holder.itemView.setTag(position);

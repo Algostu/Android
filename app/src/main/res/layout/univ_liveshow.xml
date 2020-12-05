@@ -3,63 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_gray"
-    android:fitsSystemWindows="true">
+    android:background="@color/white_gray">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:clipChildren="false"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.Appbar">
 
-        <!--        app:statusBarScrim="@android:color/transparent"-->
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:clipChildren="false"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/CollapsingTitleStyle"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginBottom="20dp"
-            app:expandedTitleTextAppearance="@style/ExpandedTitleStyle"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/saffron"
+            app:menu="@menu/option_menu_live_show"
+            app:subtitleTextAppearance="@style/AppTheme.Appbar.SubTitleTextApp"
+            app:titleTextAppearance="@style/AppTheme.Appbar.TitleTextApp" />
     </com.google.android.material.appbar.AppBarLayout>
-
-    <!--    <include layout="@layout/content_scrolling" />-->
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_liveshow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
         android:overScrollMode="never"
-        android:scrollbarFadeDuration="0"
-        android:scrollbarSize="5dp"
-        android:scrollbarThumbVertical="@android:color/darker_gray"
-        android:scrollbars="vertical"
+        android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-
-    <!--        app:layout_anchor="@id/app_bar"-->
-    <!--        app:layout_anchorGravity="bottom|end"-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:backgroundTint="@color/saffron"
         android:tint="@android:color/white"
         app:backgroundTint="@color/saffron"
