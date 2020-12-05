@@ -239,7 +239,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         mySetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).replaceFragmentPopup(new Mypage());
+                ((MainActivity) getActivity()).replaceFragmentFull(new Mypage());
             }
         });
 
