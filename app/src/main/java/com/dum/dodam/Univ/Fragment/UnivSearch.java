@@ -90,7 +90,7 @@ public class UnivSearch extends Fragment {
         major.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(majorMode){
+                if (majorMode) {
                     et_input.setTypeface(null, Typeface.NORMAL);
                     major.setImageResource(R.drawable.ic_mortarboard);
                     et_input.setBackgroundColor(Color.WHITE);
@@ -130,7 +130,7 @@ public class UnivSearch extends Fragment {
                     @Override
                     public void onYoutubeClick() {
                         Log.d("RHC", "col" + collage.youtube);
-                        if (collage.youtube == null) {
+                        if (collage.youtube == null || collage.youtube.equals("")) {
                             Toast.makeText(getContext(), "관련 정보가 없어 검색페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
                             String youtubeUrl = "https://www.youtube.com/results?search_query=" + collage.univName;
                             ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(youtubeUrl));
@@ -142,11 +142,11 @@ public class UnivSearch extends Fragment {
                     @Override
                     public void onEduPageClick() {
                         Log.d("RHC", "col" + collage.admission);
-                        if (collage.admission == null) {
+                        if (collage.admission == null || collage.admission.equals("")) {
                             Toast.makeText(getContext(), "입학처 정보가 없어 홈페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
                             ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.homePage));
                         } else {
-                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.eduHomePage));
+                            ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(collage.admission));
                         }
                     }
                 });
@@ -174,8 +174,8 @@ public class UnivSearch extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String text = et_input.getText().toString();
-                if(charSequence.length() > 0){
-                    if (majorMode){
+                if (charSequence.length() > 0) {
+                    if (majorMode) {
                         search2(text);
                     } else {
                         search(text);
@@ -243,7 +243,7 @@ public class UnivSearch extends Fragment {
             @Override
             public void onResponse(Call<UnivResponse> call, retrofit2.Response<UnivResponse> response) {
                 if (response.isSuccessful()) {
-                    if(response.body().checkError(getContext())!=0){
+                    if (response.body().checkError(getContext()) != 0) {
                         return;
                     }
                     Log.d(TAG, "response" + response.raw());
@@ -263,7 +263,7 @@ public class UnivSearch extends Fragment {
         });
     }
 
-    public void showHistory(){
+    public void showHistory() {
         // 저장되어있는 알람 중 오래된것들 삭제
         SharedPreferences sharedPref = getActivity().getSharedPreferences(
                 "auto", Context.MODE_PRIVATE);

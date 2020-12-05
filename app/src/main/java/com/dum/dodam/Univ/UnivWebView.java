@@ -1,6 +1,7 @@
 package com.dum.dodam.Univ;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class UnivWebView extends Fragment {
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.loadUrl(homepage); // 웹뷰에 표시할 웹사이트 주소, 웹뷰 시작
+        Log.d("RHC", "WebView " + homepage);
         return view;
     }
 }
