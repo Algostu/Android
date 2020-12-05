@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.dum.dodam.Univ.Fragment.RankingPage;
+import com.dum.dodam.Univ.dataframe.MajorFrame;
+import com.dum.dodam.Univ.dataframe.UnivFrame;
 
 import java.util.ArrayList;
 
@@ -20,13 +22,13 @@ public class RankingPageAdapter extends FragmentStatePagerAdapter {
     ArrayList<Fragment> fragments = new ArrayList<>();
     ArrayList<String> pageTitles = new ArrayList<>();
 
-    public RankingPageAdapter(@NonNull FragmentManager fm) {
+    public RankingPageAdapter(@NonNull FragmentManager fm, ArrayList<UnivFrame> univList, ArrayList<MajorFrame> majorList) {
         super(fm);
 
-        fragments.add(new RankingPage(1));
+        fragments.add(new RankingPage(1, univList, majorList));
         pageTitles.add("대학교랭킹");
 
-        fragments.add(new RankingPage(2));
+        fragments.add(new RankingPage(2, univList, majorList));
         pageTitles.add("학과랭킹");
     }
 

@@ -11,7 +11,7 @@ import com.dum.dodam.Login.Data.LoginResponse;
 import com.dum.dodam.Login.Data.SearchResponse;
 import com.dum.dodam.Univ.dataframe.LiveShowResponse;
 import com.dum.dodam.Univ.dataframe.MajorResponse;
-import com.dum.dodam.Univ.dataframe.RankingResponse;
+import com.dum.dodam.Univ.dataframe.RankingResponse2;
 import com.dum.dodam.Univ.dataframe.UnivArticleResponse;
 import com.dum.dodam.Univ.dataframe.UnivLogoResponse;
 import com.dum.dodam.Univ.dataframe.UnivResponse;
@@ -104,7 +104,7 @@ public interface RetrofitService {
     Call<BaseResponse> getViewMajor(@Query("majorID") int id);
 
     @GET("/univ/ranking")
-    Call<RankingResponse> loadRanking();
+    Call<RankingResponse2> loadRanking();
 
     @GET("/17841442985795349/media")
     Call<FeedResult> getFeeds(@Query("fields") String fields, @Query("access_token") String access_token);

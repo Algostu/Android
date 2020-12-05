@@ -2,7 +2,6 @@ package com.dum.dodam.Univ.Fragment;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +19,9 @@ import com.dum.dodam.R;
 import com.dum.dodam.Univ.Adapter.RankingRecyclerAdapter;
 import com.dum.dodam.Univ.UnivWebView;
 import com.dum.dodam.Univ.dataframe.MajorFrame;
-import com.dum.dodam.Univ.dataframe.RankingResponse;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
-import com.dum.dodam.httpConnection.RetrofitAdapter;
-import com.dum.dodam.httpConnection.RetrofitService;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
 
 public class RankingPage extends Fragment implements RankingRecyclerAdapter.OnListItemSelectedInterface {
     private static final String TAG = RankingPage.class.getName();
@@ -35,11 +29,13 @@ public class RankingPage extends Fragment implements RankingRecyclerAdapter.OnLi
     public int type;
 
     private RankingRecyclerAdapter adapter;
-    private ArrayList<UnivFrame> univList = new ArrayList<>();
-    private ArrayList<MajorFrame> majorList = new ArrayList<>();
+    private ArrayList<UnivFrame> univList;
+    private ArrayList<MajorFrame> majorList;
 
-    public RankingPage(int type) {
+    public RankingPage(int type, ArrayList<UnivFrame> univList, ArrayList<MajorFrame> majorList) {
         this.type = type;
+        this.univList = univList;
+        this.majorList = majorList;
     }
 
     @Nullable
@@ -47,20 +43,12 @@ public class RankingPage extends Fragment implements RankingRecyclerAdapter.OnLi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.univ_ranking_page, container, false);
 
-        if (type == 1) {
-            adapter = new RankingRecyclerAdapter(getContext(), univList, majorList, type, this);
-        } else {
-            adapter = new RankingRecyclerAdapter(getContext(), univList, majorList, type, this);
-        }
-
-        loadRanking();
-
+        adapter = new RankingRecyclerAdapter(getContext(), univList, majorList, type, this);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rankpage_recyclerview);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
 
         return view;
     }
@@ -109,39 +97,5 @@ public class RankingPage extends Fragment implements RankingRecyclerAdapter.OnLi
     public void onItemSelected2(View v, MajorFrame majorFrame) {
         String careerNetUrl = "https://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=" + majorFrame.majorSeq;
         ((MainActivity) getActivity()).replaceFragmentFull(new UnivWebView(careerNetUrl));
-    }
-
-    private void loadRanking() {
-        RetrofitService service = RetrofitAdapter.getInstance(getContext());
-        Call<RankingResponse> call = service.loadRanking();
-
-        call.enqueue(new retrofit2.Callback<RankingResponse>() {
-            @Override
-            public void onResponse(Call<RankingResponse> call, retrofit2.Response<RankingResponse> response) {
-                if (response.isSuccessful()) {
-                    RankingResponse result = response.body();
-                    univList.clear();
-                    majorList.clear();
-                    univList.addAll(result.univList);
-                    majorList.addAll(result.majorList);
-
-                    for (UnivFrame frame : univList) {
-                        Log.d("RHC", "onResponse: " + frame.univName);
-                    }
-                    for (MajorFrame frame : majorList) {
-                        Log.d("RHC", "onResponse: " + frame.mClass);
-                    }
-
-                    adapter.notifyDataSetChanged();
-                } else {
-                    Log.d(TAG, "onResponse: Fail " + response.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RankingResponse> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
     }
 }
