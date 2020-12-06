@@ -40,7 +40,8 @@
         android:lineSpacingExtra="3dp"
         android:text="아직 진행되는 라이브쇼가 없어요 ㅠㅠ\n아래 인스타 버튼으로 도담도담 페이지를 구경해보세요!!"
         android:textAlignment="center"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

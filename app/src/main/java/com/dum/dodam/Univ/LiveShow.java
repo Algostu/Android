@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,16 +49,16 @@ import retrofit2.Response;
 
 public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSelectedInterface {
 
+    private static String TAG = LiveShow.class.getName();
+
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-
-    private String TAG = "RHC";
+    TextView no_liveshow;
 
     private ArrayList<LiveShowFrame> list = new ArrayList<LiveShowFrame>();
     private UnivFrame collage = new UnivFrame();
     private int cnt_readLiveShow = 0;
-    private int added_heart = 0;
 
     private Realm realm;
 
@@ -68,6 +69,8 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
         view.setClickable(true);
         setHasOptionsMenu(true);
         RealmTodoListInit();
+
+        no_liveshow = view.findViewById(R.id.no_liveshow);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -132,6 +135,8 @@ public class LiveShow extends Fragment implements LiveShowAdapter.OnListItemSele
 
                     list.addAll(result.body);
                     adapter.notifyDataSetChanged();
+                    if (list.size() < 1)
+                        no_liveshow.setVisibility(View.VISIBLE);
                 } else {
                     Log.d(TAG, "onResponse: Fail");
                 }
