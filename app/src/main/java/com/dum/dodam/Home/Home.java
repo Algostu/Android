@@ -546,6 +546,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
             @Override
             public void onResponse(Call<MealInfo> call, final Response<MealInfo> response) {
                 if (response.isSuccessful()) {
+                    if (response.body().mealServiceDietInfo == null)
+                        return;
                     resultMeal = response.body().mealServiceDietInfo.get(1).row;
 
                     realm.executeTransactionAsync(new Realm.Transaction() {

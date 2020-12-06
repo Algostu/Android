@@ -18,46 +18,47 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="195dp"
-            app:contentScrim="@color/transparent"
             android:background="@color/saffron"
             app:collapsedTitleTextAppearance="@style/CollapsingTitleStyle"
+            app:contentScrim="@color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:gravity="center"
-                >
+                android:orientation="horizontal">
+
                 <LinearLayout
-                    android:layout_weight="8"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_weight="8"
                     android:background="@color/transparent"
-                    >
+                    android:orientation="horizontal">
+
                     <View
-                        android:layout_weight="2"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        />
+                        android:layout_weight="2" />
+
                     <TextView
-                        android:layout_weight="6"
+                        android:id="@+id/welcome_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="6"
                         android:gravity="center"
                         android:lineSpacingExtra="10dp"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
                         android:text="아주고등학교\n삐약이님 안녕하세요"
-                        android:id="@+id/welcome_text"
-                        />
+                        android:textColor="@color/black"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2">
+
                     <ImageView
                         android:id="@+id/user_icon"
                         android:layout_width="60dp"
@@ -126,10 +127,10 @@
                 android:id="@+id/cv_school"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
                 app:cardCornerRadius="15dp"
                 app:cardElevation="10dp"
                 app:cardUseCompatPadding="true"
-                android:layout_marginBottom="25dp"
                 app:layout_constraintLeft_toLeftOf="@id/gd_left"
                 app:layout_constraintRight_toRightOf="@id/gd_right"
                 app:layout_constraintTop_toTopOf="parent"
@@ -147,14 +148,14 @@
                         android:layout_height="wrap_content"
                         android:text="오늘의 급식"
                         android:textAlignment="center"
-                        android:textSize="16dp"/>
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/cafeteria"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="MENU1\nMENU2\nMENU3"
+                        android:text="제공되는 식단이 없습니다."
                         android:textColor="@android:color/black"
                         android:textSize="14dp" />
                 </LinearLayout>
@@ -164,21 +165,22 @@
                 android:id="@+id/new_article_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_new_articles"
-                android:layout_marginBottom="20dp"
                 android:layout_marginLeft="25dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/ic_new_articles"
                 app:layout_constraintLeft_toLeftOf="@+id/cv_school"
-                app:layout_constraintTop_toBottomOf="@id/cv_school"/>
+                app:layout_constraintTop_toBottomOf="@id/cv_school" />
+
             <TextView
                 android:id="@+id/title_my_community"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="최신 게시판"
-                android:textSize="16dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginLeft="75dp"
+                android:layout_marginTop="5dp"
+                android:text="최신 게시물"
+                android:textSize="16dp"
                 app:layout_constraintLeft_toLeftOf="@+id/cv_school"
-                app:layout_constraintTop_toBottomOf="@id/cv_school"/>
+                app:layout_constraintTop_toBottomOf="@id/cv_school" />
 
             <!-- 내 게시판 -->
             <androidx.cardview.widget.CardView
@@ -196,9 +198,9 @@
 
                 <!--Recycler View for my community-->
                 <androidx.core.widget.NestedScrollView
-                    android:background="@drawable/cardview_background"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/cardview_background"
                     android:padding="15dp">
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -218,10 +220,10 @@
                 android:id="@+id/title_hot_community"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="75dp"
+                android:layout_marginTop="12dp"
                 android:text="HOT 게시물"
                 android:textSize="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginLeft="75dp"
                 app:layout_constraintLeft_toLeftOf="@+id/cv_my_community"
                 app:layout_constraintTop_toBottomOf="@+id/cv_my_community" />
 
@@ -229,12 +231,12 @@
                 android:id="@+id/hot_article_icon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/ic_hot_articles"
+                android:layout_marginLeft="25dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="20dp"
-                android:layout_marginLeft="25dp"
+                android:src="@drawable/ic_hot_articles"
                 app:layout_constraintLeft_toLeftOf="@+id/cv_my_community"
-                app:layout_constraintTop_toBottomOf="@+id/cv_my_community"/>
+                app:layout_constraintTop_toBottomOf="@+id/cv_my_community" />
 
             <!-- 핫 게시판 -->
             <androidx.cardview.widget.CardView
@@ -252,10 +254,10 @@
                 tools:ignore="MissingConstraints">
 
                 <androidx.core.widget.NestedScrollView
-                    android:background="@drawable/cardview_background"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/title_hot_community"
+                    android:background="@drawable/cardview_background"
                     android:padding="15dp">
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -276,8 +278,8 @@
                 android:id="@+id/title_contest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginLeft="58dp"
+                android:layout_marginTop="15dp"
                 android:text="공모전 모아보기"
                 android:textSize="16dp"
                 app:layout_constraintLeft_toLeftOf="@+id/gd_left"
@@ -288,11 +290,11 @@
                 android:id="@+id/title_contest_icon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/ic_contest_list"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_contest_list"
                 app:layout_constraintLeft_toLeftOf="@+id/cv_hot_article"
-                app:layout_constraintTop_toBottomOf="@+id/cv_hot_article"/>
+                app:layout_constraintTop_toBottomOf="@+id/cv_hot_article" />
 
             <TextView
                 android:id="@+id/more_contest"
@@ -323,9 +325,9 @@
                 tools:ignore="MissingConstraints">
 
                 <androidx.core.widget.NestedScrollView
-                    android:background="@drawable/cardview_background"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/cardview_background"
                     android:padding="15dp">
 
                     <androidx.recyclerview.widget.RecyclerView

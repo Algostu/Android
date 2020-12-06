@@ -22,16 +22,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import io.realm.Realm;
-
 public class CafeteriaTab extends Fragment {
 
     private List<Integer> mydate;
 
     private final ArrayList<CafeteriaWeek> cafeteriaWeeks;
     private boolean isFirstWeekNull;
-
-    private Realm realm;
 
     public CafeteriaTab(ArrayList<CafeteriaWeek> cafeteriaWeeks, boolean isFirstNull) {
         this.cafeteriaWeeks = cafeteriaWeeks;
@@ -58,7 +54,9 @@ public class CafeteriaTab extends Fragment {
         TabLayout tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);
         tab_layout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         tab_layout.setupWithViewPager(pager);
-        tab_layout.getTabAt(mydate.get(3)).select();
+
+        if (tab_layout.getTabCount() > mydate.get(3))
+            tab_layout.getTabAt(mydate.get(3)).select();
 
         return view;
     }
