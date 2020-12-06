@@ -32,6 +32,16 @@
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <TextView
+        android:id="@+id/no_liveshow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:text="아직 진행되는 라이브쇼가 없어요 ㅠㅠ\n아래 인스타 버튼으로 도담도담 페이지를 구경해보세요!!"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
