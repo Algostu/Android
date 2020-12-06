@@ -73,6 +73,8 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
 
     private ShimmerFrameLayout shimmerFrameLayout;
 
+    private boolean isDestroyed;
+
 
     @Nullable
     @Override
@@ -81,6 +83,7 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
         view.setClickable(true);
         viewPage = (ViewPager) view.findViewById(R.id.vp_ranking);
         tabs = (TabLayout) view.findViewById(R.id.tab_ranking);
+        isDestroyed = false;
         loadRanking();
         // Appbar 적용
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -203,14 +206,16 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
                     majorList.clear();
                     univList.addAll(result.univList);
                     majorList.addAll(result.majorList);
+                    Log.d("RHC", "isDestroyed: " + isDestroyed);
+                    if (!isDestroyed) {
+                        // ranking
+                        pageAdapter = new RankingPageAdapter(getChildFragmentManager(), univList, majorList);
+                        viewPage.setAdapter(pageAdapter);
+                        viewPage.setSaveEnabled(false);
 
-                    // ranking
-                    pageAdapter = new RankingPageAdapter(getChildFragmentManager(), univList, majorList);
-                    viewPage.setAdapter(pageAdapter);
-                    viewPage.setSaveEnabled(false);
-
-                    tabs.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
-                    tabs.setupWithViewPager(viewPage);
+                        tabs.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white_gray));
+                        tabs.setupWithViewPager(viewPage);
+                    }
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
                 }
@@ -223,4 +228,10 @@ public class UnivMain extends Fragment implements InstagramAdapter.OnListItemSel
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        isDestroyed = true;
+        Log.d("RHC", "onDestroyView: " + isDestroyed);
+        super.onDestroyView();
+    }
 }
