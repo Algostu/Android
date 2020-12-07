@@ -187,7 +187,20 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         today_lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).replaceFragmentFull(new CafeteriaTab(cafeteriaWeeks, isFirstWeekNull));
+                if (cafeteriaWeeks.size() == 0){
+                    if(getContext() == null)
+                        return;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("급식정보가 제공되지 않는 학교 입니다.");
+                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+                    builder.show();
+                } else {
+                    ((MainActivity) getActivity()).replaceFragmentFull(new CafeteriaTab(cafeteriaWeeks, isFirstWeekNull));
+                }
             }
         });
 

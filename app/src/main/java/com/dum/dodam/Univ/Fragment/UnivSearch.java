@@ -254,6 +254,7 @@ public class UnivSearch extends Fragment {
                     list.clear();
                     list2.clear();
                     list.addAll(result.body);
+
                     adapter.notifyDataSetChanged();
                 } else {
                     Log.d(TAG, "onResponse: Fail " + response.body());
@@ -412,6 +413,10 @@ public class UnivSearch extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         // status bar color
+        if (getActivity()==null)
+            return;
+        InputMethodManager imm = (InputMethodManager) ((MainActivity) getActivity()).getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(et_input.getWindowToken(), 0);
         View window = getActivity().getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (window != null) {
