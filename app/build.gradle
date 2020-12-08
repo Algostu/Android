@@ -8,8 +8,8 @@ android {
         applicationId "com.dum.dodam"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 6
-        versionName "1.5"
+        versionCode 11
+        versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,6 +24,13 @@ android {
         dataBinding true
         // for view binding:
         viewBinding true
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
 }
 

@@ -66,6 +66,12 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Hold
                     mListener.onItemSelected();
                 }
             });
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemSelected();
+                }
+            });
         }
     }
 
