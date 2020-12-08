@@ -74,7 +74,14 @@ public class RankingRecyclerAdapter extends RecyclerView.Adapter<RankingRecycler
             this.iv_logo = view.findViewById(R.id.iv_logo);
             this.tv_feature = view.findViewById(R.id.tv_feature);
 
-            view.setOnClickListener(new View.OnClickListener() {
+            tv_feature.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemSelected3(v, majorList.get(getAbsoluteAdapterPosition()));
+                }
+            });
+
+            tv_title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (type == 1) {
@@ -82,6 +89,24 @@ public class RankingRecyclerAdapter extends RecyclerView.Adapter<RankingRecycler
                     } else {
                         mListener.onItemSelected2(v, majorList.get(getAbsoluteAdapterPosition()));
                     }
+                }
+            });
+
+            tv_rank.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (type == 1) {
+                        mListener.onItemSelected1(v, univList.get(getAbsoluteAdapterPosition()));
+                    } else {
+                        mListener.onItemSelected2(v, majorList.get(getAbsoluteAdapterPosition()));
+                    }
+                }
+            });
+
+            iv_logo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemSelected1(v, univList.get(getAbsoluteAdapterPosition()));
                 }
             });
         }
@@ -120,7 +145,8 @@ public class RankingRecyclerAdapter extends RecyclerView.Adapter<RankingRecycler
 
 //            MajorFrame frame = majorList.get(position);
 //            holder.tv_feature.setText(String.format("%s / %s / %s", frame.employment_rate, frame.gender, frame.avg_salary));
-            holder.tv_feature.setText(String.format("평균 %s 만원", majorList.get(position).avg_salary));
+//            holder.tv_feature.setText(String.format("평균 %s 만원", majorList.get(position).avg_salary));
+            holder.tv_feature.setText("관련대학");
         }
 
         holder.itemView.setTag(position);
@@ -130,5 +156,7 @@ public class RankingRecyclerAdapter extends RecyclerView.Adapter<RankingRecycler
         void onItemSelected1(View v, UnivFrame univFrame);
 
         void onItemSelected2(View v, MajorFrame majorFrame);
+
+        void onItemSelected3(View v, MajorFrame majorFrame);
     }
 }
