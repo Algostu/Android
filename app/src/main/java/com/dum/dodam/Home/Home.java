@@ -187,8 +187,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
         today_lunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cafeteriaWeeks.size() == 0){
-                    if(getContext() == null)
+                if (cafeteriaWeeks.size() == 0) {
+                    if (getContext() == null)
                         return;
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("급식정보가 제공되지 않는 학교 입니다.");
@@ -533,10 +533,8 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     public void saveCafeteria() {
         UserJson user = ((MainActivity) getActivity()).getUser();
 
-//        String ATPT_OFCDC_SC_CODE = user.I_CODE;
-//        String SD_SCHUL_CODE = user.SC_CODE;
-        String ATPT_OFCDC_SC_CODE = "R10";
-        String SD_SCHUL_CODE = "8750092";
+        String ATPT_OFCDC_SC_CODE = user.I_CODE;
+        String SD_SCHUL_CODE = user.SC_CODE;
         String MLSV_YMD = version;
 
         Gson gson = new GsonBuilder()
