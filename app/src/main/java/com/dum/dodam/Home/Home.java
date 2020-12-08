@@ -271,7 +271,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
             @Override
             public void onFailure(Call<MyCommunityResponse> call, Throwable t) {
-                Log.d(TAG, "My Community " + String.valueOf(cnt_myCommunity) + " " + t.getMessage());
                 if (cnt_myCommunity < 5) setMyCommunity();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
                 cnt_myCommunity++;
@@ -300,7 +299,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
             @Override
             public void onFailure(Call<HotArticleResponse> call, Throwable t) {
-                Log.d(TAG, "HotArticle " + String.valueOf(cnt_hotArticle) + " " + t.getMessage());
                 if (cnt_hotArticle < 5) setHotArticle();
                 else Toast.makeText(getContext(), "Please reloading", Toast.LENGTH_SHORT).show();
                 cnt_hotArticle++;
@@ -322,7 +320,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                     if (response.isSuccessful()) {
                         ArrayList<com.dum.dodam.Contest.dataframe.ContestFrame> result = response.body().body;
                         if (result.size() == 0) return;
-                        Log.d(TAG, "CONTEST RESULT" + result.size());
 
                         JSONArray jsArray = new JSONArray();//배열이 필요할때
                         try {
@@ -347,7 +344,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                         }
 
                         try {
-                            Log.d(TAG, "CONTEST Write Start");
                             if (getContext() == null) return;
                             File file = new File(getContext().getFilesDir(), "contest");
                             FileWriter fileWriter = null;
@@ -355,7 +351,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                             bufferedWriter.write(jsArray.toString());
                             bufferedWriter.close();
-                            Log.d(TAG, "CONTEST Write End");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -367,7 +362,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
 
                 @Override
                 public void onFailure(Call<ContestListResponse> call, Throwable t) {
-                    Log.d(TAG, "getContestList" + t.getMessage());
                     if (cnt_getContestList < 5) setContest();
                     else
                         Toast.makeText(((MainActivity) getContext()), "Please reloading", Toast.LENGTH_SHORT).show();
@@ -526,8 +520,10 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     public void saveCafeteria() {
         UserJson user = ((MainActivity) getActivity()).getUser();
 
-        String ATPT_OFCDC_SC_CODE = user.I_CODE;
-        String SD_SCHUL_CODE = user.SC_CODE;
+//        String ATPT_OFCDC_SC_CODE = user.I_CODE;
+//        String SD_SCHUL_CODE = user.SC_CODE;
+        String ATPT_OFCDC_SC_CODE = "R10";
+        String SD_SCHUL_CODE = "8750092";
         String MLSV_YMD = version;
 
         Gson gson = new GsonBuilder()
@@ -627,7 +623,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                             for (int i = loop_start; i < last_date + 1; i++) {
                                 if (DOW == 2) { //월요일
                                     cafeteriaWeek.mondayDate = String.format("%02d", i);
-                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                    if (index < resultMeal.size() && resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
                                         cafeteriaWeek.monday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
                                         cafeteriaWeek.mondayCal = resultMeal.get(index).CAL_INFO;
                                         index++;
@@ -638,7 +634,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                                     DOW++;
                                 } else if (DOW == 3) { //화요일
                                     cafeteriaWeek.tuesdayDate = String.format("%02d", i);
-                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                    if (index < resultMeal.size() && resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
                                         cafeteriaWeek.tuesday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
                                         cafeteriaWeek.tuesdayCal = resultMeal.get(index).CAL_INFO;
                                         index++;
@@ -649,7 +645,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                                     DOW++;
                                 } else if (DOW == 4) { //수요일
                                     cafeteriaWeek.wednesdayDate = String.format("%02d", i);
-                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                    if (index < resultMeal.size() && resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
                                         cafeteriaWeek.wednesday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
                                         cafeteriaWeek.wednesdayCal = resultMeal.get(index).CAL_INFO;
                                         index++;
@@ -660,7 +656,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                                     DOW++;
                                 } else if (DOW == 5) { //목요일
                                     cafeteriaWeek.thursdayDate = String.format("%02d", i);
-                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                    if (index < resultMeal.size() && resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
                                         cafeteriaWeek.thursday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
                                         cafeteriaWeek.thursdayCal = resultMeal.get(index).CAL_INFO;
                                         index++;
@@ -671,7 +667,7 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
                                     DOW++;
                                 } else if (DOW == 6) { //금요일
                                     cafeteriaWeek.fridayDate = String.format("%02d", i);
-                                    if (resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
+                                    if (index < resultMeal.size() && resultMeal.get(index).MLSV_YMD.substring(6).equals(String.format("%02d", i))) {
                                         cafeteriaWeek.friday = resultMeal.get(index).DDISH_NM.replace("<br/>", " ").replaceAll("\\d|\\.", "");
                                         cafeteriaWeek.fridayCal = resultMeal.get(index).CAL_INFO;
                                         index++;
@@ -812,7 +808,6 @@ public class Home extends Fragment implements HotArticleAdapter.OnListItemSelect
     }
 
     public void saveTimeTable(String TI_FROM_YMD, final String TI_TO_YMD) {
-        Log.d(TAG, "saveTimeTable: ");
         UserJson user = ((MainActivity) getActivity()).getUser();
         String ATPT_OFCDC_SC_CODE = user.I_CODE;
         String SD_SCHUL_CODE = user.SC_CODE;
