@@ -135,7 +135,8 @@ public class Community extends Fragment implements ArticleListAdapter.OnListItem
                 super.onScrolled(recyclerView, dx, dy);
                 int curPosition = recyclerView.getAdapter().getItemCount() - 1;
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-
+                Log.d("CommunityDebug", "curposition: " + curPosition);
+                Log.d("CommunityDebug", "lastVisibleItemPosition: " + lastVisibleItemPosition);
                 if ((lastVisibleItemPosition >= 15) && (curPosition >= lastVisibleItemPosition - 3)) {
                     readArticleList();
                 }

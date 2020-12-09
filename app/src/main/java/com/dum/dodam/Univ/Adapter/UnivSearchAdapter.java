@@ -13,7 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dum.dodam.MainActivity;
 import com.dum.dodam.R;
+import com.dum.dodam.Univ.UnivWebView;
 import com.dum.dodam.Univ.dataframe.MajorFrame;
 import com.dum.dodam.Univ.dataframe.UnivFrame;
 import com.dum.dodam.Utils.TextUtils;
@@ -149,16 +151,22 @@ public class UnivSearchAdapter extends BaseAdapter {
             viewHolder.remove_icon.setVisibility(View.GONE);
             viewHolder.region_name.setVisibility(View.VISIBLE);
             if (list.size() > 0) {
-//                viewHolder.region_name.setText(list.get(position).subRegion);
-                viewHolder.region_name.setText("관련 대학");
+                viewHolder.region_name.setText(list.get(position).subRegion);
             } else {
-                String subText = list2.get(position).avg_salary;
-                if (subText != null) {
-                    viewHolder.region_name.setText(subText.split("\\.")[0] + "만원");
-                } else {
-                    viewHolder.region_name.setText("정보미제공");
-                }
-
+//                String subText = list2.get(position).avg_salary;
+//                if (subText != null) {
+//                    viewHolder.region_name.setText(subText.split("\\.")[0] + "만원");
+//                } else {
+//                    viewHolder.region_name.setText("정보미제공");
+//                }
+                viewHolder.region_name.setText("관련 대학");
+                viewHolder.region_name.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String careerNetUrl = "https://www.career.go.kr/cnet/front/base/major/FunivMajorView.do?SEQ=" + list2.get(position).majorSeq + "#tab2";
+                        ((MainActivity) context).replaceFragmentFull(new UnivWebView(careerNetUrl));
+                    }
+                });
             }
         }
 
