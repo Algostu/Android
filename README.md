@@ -5,7 +5,6 @@
     <img src=".docs/logo_typo.png" alt="도담도담" width="120" style="margin:10px 0px">
   <br>
 </h1>
-
 <h4 align="center">고등학생 전용 지역 기반 커뮤니티 & 입시 도우미 모바일 어플리케이션</h4>
 
 <p align="center">
@@ -25,6 +24,7 @@
     <img src="https://img.shields.io/badge/user-40-ff69b4"
          alt="user">
   </a>
+</p>
 <p align="center">
   <a href="#overview">Overview</a> • 
   <a href="#key-features">Key Features</a> • 
@@ -36,6 +36,7 @@
 <p align="center">
    <img src=".docs\full_gif.gif" alt="도담도담"> 
 </p>
+
 
 
 ## Overview
