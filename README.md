@@ -45,7 +45,7 @@
 
 ![screenshots](.docs/screenshots.png)
 
-## Key Feature
+## Key Features
 
 * 교내, 동네, 전국 커뮤니티
 
