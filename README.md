@@ -84,3 +84,7 @@
 
 * [도담도담](https://play.google.com/store/apps/details?id=com.dum.dodam) : 도담도담 플레이 스토어
 * [d.___.dam](https://www.instagram.com/d.___.dam/) : 도담도담 인스타그램
+
+
+
+> 도담도담에 대한 자세한 내용을 보고싶다면 [report](.docs/report.pdf) 참고
