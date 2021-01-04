@@ -32,7 +32,7 @@
   <a href="#credits">Credits</a> •   
   <a href="#structure">Structure</a> • 
   <a href="#related">Related</a> • 
-  <a href="#lisence">Lisence</a>
+  <a href="#license">License</a>
 </p>
 <p align="center">
    <img src=".docs\full_gif.gif" alt="도담도담"> 
