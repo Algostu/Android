@@ -31,7 +31,8 @@
   <a href="#download">Download</a> •  
   <a href="#credits">Credits</a> •   
   <a href="#structure">Structure</a> • 
-  <a href="#related">Related</a>
+  <a href="#related">Related</a> • 
+  <a href="#lisence">Lisence</a>
 </p>
 <p align="center">
    <img src=".docs\full_gif.gif" alt="도담도담"> 
@@ -86,6 +87,7 @@
 * [도담도담](https://play.google.com/store/apps/details?id=com.dum.dodam) : 도담도담 플레이 스토어
 * [d.___.dam](https://www.instagram.com/d.___.dam/) : 도담도담 인스타그램
 
-
+## License
+This application is freely available for free non-commercial use, and may be redistributed under these conditions. Please, see the [license](LICENSE) for further details.
 
 > 도담도담에 대한 자세한 내용을 보고싶다면 [report](.docs/report.pdf) 참고
